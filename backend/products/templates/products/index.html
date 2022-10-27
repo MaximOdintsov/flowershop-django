@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mutliple Upload</title>
+    <style>
+        img {
+            height: 200px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello!</h1>
+    <li>
+        {% for flower in flowers %}
+            <img src="{{ flower.image }}" height="300"> <br>
+            {{ flower.category }} <br>
+            {{ flower.title }} <br>
+            {{ flower.slug }} <br>
+            {{ flower.description }} <br>
+            {{ flower.price }} <br>
+            {{ flower.discount }} <br>
+            {{ flower.image }} <br>
+            {{ flower.stock }} <br>
+            {{ flower.available }} <br>
+            <p>Hey</p>
+        {% endfor %}
+    </li>
+    <img src="" alt="Image">
+</body>
+</html>
