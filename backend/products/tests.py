@@ -1,6 +1,6 @@
 from django.test import TestCase
 from .models import Category, Flower, Bouquet
-from .models import GalleryFlower
+from .models import GalleryFlower, CompositionOfTheBouquet
 
 from django.core.files import File
 
@@ -70,7 +70,7 @@ class ProductsModelsTest(TestCase):
             price=1000,
             discount=10,
             # image=File(open('products/img/1.jpg', 'rb')),
-            stock=4,
+            all_stock=4,
             available=True,
         )
         flower_1.save()
@@ -84,7 +84,7 @@ class ProductsModelsTest(TestCase):
             price=1300,
             discount=0,
             # image=File(open('products/img/2.jpg', 'rb')),
-            stock=0,
+            all_stock=0,
             available=False,
         )
         flower_2.save()
@@ -128,7 +128,7 @@ class ProductsModelsTest(TestCase):
 
         # check: stock db == saved stock
         self.assertEqual(
-            all_flowers[0].stock, flower_1.stock,
+            all_flowers[0].all_stock, flower_1.all_stock,
         )
         # check: available db == saved available
         self.assertEqual(
@@ -161,14 +161,9 @@ class ProductsModelsTest(TestCase):
             all_flowers[1].discount, flower_2.discount,
         )
 
-        # check: the image from the db is equal to the saved image
-        # self.assertEqual(
-        #     all_flowers[1].image, flower_2.image,
-        # )
         # check: stock db == saved stock
-
         self.assertEqual(
-            all_flowers[1].stock, flower_2.stock,
+            all_flowers[1].all_stock, flower_2.all_stock,
         )
         # check: available db == saved available
         self.assertEqual(
@@ -275,4 +270,57 @@ class ProductsModelsTest(TestCase):
         # check: only_on_order db == saved only_on_order
         self.assertEqual(
             all_bouquets[1].only_on_order, bouquet_2.only_on_order,
+        )
+
+    def test_count_stock(self):
+        # add category 1
+        category_1 = Category(
+            name='Цветы_1',
+            slug='flower_1',
+        )
+        category_1.save()
+
+        # add flower_1
+        flower_1 = Flower(
+            category=Category.objects.all()[0],
+            title="Роза",
+            slug="Roze",
+            description="Белая роза",
+            price=1000,
+            discount=10,
+            all_stock=4,
+            stock_in_bouquets=0,
+            available=True,
+        )
+        flower_1.save()
+
+        # add bouquet_1
+        bouquet_1 = Bouquet(
+            title="Букет из 100 роз",
+            slug="buket_iz_100_roz",
+            description="Красивый букет из разных видов роз",
+            price=15.000,
+            discount=10,
+            stock=5,
+            available=True,
+            only_on_order=False,
+        )
+        bouquet_1.save()
+
+        composition_1 = CompositionOfTheBouquet(
+            flower=Flower.objects.all()[0],
+            bouquet=Bouquet.objects.all()[0],
+            count=1,
+        )
+        composition_1.save()
+
+        flower = Flower.objects.all()[composition_1.flower.id-1]
+        flower.stock_in_bouquets = composition_1.bouquet.stock * composition_1.count
+        flower.save()
+
+        self.assertEqual(
+            flower.stock_in_bouquets, composition_1.count * bouquet_1.stock
+        )
+        self.assertEqual(
+            composition_1.flower.id-1, 0
         )

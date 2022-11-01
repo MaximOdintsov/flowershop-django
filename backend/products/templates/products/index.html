@@ -17,18 +17,29 @@
     <li>
         {% for flower in flowers %}
             <img src="{{ flower.image }}" height="300"> <br>
-            {{ flower.category }} <br>
+            {{ flower.flower_id }} <br>
             {{ flower.title }} <br>
             {{ flower.slug }} <br>
             {{ flower.description }} <br>
             {{ flower.price }} <br>
             {{ flower.discount }} <br>
-            {{ flower.image }} <br>
             {{ flower.stock }} <br>
             {{ flower.available }} <br>
-            <p>Hey</p>
         {% endfor %}
+
     </li>
+
+<!--    <form action="f;" method="post">-->
+<!--        <label for="flowers">Enter name: </label>-->
+<!--        <input-->
+<!--            id="team_name"-->
+<!--            type="text"-->
+<!--            name="name_field"-->
+<!--            value="Default name for team."-->
+<!--        />-->
+<!--        <input type="submit" value="OK" />-->
+<!--    </form>-->
+
     <img src="" alt="Image">
 </body>
 </html>
