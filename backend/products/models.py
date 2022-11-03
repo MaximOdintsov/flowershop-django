@@ -8,7 +8,8 @@ from django.utils.text import slugify
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=100, verbose_name='Имя категории')
+    """ Класс добавления категории цветов """
+    title = models.CharField(max_length=100, verbose_name='Имя категории')
     slug = models.SlugField(unique=True)
 
     class Meta:
@@ -16,28 +17,51 @@ class Category(models.Model):
         verbose_name_plural = 'Категории цветов'
 
     def __str__(self):
-        return self.name
+        return self.title
 
     def get_absolute_url(self):
         return reverse('category_flower', kwargs={'slug': self.slug})
 
+    def save(self, *args, **kwargs):
+        """ Переводит поле title с ru на en и сохраняет в slug """
+        # for translate slug
+        from translate import Translator
+        translator = Translator(from_lang='ru', to_lang='en')
+        translated_title = translator.translate(self.title)
+        self.slug = slugify(translated_title)
+        super(Category, self).save(*args, **kwargs)
+
 
 class Flower(models.Model):
+    """ Класс добавления цветка """
+    SALE = 1
+    ORDER = 2
+    UNAVAILABLE = 3
+
+    STATUS_CHOICES = [
+        (UNAVAILABLE, 'Недоступно для продажи'),
+        (ORDER, 'Только под заказ'),
+        (SALE, 'Доступно для продажи'),
+    ]
+
     category = models.ForeignKey(
         Category, verbose_name='Категория', on_delete=models.PROTECT
     )
     title = models.CharField(verbose_name='Название', max_length=100)
-    slug = models.SlugField(verbose_name='Название на английском', unique=True, null=True, default='')
+    slug = models.SlugField(verbose_name='Название на английском', max_length=150, unique=True, null=True, default='')
     description = models.CharField(verbose_name='Описание', max_length=250)
     price = models.DecimalField(verbose_name='Цена', max_digits=7, decimal_places=2)
     discount = models.PositiveIntegerField(verbose_name='Скидка в %', default=0)
 
     whole_stock = models.PositiveIntegerField(verbose_name='Весь запас', default=0)
     stock_in_bouquets = models.PositiveIntegerField(verbose_name='Цветы в букетах', default=0)
-    all_stock = models.PositiveIntegerField(verbose_name='Остаток для продажи', default=0)
+    stock_for_sale = models.PositiveIntegerField(verbose_name='Остаток для продажи', default=0)
 
-    available = models.BooleanField(verbose_name='Отображается в каталоге', default=False)
-    only_on_order = models.BooleanField(verbose_name='Только под заказ', default=False)
+    status = models.PositiveSmallIntegerField(
+        choices=STATUS_CHOICES,
+        default=UNAVAILABLE,
+        verbose_name='Статус',
+    )
 
     class Meta:
         verbose_name = 'Цветок'
@@ -50,18 +74,20 @@ class Flower(models.Model):
     def get_absolute_url(self):
         return reverse('flowers', kwargs={'slug': self.slug})
 
-    # def save(self, *args, **kwargs):
-    #     # for translate slug
-    #     from translate import Translator
-    #     translator = Translator(from_lang='ru', to_lang='en')
-    #     translated_title = translator.translate(self.title)
-    #     self.slug = slugify(translated_title)
-    #     super(Flower, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        """ Переводит поле title с ru на en и сохраняет в slug """
+        # for translate slug
+        from translate import Translator
+        translator = Translator(from_lang='ru', to_lang='en')
+        translated_title = translator.translate(self.title)
+        self.slug = slugify(translated_title)
+        super(Flower, self).save(*args, **kwargs)
 
 
 class GalleryFlower(models.Model):
+    """ Класс добавления картинок в цветок """
     image = models.ImageField(upload_to='images')
-    flower = models.ForeignKey(Flower, on_delete=models.CASCADE, related_name='img')
+    flower_gallery = models.ForeignKey(Flower, on_delete=models.CASCADE, related_name='flower_gallery')
 
     class Meta:
         verbose_name = 'Картинка'
@@ -69,14 +95,28 @@ class GalleryFlower(models.Model):
 
 
 class Bouquet(models.Model):
+    """ Класс создания букета """
+    SALE = 1
+    ORDER = 2
+    UNAVAILABLE = 3
+
+    STATUS_CHOICES = [
+        (UNAVAILABLE, 'Недоступно для продажи'),
+        (ORDER, 'Только под заказ'),
+        (SALE, 'Доступно для продажи'),
+    ]
+
     title = models.CharField(verbose_name='Название', max_length=150)
-    slug = models.SlugField(verbose_name='Название на английском', unique=True)
+    slug = models.SlugField(verbose_name='Название на английском', max_length=150, unique=True)
     description = models.CharField(verbose_name='Описание', max_length=250)
     price = models.DecimalField(verbose_name='Цена', max_digits=7, decimal_places=2)
     discount = models.PositiveIntegerField(verbose_name='Скидка в %', default=0)
-    stock = models.PositiveIntegerField(verbose_name='Остаток на складе', default=0)
-    available = models.BooleanField(verbose_name='Отображается в каталоге', default=False)
-    only_on_order = models.BooleanField(verbose_name='Только под заказ', default=False)
+    stock = models.PositiveIntegerField(verbose_name='Количество букетов', default=0)
+    status = models.PositiveSmallIntegerField(
+        choices=STATUS_CHOICES,
+        default=UNAVAILABLE,
+        verbose_name='Статус',
+    )
 
     class Meta:
         verbose_name = 'Букет'
@@ -84,15 +124,25 @@ class Bouquet(models.Model):
         unique_together = ('slug',)  # делает поле уникальным
 
     def __str__(self):
-        return f'title = {self.title}'
+        return self.title
 
     def get_absolute_url(self):
         return reverse('bouquets', kwargs={'slug': self.slug})
 
+    def save(self, *args, **kwargs):
+        """ Переводит поле title с ru на en и сохраняет в slug """
+        # for translate slug
+        from translate import Translator
+        translator = Translator(from_lang='ru', to_lang='en')
+        translated_title = translator.translate(self.title)
+        self.slug = slugify(translated_title)
+        super(Bouquet, self).save(*args, **kwargs)
+
 
 class GalleryBouquet(models.Model):
+    """ Класс добавления картинок в букет """
     image = models.ImageField(upload_to='images')
-    bouquet = models.ForeignKey(Bouquet, on_delete=models.CASCADE, related_name='img')
+    bouquet_gallery = models.ForeignKey(Bouquet, on_delete=models.CASCADE, related_name='bouquet_gallery')
 
     class Meta:
         verbose_name = 'Изображение'
@@ -100,49 +150,48 @@ class GalleryBouquet(models.Model):
 
 
 class CompositionOfTheBouquet(models.Model):
+    """ Класс сохранения цветов в букете """
+    # для связи между букетом и композицией
+    bouquet_composition = models.ForeignKey(
+        Bouquet, verbose_name='Букет', on_delete=models.PROTECT, related_name='bouquet_composition'
+    )
+    # для выбора цветка в букет
     flower = models.ForeignKey(
-        Flower, verbose_name='Выбрать цветок', on_delete=models.PROTECT
+        Flower, verbose_name='Выбрать цветок', on_delete=models.PROTECT, db_column='flower'
     )
-    bouquet = models.ForeignKey(
-        Bouquet, verbose_name='Состав', on_delete=models.PROTECT
+    # количество цветка в букете
+    count = models.PositiveIntegerField(verbose_name='Количество цветов', default=0)
+    # общее количество цветов в букетах (количество букетов * количество цветка в букете)
+    total_count = models.PositiveIntegerField(
+        verbose_name='Общее количество цветов в этом букете',
+        default=0
     )
-    count = models.PositiveIntegerField(verbose_name='Количество', default=0)
 
     def __str__(self):
-        return f'Flower = {self.flower}, Bouquet = {self.bouquet}, Count = {self.count}'
+        return f'{self.flower.title}'
 
-    # def save(self, *args, **kwargs):
-    #     Flower.objects.all().stock_in_bouquets = 2+2
-    #     super(CompositionOfTheBouquet, Flower, self).save(*args, **kwargs)
+    class Meta:
+        verbose_name = 'Цветок'
+        verbose_name_plural = 'Цветы'
 
-    # Flower.objects.annotate(
-    #     count=Sum('CompositionOfTheBouquet_set__count'),
-    #     bouquet=Sum('Bouquet_set__stock'),
-    # ).annotate(
-    #     stock_in_bouquets=F('count') + F('bouquet')
-    # )
+    def delete(self, *args, **kwargs):
+        flowers = Flower.objects.get(id=self.flower.id)
+        # удаляем значение из общего количества цветов в букетах
+        flowers.stock_in_bouquets -= self.total_count
+        flowers.save()
+        super(CompositionOfTheBouquet, self).delete(*args, **kwargs)
 
-    # def save(self, *args, **kwargs):
-    #     # flower = Flower.stock
-    #     # bouquet = Bouquet.stock
-    #     Flower.stock = int(self.flower.stock) - (int(self.bouquet.stock) * int(self.count))
-    #     super(CompositionOfTheBouquet, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
 
-    # @property
-    # def counter(self):
-    #     if self.count:
-    #         # self.flower.stock = self.flower.stock - (self.count * self.bouquet.stock)
-    #         # self.flower.stock.save()
-    #         Flower.stock = int(Flower.stock) - (int(self.count) * int(Bouquet.stock))
-    #         Flower.stock.save()
-    #         print(Flower.stock)
-    #         return Flower.stock
+        flowers = Flower.objects.get(id=self.flower.id)
+        # удаляем старое значение из общего количества цветов в букетах
+        flowers.stock_in_bouquets -= self.total_count
+        # присваиваем новое значение
+        self.total_count = self.bouquet_composition.stock * self.count
 
-    # @property
-    # def math(self):
-    #     if self.count:
-    #         x = self.count - self.flower.stock
-    #         return x
-    #     else:
-    #         return '-'
+        flowers.stock_in_bouquets += self.total_count
+        flowers.save()
+        super(CompositionOfTheBouquet, self).save(*args, **kwargs)
+
+
 

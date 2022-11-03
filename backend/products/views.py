@@ -3,7 +3,6 @@ from django.shortcuts import render
 from .models import Category, Flower, Bouquet
 from .models import GalleryFlower, CompositionOfTheBouquet
 
-
 from django.views.generic import ListView
 
 
@@ -36,25 +35,21 @@ from django.views.generic import ListView
 #     fields = '__all__'
 #     # под каким названием будут лететь строчки из таблицы в шаблон
 #     context_object_name = 'flower_images'
+async def save_composition():
+    compositions = CompositionOfTheBouquet.objects.all()
+    async for composition in compositions:
+        await composition.save()
 
 
 def index(request):
-    category = Category.objects.all()
-    flowers = Flower.objects.all()
     bouquets = Bouquet.objects.all()
     compositions = CompositionOfTheBouquet.objects.all()
 
-    # считает сумму цветов, которые задействованы в букетах
-    for composition in compositions:
-        flower = Flower.objects.get(id=composition.flower.id)
-        flower.stock_in_bouquets = composition.bouquet.stock * composition.count
-        flower.save()
+    save_composition()
 
-    for flower in flowers:
-        flower.save()
+    # сделать вычисления (stock_for_sale = whole_stock - stock_in_bouquets)
 
     return render(request, 'products/index.html', {
-        'categories': category,
-        'flowers': flowers,
+        'bouquets': bouquets,
         'compositions': compositions,
     })
