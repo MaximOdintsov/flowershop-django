@@ -1,12 +1,12 @@
 from django.contrib import admin
-from django.db.models import F
+from django.db import models
 
 from .models import Category, Flower, Bouquet
 from .models import GalleryFlower, GalleryBouquet, CompositionOfTheBouquet
 
 from django.contrib import admin
-from django.contrib.admin import AdminSite
-from django.http import HttpResponse
+
+from django.forms import TextInput, IntegerField
 
 
 class GalleryFlowerInline(admin.TabularInline):
@@ -25,7 +25,7 @@ class CompositionOfTheBouquetInline(admin.StackedInline):
     model = CompositionOfTheBouquet
     # fk_name = 'bouquet_composition'
     extra = 0
-    fields = ('flower', 'count',)
+    fields = ('flower', 'count', )
     actions = ['save_composition', ]
 
 
@@ -36,17 +36,33 @@ class Category(admin.ModelAdmin):
 
 @admin.register(Flower)
 class Flower(admin.ModelAdmin):
+    formfield_overrides = {
+        models.DecimalField: {
+            'widget': TextInput(attrs={'size': 10})
+        },
+    }
+
     inlines = [GalleryFlowerInline, ]
     fields = ('category', 'title',  # 'slug',
               'description', ('price', 'discount'), 'whole_stock', 'status')
+    list_display = ['title', 'price', 'discount', 'discount_price', 'new_arrival', 'whole_stock', 'stock_for_sale', 'status', ]
+    list_editable = ['price', 'discount', 'new_arrival', 'status', ]
+    list_per_page = 20  # сколько строк отображается на 1 странице
+    ordering = ['status', ]  # сортировка
 
 
 @admin.register(Bouquet)
 class Bouquet(admin.ModelAdmin):
+    formfield_overrides = {
+        models.DecimalField: {
+            'widget': TextInput(attrs={'size': 10})
+        },
+    }
+
     inlines = [GalleryBouquetInline, CompositionOfTheBouquetInline, ]
     fields = ('title', 'description',
               ('price', 'discount'), 'stock', 'status')
-    list_display = ['title', 'description', 'price', 'discount', 'stock', 'status']
+    list_display = ['title', 'price', 'discount', 'discount_price', 'stock', 'status']
     list_editable = ['price', 'discount', 'stock', 'status']
     list_per_page = 20  # сколько строк отображается на 1 странице
     ordering = ['status', ]  # сортировка
@@ -58,14 +74,9 @@ class Bouquet(admin.ModelAdmin):
         # обновляем Flower.stock_in_bouquets и рассчитываем Flower.stock_for_sale
         bouquets = queryset
         for bouquet in bouquets:
-            flower_len = len(CompositionOfTheBouquet.objects.filter(bouquet_composition=bouquet))
-            flowers = CompositionOfTheBouquet.objects.filter(bouquet_composition=bouquet)
-            for flower in flowers:
-                # сохраняем поле CompositionOfTheBouquet
-                save_composition = CompositionOfTheBouquet.objects.get(id=flower.id)
-                save_composition.save()
+            bouquet = bouquet
+            bouquet.save()
 
-        # рассчитать Flower.stock_for_sale
         self.message_user(
             request,
             f'Было обновлено {len(bouquets)} записей'
