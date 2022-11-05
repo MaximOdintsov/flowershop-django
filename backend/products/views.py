@@ -1,7 +1,7 @@
 from django.db.models import Sum, F
 from django.shortcuts import render
 from .models import Category, Flower, Bouquet
-from .models import GalleryFlower, CompositionOfTheBouquet
+from .models import GalleryFlower, GalleryBouquet, CompositionOfTheBouquet
 
 from django.views.generic import ListView
 
@@ -34,22 +34,39 @@ from django.views.generic import ListView
 #     # какие поля будут отправляться в шаблон
 #     fields = '__all__'
 #     # под каким названием будут лететь строчки из таблицы в шаблон
-#     context_object_name = 'flower_images'
-async def save_composition():
-    compositions = CompositionOfTheBouquet.objects.all()
-    async for composition in compositions:
-        await composition.save()
+#     context_object_name = 'flower_images
 
 
 def index(request):
-    bouquets = Bouquet.objects.all()
-    compositions = CompositionOfTheBouquet.objects.all()
 
-    save_composition()
+    return render(request, 'products/index.html')
+
+
+def flower(request):
+    flowers = Flower.objects.all()
+    gallery = GalleryFlower.objects.all()
 
     # сделать вычисления (stock_for_sale = whole_stock - stock_in_bouquets)
 
-    return render(request, 'products/index.html', {
+    return render(request, 'products/flowers.html', {
+        'flowers': flowers,
+
+        # 'gallery': gallery,
+        'gallery': Flower.objects.all()[3].flower_gallery.all(),
+
+        # 'gallery':  Flower.objects.get(id=10).flower_gallery.all()[0].image,
+    })
+
+
+def bouquet(request):
+    bouquets = Bouquet.objects.all()
+    gallery = GalleryBouquet.objects.all()
+    compositions = CompositionOfTheBouquet.objects.all()
+
+    # сделать вычисления (stock_for_sale = whole_stock - stock_in_bouquets)
+
+    return render(request, 'products/bouquets.html', {
         'bouquets': bouquets,
+        'gallery': gallery,
         'compositions': compositions,
     })

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.db import models
+from django.db import models, transaction
 
 from .models import Category, Flower, Bouquet
 from .models import GalleryFlower, GalleryBouquet, CompositionOfTheBouquet
@@ -45,10 +45,23 @@ class Flower(admin.ModelAdmin):
     inlines = [GalleryFlowerInline, ]
     fields = ('category', 'title',  # 'slug',
               'description', ('price', 'discount'), 'whole_stock', 'status')
-    list_display = ['title', 'price', 'discount', 'discount_price', 'new_arrival', 'whole_stock', 'stock_for_sale', 'status', ]
-    list_editable = ['price', 'discount', 'new_arrival', 'status', ]
+    # для работы
+    # list_display = ['title', 'price', 'discount', 'discount_price', 'new_arrival', 'whole_stock', 'stock_for_sale', 'status', ]
+    # list_editable = ['price', 'discount', 'new_arrival', 'status', ]
+
+    # для разработки
+    list_display = ['title', 'price', 'whole_stock', 'stock_in_bouquets', 'stock_for_sale', 'status', ]
+    list_editable = ['price', 'whole_stock', 'stock_in_bouquets', 'stock_for_sale', 'status', ]
     list_per_page = 20  # сколько строк отображается на 1 странице
     ordering = ['status', ]  # сортировка
+
+    @transaction.atomic
+    @admin.action(description='Удалить выбранные объекты')
+    def delete_queryset(self, request, queryset):
+        # переопределяем метод delete в actions
+        flowers = queryset
+        for flower in flowers:
+            flower.delete()
 
 
 @admin.register(Bouquet)
@@ -69,15 +82,28 @@ class Bouquet(admin.ModelAdmin):
 
     actions = ['save_composition', ]
 
+    @transaction.atomic
+    @admin.action(description='Удалить выбранные объекты')
+    def delete_queryset(self, request, queryset):
+        # переопределяем метод delete в actions
+        bouquets = queryset
+        for bouquet in bouquets:
+            bouquet.delete()
+
+        self.message_user(
+            request,
+            f'Было удалено {len(bouquets)} букетов'
+        )
+
+    @transaction.atomic
     @admin.action(description='Обновить значения')
     def save_composition(self, request, queryset):
         # обновляем Flower.stock_in_bouquets и рассчитываем Flower.stock_for_sale
         bouquets = queryset
         for bouquet in bouquets:
-            bouquet = bouquet
             bouquet.save()
 
         self.message_user(
             request,
-            f'Было обновлено {len(bouquets)} записей'
+            f'Было обновлено {len(bouquets)} букетов'
         )

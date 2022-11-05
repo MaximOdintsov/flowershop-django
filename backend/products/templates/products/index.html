@@ -1,45 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mutliple Upload</title>
-    <style>
-        img {
-            height: 200px;
-            width: 200px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Hello!</h1>
-    <li>
-        {% for flower in flowers %}
-            <img src="{{ flower.image }}" height="300"> <br>
-            {{ flower.flower_id }} <br>
-            {{ flower.title }} <br>
-            {{ flower.slug }} <br>
-            {{ flower.description }} <br>
-            {{ flower.price }} <br>
-            {{ flower.discount }} <br>
-            {{ flower.stock }} <br>
-            {{ flower.available }} <br>
-        {% endfor %}
+{% extends 'products/base.html' %}
 
-    </li>
+{% load static %}
 
-<!--    <form action="f;" method="post">-->
-<!--        <label for="flowers">Enter name: </label>-->
-<!--        <input-->
-<!--            id="team_name"-->
-<!--            type="text"-->
-<!--            name="name_field"-->
-<!--            value="Default name for team."-->
-<!--        />-->
-<!--        <input type="submit" value="OK" />-->
-<!--    </form>-->
+{% block static %}
+    <link rel="stylesheet" href="{% static 'home_page/css/style.css' %}">
+{% endblock %}
 
-    <img src="" alt="Image">
-</body>
-</html>
+
+{% block title %} Цветы Киров {% endblock %}
+
+
+{% block content %}
+
+    <nav class="flex-title">
+
+        <a href="{% url 'index' %}">Главная</a>
+        <a href="{% url 'flowers' %}">Цветы</a>
+        <a href="{% url 'bouquets' %}">Букеты</a>
+        <a href="admin">Админка</a>
+
+    </nav>
+{% endblock %}
+
+

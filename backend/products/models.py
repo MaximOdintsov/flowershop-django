@@ -1,10 +1,11 @@
+import os
+
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models, transaction
 
 # import for get_absolute_url
 from django.urls import reverse
 
-from django.db.models import Case, Value, When, F, Sum
 from django.utils.text import slugify
 
 
@@ -12,7 +13,7 @@ class Category(models.Model):
     """ Класс добавления категории цветов """
 
     title = models.CharField(max_length=100, verbose_name='Имя категории')
-    slug = models.SlugField(verbose_name='Название на английском', max_length=150, unique=True, null=True, default=None)
+    slug = models.SlugField(verbose_name='Название на английском', max_length=150, unique=True, null=False)
 
     class Meta:
         verbose_name = 'Категория цветка'
@@ -58,13 +59,14 @@ class Flower(models.Model):
         Category, verbose_name='Категория', on_delete=models.PROTECT
     )
     title = models.CharField(verbose_name='Название', max_length=100)
-    slug = models.SlugField(verbose_name='Название на английском', max_length=150, unique=True, null=True, default=None)
+    slug = models.SlugField(verbose_name='Название на английском', max_length=150, unique=True, null=False)
     description = models.CharField(verbose_name='Описание', max_length=250)
 
     price = models.DecimalField(verbose_name='Цена без скидки', max_digits=8, decimal_places=2)
     discount_price = models.DecimalField(verbose_name='Цена со скидкой', max_digits=8, decimal_places=2, default=0.00)
     discount = models.PositiveSmallIntegerField(
         verbose_name='Скидка в %',
+        default=0,
         validators=[MinValueValidator(0), MaxValueValidator(80)]
     )
 
@@ -73,6 +75,11 @@ class Flower(models.Model):
     stock_in_bouquets = models.PositiveSmallIntegerField(verbose_name='Цветы в букетах', default=0)
     stock_for_sale = models.PositiveSmallIntegerField(verbose_name='Остаток для продажи', default=0)
 
+    # находится ли этот цветок в букетах
+    # status_in_bouquets = models.PositiveSmallIntegerField(
+    #
+    # )
+    #
     status = models.PositiveSmallIntegerField(
         choices=STATUS_CHOICES,
         default=UNCHECKED,
@@ -90,8 +97,11 @@ class Flower(models.Model):
     def get_absolute_url(self):
         return reverse('flowers', kwargs={'slug': self.slug})
 
+    # при сохранении букетов может возникнуть ошибка, для отката изменений
+    @transaction.atomic
     def save(self, *args, **kwargs):
-        """ Переводит поле title с ru на en и сохраняет в slug """
+        """ Переводит поле title с ru на en и сохраняет в slug
+        Обновляет stocks"""
 
         # сохраняем для определения id
         super(Flower, self).save()
@@ -115,6 +125,14 @@ class Flower(models.Model):
         self.discount_price = self.price - sale
 
         super(Flower, self).save(*args, **kwargs)
+
+    @transaction.atomic
+    def delete(self, *args, **kwargs):
+        if self.stock_in_bouquets == 0:
+            super(Flower, self).delete(*args, **kwargs)
+        else:
+            raise Exception(f'Сначала нужно удалить цветок {self.title} во всех букетах\n'
+                            f'После этого можно будет удалить этот цветок из каталога\n')
 
 
 class GalleryFlower(models.Model):
@@ -143,13 +161,14 @@ class Bouquet(models.Model):
     ]
 
     title = models.CharField(verbose_name='Название', max_length=150)
-    slug = models.SlugField(verbose_name='Название на английском', max_length=150, unique=True, null=True, default=None)
+    slug = models.SlugField(verbose_name='Название на английском', max_length=150, unique=True, null=False)
     description = models.CharField(verbose_name='Описание', max_length=250)
 
     price = models.DecimalField(verbose_name='Цена без скидки', max_digits=8, decimal_places=2)
     discount_price = models.DecimalField(verbose_name='Цена со скидкой', max_digits=8, decimal_places=2, default=0.00)
     discount = models.PositiveSmallIntegerField(
         verbose_name='Скидка в %',
+        default=0,
         validators=[MinValueValidator(0), MaxValueValidator(80)]
     )
 
@@ -199,7 +218,7 @@ class Bouquet(models.Model):
             # прибавляем к количеству цветов в букете total_count
             flower.stock_in_bouquets += composition.total_count
 
-            # сохраняем composition и flower, если весь запаса хватает
+            # сохранение composition и flower, если проверка прошла успешно
             if flower.whole_stock >= flower.stock_in_bouquets:
                 composition.save()
                 flower.save()
@@ -211,6 +230,16 @@ class Bouquet(models.Model):
         sale = (self.price / 100) * self.discount
         self.discount_price = self.price - sale
         super(Bouquet, self).save(*args, **kwargs)
+
+    @transaction.atomic
+    def delete(self, *args, **kwargs):
+        compositions = Bouquet.objects.get(id=self.id).bouquet_composition.all()
+        for composition in compositions:
+            # удаляем каждый цветок в букете
+            composition.delete()
+            self.save()
+
+        super(Bouquet, self).delete(*args, **kwargs)
 
 
 class GalleryBouquet(models.Model):
@@ -227,12 +256,12 @@ class CompositionOfTheBouquet(models.Model):
     """ Класс сохранения цветов в букете """
     # для связи между букетом и композицией
     bouquet_composition = models.ForeignKey(
-        Bouquet, verbose_name='Букет', on_delete=models.PROTECT, related_name='bouquet_composition'
+        Bouquet, verbose_name='Букет', on_delete=models.CASCADE, related_name='bouquet_composition'
     )
     # для выбора цветка в букет
     flower = models.ForeignKey(
         Flower, verbose_name='Выбрать цветок',
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         db_column='flower',
         related_name='flower_composition',
     )
@@ -251,12 +280,13 @@ class CompositionOfTheBouquet(models.Model):
         verbose_name = 'Цветок'
         verbose_name_plural = 'Цветы'
 
+    @transaction.atomic
     def delete(self, *args, **kwargs):
         flowers = Flower.objects.get(id=self.flower.id)
         # удаляем значение из общего количества цветов в букетах
         flowers.stock_in_bouquets -= self.total_count
         flowers.save()
+        self.bouquet_composition.save()
         super(CompositionOfTheBouquet, self).delete(*args, **kwargs)
-
 
 

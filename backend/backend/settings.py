@@ -47,6 +47,9 @@ INSTALLED_APPS = [
 
     'products',
     'django_extensions',
+
+    # должен быть последним / нужен для удаления медиа файлов
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
