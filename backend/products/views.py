@@ -5,68 +5,68 @@ from .models import GalleryFlower, GalleryBouquet, CompositionOfTheBouquet
 
 from django.views.generic import ListView
 
+from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
-# class ListFlower(ListView):
-#     model = Flower
-#     template_name = 'products/index.html'
+from . import serializers
+
+
+class FlowerListView(APIView):
+    """ Вывод списка цветов """
+
+    def get(self, request):
+        flowers = Flower.objects.filter(available=True)
+        serializer = serializers.FlowerListSerializer(flowers, many=True)
+        return Response(serializer.data)
+
+
+# показывает неверные ссылки
+class FlowerDetailView(APIView):
+    """ Вывод списка цветов """
+
+    def get(self, request, pk):
+        flower = Flower.objects.get(id=pk, available=True)
+        serializer = serializers.FlowerDetailSerializer(flower)
+        return Response(serializer.data)
+
+
+class FlowerGalleryView(generics.ListAPIView):
+    """ Показывает правильные ссылки """
+    queryset = GalleryFlower.objects.all()
+    serializer_class = serializers.GallerySerializer
+
 #
-#     # какие поля будут отправляться в шаблон
-#     fields = '__all__'
-#     # под каким названием будут лететь строчки из таблицы в шаблон
-#     context_object_name = 'flowers'
+# def index(request):
 #
+#     return render(request, 'products/index.html')
+#
+#
+# def flower(request):
 #     flowers = Flower.objects.all()
-#     for flower in flowers:
-#         flower.save()
-
-    # add math
-    # def substract(request):
-    #     flower = Flower.objects.all()
-    #     composition = CompositionOfTheBouquet.objects.all()
-    #     foo = flower.stock - composition.count
-    #     return foo
-
-
-# class ListFlowerImages(ListView):
-#     model = GalleryFlower
-#     template_name = 'products/index.html'
+#     gallery = GalleryFlower.objects.all()
 #
-#     # какие поля будут отправляться в шаблон
-#     fields = '__all__'
-#     # под каким названием будут лететь строчки из таблицы в шаблон
-#     context_object_name = 'flower_images
-
-
-def index(request):
-
-    return render(request, 'products/index.html')
-
-
-def flower(request):
-    flowers = Flower.objects.all()
-    gallery = GalleryFlower.objects.all()
-
-    # сделать вычисления (stock_for_sale = whole_stock - stock_in_bouquets)
-
-    return render(request, 'products/flowers.html', {
-        'flowers': flowers,
-
-        # 'gallery': gallery,
-        'gallery': Flower.objects.all()[3].flower_gallery.all(),
-
-        # 'gallery':  Flower.objects.get(id=10).flower_gallery.all()[0].image,
-    })
-
-
-def bouquet(request):
-    bouquets = Bouquet.objects.all()
-    gallery = GalleryBouquet.objects.all()
-    compositions = CompositionOfTheBouquet.objects.all()
-
-    # сделать вычисления (stock_for_sale = whole_stock - stock_in_bouquets)
-
-    return render(request, 'products/bouquets.html', {
-        'bouquets': bouquets,
-        'gallery': gallery,
-        'compositions': compositions,
-    })
+#     # сделать вычисления (stock_for_sale = whole_stock - stock_in_bouquets)
+#
+#     return render(request, 'products/flowers.html', {
+#         'flowers': flowers,
+#
+#         # 'gallery': gallery,
+#         'gallery': Flower.objects.all()[3].flower_gallery.all(),
+#
+#         # 'gallery':  Flower.objects.get(id=10).flower_gallery.all()[0].image,
+#     })
+#
+#
+# def bouquet(request):
+#     bouquets = Bouquet.objects.all()
+#     gallery = GalleryBouquet.objects.all()
+#     compositions = CompositionOfTheBouquet.objects.all()
+#
+#     # сделать вычисления (stock_for_sale = whole_stock - stock_in_bouquets)
+#
+#     return render(request, 'products/bouquets.html', {
+#         'bouquets': bouquets,
+#         'gallery': gallery,
+#         'compositions': compositions,
+#     })

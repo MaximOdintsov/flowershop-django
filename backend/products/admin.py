@@ -46,12 +46,12 @@ class Flower(admin.ModelAdmin):
     fields = ('category', 'title',  # 'slug',
               'description', ('price', 'discount'), 'whole_stock', 'status')
     # для работы
-    # list_display = ['title', 'price', 'discount', 'discount_price', 'new_arrival', 'whole_stock', 'stock_for_sale', 'status', ]
-    # list_editable = ['price', 'discount', 'new_arrival', 'status', ]
+    list_display = ['title', 'price', 'discount', 'discount_price', 'new_arrival', 'whole_stock', 'stock_for_sale', 'available', 'status']
+    list_editable = ['price', 'discount', 'new_arrival', 'available', 'status', ]
 
     # для разработки
-    list_display = ['title', 'price', 'whole_stock', 'stock_in_bouquets', 'stock_for_sale', 'status', ]
-    list_editable = ['price', 'whole_stock', 'stock_in_bouquets', 'stock_for_sale', 'status', ]
+    # list_display = ['title', 'price', 'whole_stock', 'stock_in_bouquets', 'stock_for_sale', 'status', ]
+    # list_editable = ['price', 'whole_stock', 'stock_in_bouquets', 'stock_for_sale', 'status', ]
     list_per_page = 20  # сколько строк отображается на 1 странице
     ordering = ['status', ]  # сортировка
 
@@ -75,8 +75,8 @@ class Bouquet(admin.ModelAdmin):
     inlines = [GalleryBouquetInline, CompositionOfTheBouquetInline, ]
     fields = ('title', 'description',
               ('price', 'discount'), 'stock', 'status')
-    list_display = ['title', 'price', 'discount', 'discount_price', 'stock', 'status']
-    list_editable = ['price', 'discount', 'stock', 'status']
+    list_display = ['title', 'price', 'discount', 'discount_price', 'stock', 'available', 'status']
+    list_editable = ['price', 'discount', 'stock', 'available', 'status']
     list_per_page = 20  # сколько строк отображается на 1 странице
     ordering = ['status', ]  # сортировка
 

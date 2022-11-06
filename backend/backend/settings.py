@@ -45,11 +45,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework',
     'products',
     'django_extensions',
 
+
     # должен быть последним / нужен для удаления медиа файлов
     'django_cleanup.apps.CleanupConfig',
+
 ]
 
 MIDDLEWARE = [

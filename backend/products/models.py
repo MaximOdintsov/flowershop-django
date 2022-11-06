@@ -46,13 +46,11 @@ class Flower(models.Model):
     UNCHECKED = 1
     SALE = 2
     ORDER = 3
-    UNAVAILABLE = 4
 
     STATUS_CHOICES = [
         (UNCHECKED, 'Находится на проверке'),
         (SALE, 'Доступно для продажи'),
         (ORDER, 'Только под заказ'),
-        (UNAVAILABLE, 'Недоступно для продажи'),
     ]
 
     category = models.ForeignKey(
@@ -75,16 +73,13 @@ class Flower(models.Model):
     stock_in_bouquets = models.PositiveSmallIntegerField(verbose_name='Цветы в букетах', default=0)
     stock_for_sale = models.PositiveSmallIntegerField(verbose_name='Остаток для продажи', default=0)
 
-    # находится ли этот цветок в букетах
-    # status_in_bouquets = models.PositiveSmallIntegerField(
-    #
-    # )
-    #
     status = models.PositiveSmallIntegerField(
         choices=STATUS_CHOICES,
         default=UNCHECKED,
         verbose_name='Статус',
     )
+
+    available = models.BooleanField(verbose_name='Доступен', default=False)
 
     class Meta:
         verbose_name = 'Цветок'
@@ -94,8 +89,9 @@ class Flower(models.Model):
     def __str__(self):
         return self.title
 
-    def get_absolute_url(self):
-        return reverse('flowers', kwargs={'slug': self.slug})
+    # url (нужно будет сделать)
+    # def get_absolute_url(self):
+    #     return reverse('flowers', kwargs={'slug': self.slug})
 
     # при сохранении букетов может возникнуть ошибка, для отката изменений
     @transaction.atomic
@@ -148,16 +144,15 @@ class GalleryFlower(models.Model):
 
 class Bouquet(models.Model):
     """ Класс создания букета """
+
     UNCHECKED = 1
     SALE = 2
     ORDER = 3
-    UNAVAILABLE = 4
 
     STATUS_CHOICES = [
         (UNCHECKED, 'Находится на проверке'),
         (SALE, 'Доступно для продажи'),
         (ORDER, 'Только под заказ'),
-        (UNAVAILABLE, 'Недоступно для продажи'),
     ]
 
     title = models.CharField(verbose_name='Название', max_length=150)
@@ -180,6 +175,8 @@ class Bouquet(models.Model):
         verbose_name='Статус',
     )
 
+    available = models.BooleanField(verbose_name='Доступен', default=False)
+
     class Meta:
         verbose_name = 'Букет'
         verbose_name_plural = 'Букеты'
@@ -188,8 +185,9 @@ class Bouquet(models.Model):
     def __str__(self):
         return self.title
 
-    def get_absolute_url(self):
-        return reverse('bouquets', kwargs={'slug': self.slug})
+    # url (нужно будет сделать)
+    # def get_absolute_url(self):
+    #     return reverse('flowers', kwargs={'slug': self.slug})
 
     # декоратор для отмены всех сохранений в бд, если произошла ошибка
     @transaction.atomic
