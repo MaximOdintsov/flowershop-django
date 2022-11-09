@@ -144,3 +144,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # add media files
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = ""
+
+# for rest api
+REST_FRAMEWORK = {
+    # for output static files
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ]
+}

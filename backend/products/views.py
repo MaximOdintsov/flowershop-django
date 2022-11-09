@@ -8,20 +8,36 @@ from django.views.generic import ListView
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.http import JsonResponse
 
 from . import serializers
 
+from django.contrib.auth.models import User
+from rest_framework.renderers import JSONRenderer
+
+
+# class FlowerListView(APIView):
+#     """ Вывод списка цветов """
+#
+#     def get(self, request):
+#         flowers = Flower.objects.filter(available=True)
+#         serializer = serializers.FlowerListSerializer(flowers, many=True)
+#         return Response(serializer.data)
 
 class FlowerListView(APIView):
     """ Вывод списка цветов """
 
     def get(self, request):
         flowers = Flower.objects.filter(available=True)
-        serializer = serializers.FlowerListSerializer(flowers, many=True)
-        return Response(serializer.data)
+        serializer = serializers.FlowerListSerializer(flowers, many=True).data
+        return Response({'posts': serializer})
 
+    # def post(self, request):
+    #     post_new = Flower.objects.create(
+    #         category=request.data['category']
+    #     )
 
-# показывает неверные ссылки
+# показывает неверные ссылки на картинки
 class FlowerDetailView(APIView):
     """ Вывод списка цветов """
 
@@ -31,42 +47,41 @@ class FlowerDetailView(APIView):
         return Response(serializer.data)
 
 
-class FlowerGalleryView(generics.ListAPIView):
-    """ Показывает правильные ссылки """
-    queryset = GalleryFlower.objects.all()
-    serializer_class = serializers.GallerySerializer
+# class FlowerGalleryView(generics.ListAPIView):
+#     """ Показывает правильные ссылки """
+#
+#     queryset = GalleryFlower.objects.all()
+#     serializer_class = serializers.GalleryFlowerSerializer
 
+
+# class FlowerGalleryView(APIView):
+#     """ Вывод списка цветов """
 #
-# def index(request):
+#     def get(self, request, pk):
+#         queryset = GalleryFlower.objects.filter(flower_gallery_id=pk).values()
+#         serializer = serializers.GalleryFlowerSerializer
 #
-#     return render(request, 'products/index.html')
-#
-#
-# def flower(request):
-#     flowers = Flower.objects.all()
-#     gallery = GalleryFlower.objects.all()
-#
-#     # сделать вычисления (stock_for_sale = whole_stock - stock_in_bouquets)
-#
-#     return render(request, 'products/flowers.html', {
-#         'flowers': flowers,
-#
-#         # 'gallery': gallery,
-#         'gallery': Flower.objects.all()[3].flower_gallery.all(),
-#
-#         # 'gallery':  Flower.objects.get(id=10).flower_gallery.all()[0].image,
-#     })
-#
-#
-# def bouquet(request):
-#     bouquets = Bouquet.objects.all()
-#     gallery = GalleryBouquet.objects.all()
-#     compositions = CompositionOfTheBouquet.objects.all()
-#
-#     # сделать вычисления (stock_for_sale = whole_stock - stock_in_bouquets)
-#
-#     return render(request, 'products/bouquets.html', {
-#         'bouquets': bouquets,
-#         'gallery': gallery,
-#         'compositions': compositions,
-#     })
+#         return Response({'model_to_return': queryset})
+
+
+# class FlowerGalleryView(APIView):
+#     """ Вывод списка цветов """
+#     # только строки
+#     def get(self, request):
+#         queryset = GalleryFlower.objects.all()
+#         context = {'request': request}
+#         serializer = serializers.GalleryFlowerSerializer(context=context)
+#         return Response(queryset, serializer.data)
+
+class FlowerGalleryView(APIView):
+    """ Вывод списка цветов """
+
+    renderer_classes = [JSONRenderer]
+
+    def get(self, request, pk):
+        queryset = GalleryFlower.objects.filter(flower_gallery_id=pk).count()
+        content = {'flower_gallery_image': queryset}
+        # serializer = serializers.GalleryFlowerSerializer
+
+        return Response({'model_to_return': queryset})
+

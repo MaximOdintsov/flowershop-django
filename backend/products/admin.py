@@ -43,7 +43,7 @@ class Flower(admin.ModelAdmin):
     }
 
     inlines = [GalleryFlowerInline, ]
-    fields = ('category', 'title',  # 'slug',
+    fields = ('category', 'title', 'preview',
               'description', ('price', 'discount'), 'whole_stock', 'status')
     # для работы
     list_display = ['title', 'price', 'discount', 'discount_price', 'new_arrival', 'whole_stock', 'stock_for_sale', 'available', 'status']
@@ -73,7 +73,7 @@ class Bouquet(admin.ModelAdmin):
     }
 
     inlines = [GalleryBouquetInline, CompositionOfTheBouquetInline, ]
-    fields = ('title', 'description',
+    fields = ('title', 'description', 'preview',
               ('price', 'discount'), 'stock', 'status')
     list_display = ['title', 'price', 'discount', 'discount_price', 'stock', 'available', 'status']
     list_editable = ['price', 'discount', 'stock', 'available', 'status']

@@ -8,6 +8,8 @@ from django.urls import reverse
 
 from django.utils.text import slugify
 
+from django.conf import settings
+from django.conf.urls.static import static
 
 class Category(models.Model):
     """ Класс добавления категории цветов """
@@ -58,6 +60,7 @@ class Flower(models.Model):
     )
     title = models.CharField(verbose_name='Название', max_length=100)
     slug = models.SlugField(verbose_name='Название на английском', max_length=150, unique=True, null=False)
+    preview = models.ImageField(verbose_name='Превью', upload_to='flowers/previews')
     description = models.CharField(verbose_name='Описание', max_length=250)
 
     price = models.DecimalField(verbose_name='Цена без скидки', max_digits=8, decimal_places=2)
@@ -134,12 +137,15 @@ class Flower(models.Model):
 class GalleryFlower(models.Model):
     """ Класс добавления картинок в цветок """
 
-    image = models.ImageField(upload_to='images')
+    image = models.ImageField(upload_to='flowers/images')
     flower_gallery = models.ForeignKey(Flower, on_delete=models.CASCADE, related_name='flower_gallery')
 
     class Meta:
         verbose_name = 'Картинка'
         verbose_name_plural = 'Картинки'
+
+    def __str__(self):
+        return self.image.name
 
 
 class Bouquet(models.Model):
@@ -156,6 +162,7 @@ class Bouquet(models.Model):
     ]
 
     title = models.CharField(verbose_name='Название', max_length=150)
+    preview = models.ImageField(verbose_name='Превью', upload_to='bouquets/previews')
     slug = models.SlugField(verbose_name='Название на английском', max_length=150, unique=True, null=False)
     description = models.CharField(verbose_name='Описание', max_length=250)
 
@@ -242,7 +249,7 @@ class Bouquet(models.Model):
 
 class GalleryBouquet(models.Model):
     """ Класс добавления картинок в букет """
-    image = models.ImageField(upload_to='images')
+    image = models.ImageField(upload_to='bouquets/images')
     bouquet_gallery = models.ForeignKey(Bouquet, on_delete=models.CASCADE, related_name='bouquet_gallery')
 
     class Meta:
