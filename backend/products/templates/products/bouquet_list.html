@@ -1,0 +1,29 @@
+{% extends 'products/base.html' %}
+
+{% load static %}
+
+{% block static %}
+    <link rel="stylesheet" href="{% static 'home_page/css/style.css' %}">
+{% endblock %}
+
+
+{% block title %} Букеты {% endblock %}
+
+
+{% block content %}
+
+    {% for bouquet in bouquets %}
+
+        {% if bouquet.preview %}
+            <img src="{{ bouquet.preview.url }}" height="300"><br>
+        {% endif %}
+
+        <a href="{{ bouquet.slug }}">{{ bouquet.title }}</a><br>
+        Стоимость: {{ bouquet.discount_price }} Руб.<br>
+        Цена: {{ bouquet.price }} Руб.<br>
+        Скидка: {{ bouquet.discount }}%<br>
+        Цена со скидкой: {{ bouquet.discount_price }} Руб.<br>
+        <br><br>
+    {% endfor %}
+
+{% endblock %}

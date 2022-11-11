@@ -1,0 +1,31 @@
+{% extends 'products/base.html' %}
+
+{% load static %}
+
+{% block static %}
+    <link rel="stylesheet" href="{% static 'home_page/css/style.css' %}">
+{% endblock %}
+
+
+{% block title %} flower.title {% endblock %}
+
+
+{% block content %}
+
+    {% for product in gallery_flower %}
+
+        {% if product.image %}
+            <img src="{{ product.image.url }}" height="300"><br>
+        {% endif %}
+
+    {% endfor %}
+
+    Категория: {{ flower.category }} <br>
+    Название: {{ flower.title }} <br>
+    Описание: {{ flower.description }} <br>
+    Цена: {{ flower.price }} Руб. <br>
+    Скидка: {{ flower.discount }}% <br>
+    Цена со скидкой: {{ flower.discount_price }} Руб. <br>
+    Статус: {{ flower.status }} <br>
+
+{% endblock %}

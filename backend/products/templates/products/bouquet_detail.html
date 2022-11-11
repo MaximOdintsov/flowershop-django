@@ -1,0 +1,34 @@
+{% extends 'products/base.html' %}
+
+{% load static %}
+
+{% block static %}
+    <link rel="stylesheet" href="{% static 'home_page/css/style.css' %}">
+{% endblock %}
+
+
+{% block title %} bouquet.title {% endblock %}
+
+
+{% block content %}
+
+    {% for product in gallery_bouquet %}
+        {% if product.image %}
+            <img src="{{ product.image.url }}" height="300"><br>
+        {% endif %}
+    {% endfor %}
+        {{ bouquet.title }}<br>
+        Описание: {{ bouquet.description }}<br>
+        Стоимость: {{ bouquet.discount_price }} Руб.<br>
+        Цена: {{ bouquet.price }} Руб.<br>
+        Скидка: {{ bouquet.discount }}%<br>
+        Цена со скидкой: {{ bouquet.discount_price }} Руб.<br>
+        Статус: {{ bouquet.status }}<br>
+
+    Букет состоит из:
+    {% for product_flower in composition %}
+        <li>
+            {{ product_flower.flower.title }}
+        </li>
+    {% endfor %}
+{% endblock %}

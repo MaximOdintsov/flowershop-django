@@ -9,14 +9,19 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     # path('', views.ListFlower.as_view()),
-    # path('', views.index, name='index'),
-    # path('flowers', views.flower, name='flowers'),
-    # path('bouquets', views.bouquet, name='bouquets'),
+    path('', views.index, name='index'),
+
+    path('flowers/', views.flower_list, name='flower_list'),
+    path('flowers/<slug:slug>', views.flower_detail, name='flower_detail'),
+
+    path('bouquets/', views.bouquet_list, name='bouquet_list'),
+    path('bouquets/<slug:slug>', views.bouquet_detail, name='bouquet_detail'),
+
 
     # for api
-    path('flower-list/', views.FlowerListView.as_view()),
-    path('gallery-list/', views.FlowerGalleryView.as_view()),
-    path('flower-list/<int:pk>/', views.FlowerDetailView.as_view()),
+    path('api/v1/flower-list/', views.FlowerListView.as_view()),
+    path('api/v1/gallery-list/', views.FlowerGalleryView.as_view()),
+    path('api/v1/flower-list/<int:pk>/', views.FlowerDetailView.as_view()),
 
 ]
 

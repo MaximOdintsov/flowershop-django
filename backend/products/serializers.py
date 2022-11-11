@@ -11,7 +11,6 @@ class GalleryFlowerSerializer(serializers.ModelSerializer):
 
 
 class FlowerListSerializer(serializers.Serializer):
-
     category_id = serializers.IntegerField()
     title = serializers.CharField()
     preview = serializers.ImageField()
@@ -19,7 +18,6 @@ class FlowerListSerializer(serializers.Serializer):
     discount_price = serializers.DecimalField(max_digits=8, decimal_places=2)
     discount = serializers.IntegerField()
     status = serializers.IntegerField()
-
 
 
 # class FlowerListSerializer(serializers.ModelSerializer):

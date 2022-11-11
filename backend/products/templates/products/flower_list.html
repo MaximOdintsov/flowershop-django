@@ -1,0 +1,26 @@
+{% extends 'products/base.html' %}
+
+{% load static %}
+
+{% block static %}
+    <link rel="stylesheet" href="{% static 'home_page/css/style.css' %}">
+{% endblock %}
+
+
+{% block title %} Цветы {% endblock %}
+
+
+{% block content %}
+
+    {% for flower in flowers %}
+        {% if flower.preview %}
+            <img src="{{ flower.preview.url }}" height="300"><br>
+        {% endif %}
+
+        <a href="{{ flower.slug }}">{{ flower.title }}</a><br>
+        Цена со скидкой: {{ flower.discount_price }} Руб.<br>
+        {{ flower.status }}
+        <br><br><br>
+    {% endfor %}
+
+{% endblock %}

@@ -143,7 +143,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # add media files
 MEDIA_ROOT = BASE_DIR / "media"
-MEDIA_URL = ""
+MEDIA_URL = "/image/"
 
 # for rest api
 REST_FRAMEWORK = {

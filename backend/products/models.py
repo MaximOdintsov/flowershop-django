@@ -11,6 +11,7 @@ from django.utils.text import slugify
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 class Category(models.Model):
     """ Класс добавления категории цветов """
 
@@ -24,8 +25,8 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
-    def get_absolute_url(self):
-        return reverse('category_flower', kwargs={'slug': self.slug})
+    # def get_absolute_url(self):
+    #     return reverse('category_flower', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
         """ Переводит поле title с ru на en и сохраняет в slug """
@@ -34,10 +35,13 @@ class Category(models.Model):
         super(Category, self).save()
 
         # for translate slug
-        if self.slug is None:
-            import translators as ts
-            translated_title = ts.google(self.title)
-            self.slug = slugify(f'category{translated_title}{self.id}')
+        if len(self.slug) < 3:
+            try:
+                import translators as ts
+                translated_title = ts.google(self.title)
+                self.slug = slugify(translated_title)
+            except Exception:
+                self.slug = self.id
 
         super(Category, self).save(*args, **kwargs)
 
@@ -92,9 +96,8 @@ class Flower(models.Model):
     def __str__(self):
         return self.title
 
-    # url (нужно будет сделать)
-    # def get_absolute_url(self):
-    #     return reverse('flowers', kwargs={'slug': self.slug})
+    def get_absolute_url(self):
+        return reverse('flower_detail', kwargs={'slug': self.slug})
 
     # при сохранении букетов может возникнуть ошибка, для отката изменений
     @transaction.atomic
@@ -106,10 +109,13 @@ class Flower(models.Model):
         super(Flower, self).save()
 
         # for translate slug
-        if self.slug is None:
-            import translators as ts
-            translated_title = ts.google(self.title)
-            self.slug = slugify(f'flower {translated_title} {self.id}')
+        if len(self.slug) < 3:
+            try:
+                import translators as ts
+                translated_title = ts.google(self.title)
+                self.slug = slugify(translated_title)
+            except Exception:
+                self.slug = self.id
 
         # прибавляем поступление цветов
         self.whole_stock += self.new_arrival
@@ -192,9 +198,8 @@ class Bouquet(models.Model):
     def __str__(self):
         return self.title
 
-    # url (нужно будет сделать)
-    # def get_absolute_url(self):
-    #     return reverse('flowers', kwargs={'slug': self.slug})
+    def get_absolute_url(self):
+        return reverse('bouquet_detail', kwargs={'slug': self.slug})
 
     # декоратор для отмены всех сохранений в бд, если произошла ошибка
     @transaction.atomic
@@ -205,10 +210,13 @@ class Bouquet(models.Model):
         super(Bouquet, self).save()
 
         # for translate slug
-        if self.slug is None:
-            import translators as ts
-            translated_title = ts.google(self.title)
-            self.slug = slugify(f'bouquet {translated_title} {self.id}')
+        if len(self.slug) < 3:
+            try:
+                import translators as ts
+                translated_title = ts.google(self.title)
+                self.slug = slugify(translated_title)
+            except Exception:
+                self.slug = self.id
 
         # расчеты flower и composition
         compositions = Bouquet.objects.get(id=self.id).bouquet_composition.all()
