@@ -1,9 +1,8 @@
-{% extends 'products/base.html' %}
-
-{% load static %}
+{% extends 'base.html' %}
 
 {% block static %}
-    <link rel="stylesheet" href="{% static 'home_page/css/style.css' %}">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
 {% endblock %}
 
 
@@ -12,17 +11,24 @@
 
 {% block content %}
 
+    {% include 'includes/header.html' %}
+
     {% for bouquet in bouquets %}
 
         {% if bouquet.preview %}
-            <img src="{{ bouquet.preview.url }}" height="300"><br>
+            <img src="{{ bouquet.preview.url }}" alt="{{ bouquet.title }}"  class="product-preview"><br>
         {% endif %}
 
-        <a href="{{ bouquet.slug }}">{{ bouquet.title }}</a><br>
-        Стоимость: {{ bouquet.discount_price }} Руб.<br>
-        Цена: {{ bouquet.price }} Руб.<br>
-        Скидка: {{ bouquet.discount }}%<br>
-        Цена со скидкой: {{ bouquet.discount_price }} Руб.<br>
+        <a href="{{ bouquet.slug }}" target="_blank">{{ bouquet.title }}</a><br>
+
+        {% if bouquet.discount == 0 %}
+            Цена: {{ bouquet.discount_price }} Руб.<br>
+        {% else %}
+            Цена: <del>{{ bouquet.price }}</del><br>
+            Скидка: <sub>{{ bouquet.discount }}%</sub><br>
+            Цена со скидкой: {{ bouquet.discount_price }} Руб.<br>
+        {% endif %}
+
         <br><br>
     {% endfor %}
 

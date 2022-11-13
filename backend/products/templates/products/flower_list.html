@@ -1,9 +1,8 @@
-{% extends 'products/base.html' %}
-
-{% load static %}
+{% extends 'base.html' %}
 
 {% block static %}
-    <link rel="stylesheet" href="{% static 'home_page/css/style.css' %}">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
 {% endblock %}
 
 
@@ -12,15 +11,54 @@
 
 {% block content %}
 
-    {% for flower in flowers %}
-        {% if flower.preview %}
-            <img src="{{ flower.preview.url }}" height="300"><br>
-        {% endif %}
+    {% include 'includes/header.html' %}
 
-        <a href="{{ flower.slug }}">{{ flower.title }}</a><br>
-        Цена со скидкой: {{ flower.discount_price }} Руб.<br>
-        {{ flower.status }}
-        <br><br><br>
-    {% endfor %}
+    <main>
+
+        <h2>Цветы</h2>
+
+        <div class="search-products">
+            <form class="form-search-products" action="" method="get">
+                <label for="найти">Поиск</label>
+                <input type="text" name="найти" placeholder="Введите название товара">
+                <button type="submit">Найти</button>
+            </form>
+        </div>
+
+        <div class="products-preview">
+
+            {% for flower in flowers %}
+
+                <section class="product-item-preview">
+
+                    <div class="product-image-preview">
+                        {% if flower.preview %}
+                            <img src="{{ flower.preview.url }}" alt="{{ flower.title }}"  class="image-preview"><br>
+                        {% endif %}
+                    </div>
+
+                    <div class="product-description-preview">
+                        <a href="{{ flower.slug }}">{{ flower.title }}</a><br>
+
+                        {% if flower.discount == 0 %}
+                            Цена: {{ flower.discount_price }} Руб.<br>
+                        {% else %}
+                            Цена: <del>{{ flower.price }}</del><br>
+                            Скидка: {{ flower.discount }}%<br>
+                            Цена со скидкой: {{ flower.discount_price }} Руб.<br>
+                        {% endif %}
+                    </div>
+
+                </section>
+
+            {% endfor %}
+
+        </div>
+
+    </main>
+
+    <aside>
+        Корзина
+    </aside>
 
 {% endblock %}

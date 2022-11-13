@@ -1,9 +1,8 @@
-{% extends 'products/base.html' %}
-
-{% load static %}
+{% extends 'base.html' %}
 
 {% block static %}
-    <link rel="stylesheet" href="{% static 'home_page/css/style.css' %}">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
 {% endblock %}
 
 
@@ -12,14 +11,8 @@
 
 {% block content %}
 
-    <nav class="flex-title">
+    {% include 'includes/header.html' %}
 
-        <a href="{% url 'index' %}">Главная</a>
-        <a href="flowers">Цветы</a>
-        <a href="bouquets">Букеты</a>
-        <a href="admin">Админка</a>
-
-    </nav>
 {% endblock %}
 
 

@@ -12,6 +12,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 
+def contacts(request):
+    return render(request, template_name='products/contacts.html')
+
+
 def index(request):
     return render(request, template_name='products/index.html')
 

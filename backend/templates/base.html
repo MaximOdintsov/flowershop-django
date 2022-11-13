@@ -1,12 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru  ">
     <head>
         {% block static %} {% endblock %}
+        {% load static %}
         <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <!-- Для адаптирования сайта к мобильным устройствам -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="keywords" content="Цветы Киров">
         <meta name="description" content="Магазин цветов киров">
 
-        <link rel="shortcut icon" href="flower_shop/home_page/static/img/icon.png">
+        <link rel="shortcut icon" href="{% static 'products/img/vk_icon.png' %}">
 
         <title>{% block title %} {% endblock %}</title>
 

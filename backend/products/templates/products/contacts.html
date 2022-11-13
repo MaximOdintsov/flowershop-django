@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block static %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
+{% endblock %}
+
+{% block title %} Контакты {% endblock %}
+
+{% block content %}
+    <p>
+        Номер телефона: +7-999-000-00-00 <br>
+        <a href="tel:+7-999-000-00-00">Позвонить</a>
+    </p>
+    <p>
+        Почта: flowershop.kirov@gmail.com <br>
+        <a href="mailto:flowershop.kirov@gmail.com">Написать</a>
+    </p>
+
+    <p>
+        Мы в соц.сетях: <br>
+        <a href="https://vk.com/">
+            <img src="{% static 'products/img/vk_icon.png' %}" width="50" alt="Наша страничка вк вк">
+        </a>
+    </p>
+{% endblock %}

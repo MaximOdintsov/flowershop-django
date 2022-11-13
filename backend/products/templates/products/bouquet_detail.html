@@ -1,9 +1,8 @@
-{% extends 'products/base.html' %}
-
-{% load static %}
+{% extends 'base.html' %}
 
 {% block static %}
-    <link rel="stylesheet" href="{% static 'home_page/css/style.css' %}">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
 {% endblock %}
 
 
@@ -12,23 +11,36 @@
 
 {% block content %}
 
+    {% include 'includes/header.html' %}
+
     {% for product in gallery_bouquet %}
         {% if product.image %}
             <img src="{{ product.image.url }}" height="300"><br>
         {% endif %}
     {% endfor %}
-        {{ bouquet.title }}<br>
-        Описание: {{ bouquet.description }}<br>
-        Стоимость: {{ bouquet.discount_price }} Руб.<br>
-        Цена: {{ bouquet.price }} Руб.<br>
+
+    {{ bouquet.title }}<br>
+    Описание: {{ bouquet.description }}<br>
+
+    {% if bouquet.discount == 0 %}
+        Цена: {{ bouquet.discount_price }} Руб.<br>
+    {% else %}
+        Цена: <del>{{ bouquet.price }}</del><br>
         Скидка: {{ bouquet.discount }}%<br>
         Цена со скидкой: {{ bouquet.discount_price }} Руб.<br>
-        Статус: {{ bouquet.status }}<br>
+    {% endif %}
+
+    {% if bouquet.status == 3 %}
+        {{ bouquet.get_status_display }}<br>
+    {% endif %}
 
     Букет состоит из:
-    {% for product_flower in composition %}
-        <li>
-            {{ product_flower.flower.title }}
-        </li>
-    {% endfor %}
+    <ul>
+        {% for product_flower in composition %}
+
+            <li>{{ product_flower.flower.title }}</li>
+
+        {% endfor %}
+    </ul>
+
 {% endblock %}

@@ -17,6 +17,8 @@ urlpatterns = [
     path('bouquets/', views.bouquet_list, name='bouquet_list'),
     path('bouquets/<slug:slug>', views.bouquet_detail, name='bouquet_detail'),
 
+    path('contacts', views.contacts, name='contacts'),
+
 
     # for api
     path('api/v1/flower-list/', views.FlowerListView.as_view()),

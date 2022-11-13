@@ -1,9 +1,8 @@
-{% extends 'products/base.html' %}
-
-{% load static %}
+{% extends 'base.html' %}
 
 {% block static %}
-    <link rel="stylesheet" href="{% static 'home_page/css/style.css' %}">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
 {% endblock %}
 
 
@@ -11,6 +10,8 @@
 
 
 {% block content %}
+
+    {% include 'includes/header.html' %}
 
     {% for product in gallery_flower %}
 
@@ -23,9 +24,16 @@
     Категория: {{ flower.category }} <br>
     Название: {{ flower.title }} <br>
     Описание: {{ flower.description }} <br>
-    Цена: {{ flower.price }} Руб. <br>
-    Скидка: {{ flower.discount }}% <br>
-    Цена со скидкой: {{ flower.discount_price }} Руб. <br>
-    Статус: {{ flower.status }} <br>
+    {% if flower.discount == 0 %}
+        Цена: {{ flower.discount_price }} Руб.<br>
+    {% else %}
+        Цена: <del>{{ flower.price }}</del><br>
+        Скидка: {{ flower.discount }}%<br>
+        Цена со скидкой: {{ flower.discount_price }} Руб.<br>
+    {% endif %}
+
+    {% if flower.status == 3 %}
+        {{ flower.get_status_display }}
+    {% endif %}
 
 {% endblock %}
