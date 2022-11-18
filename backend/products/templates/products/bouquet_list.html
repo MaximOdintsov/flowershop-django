@@ -10,26 +10,74 @@
 
 
 {% block content %}
-
+    
     {% include 'includes/header.html' %}
+    <main>
+        {% for bouquet in bouquets %}
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="{{ bouquet.preview.url }}" class="img-fluid rounded-start" alt="{{ bouquet.title }}">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </main>
+    
 
-    {% for bouquet in bouquets %}
+    <div class="card-group">
+        {% for bouquet in bouquets %}
+            <div class="card">
+                <img src="{{ bouquet.preview.url }}" width="300px" class="card-img-top" alt="{{ bouquet.preview.url }}">
+                <div class="card-body">
 
-        {% if bouquet.preview %}
-            <img src="{{ bouquet.preview.url }}" alt="{{ bouquet.title }}"  class="product-preview"><br>
-        {% endif %}
+                    <h5 class="card-title text-center">
+                        <a href="{{ bouquet.slug }}" target="_blank">{{ bouquet.title }}</a><br>
+                    </h5>
 
-        <a href="{{ bouquet.slug }}" target="_blank">{{ bouquet.title }}</a><br>
+                    <p class="card-text text-center">
+                        {% if bouquet.discount == 0 %}
+                            Цена: {{ bouquet.discount_price }} Руб.<br>
+                        {% else %}
+                            Цена: <del>{{ bouquet.price }}</del><br>
+                            Скидка: <sub>{{ bouquet.discount }}%</sub><br>
+                            Цена со скидкой: {{ bouquet.discount_price }} Руб.<br>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+      </div>
 
-        {% if bouquet.discount == 0 %}
-            Цена: {{ bouquet.discount_price }} Руб.<br>
-        {% else %}
-            Цена: <del>{{ bouquet.price }}</del><br>
-            Скидка: <sub>{{ bouquet.discount }}%</sub><br>
-            Цена со скидкой: {{ bouquet.discount_price }} Руб.<br>
-        {% endif %}
 
-        <br><br>
-    {% endfor %}
+
+
+
+    <main>
+        {% for bouquet in bouquets %}
+
+            {% if bouquet.preview %}
+                <img src="{{ bouquet.preview.url }}" alt="{{ bouquet.preview.url }}"><br>
+            {% endif %}
+
+            <a href="{{ bouquet.slug }}" target="_blank">{{ bouquet.title }}</a><br>
+
+            {% if bouquet.discount == 0 %}
+                Цена: {{ bouquet.discount_price }} Руб.<br>
+            {% else %}
+                Цена: <del>{{ bouquet.price }}</del><br>
+                Скидка: <sub>{{ bouquet.discount }}%</sub><br>
+                Цена со скидкой: {{ bouquet.discount_price }} Руб.<br>
+            {% endif %}
+
+            <br><br>
+        {% endfor %}
+    </main>
 
 {% endblock %}

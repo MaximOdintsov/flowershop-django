@@ -11,54 +11,87 @@
 
 {% block content %}
 
-    {% include 'includes/header.html' %}
+        {% include 'includes/header.html' %}
 
-    <main>
+        <main>
+            <div class="container">
 
-        <h2>Цветы</h2>
+                <div class="row row-cols-1 row-cols-xs-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-5 justify-content-center">
+                    {% for flower in flowers %}
+                        <div class="col justify-content-center">
 
-        <div class="search-products">
-            <form class="form-search-products" action="" method="get">
-                <label for="search">Поиск</label>
-                <input type="text" name="найти" placeholder="Введите название товара">
-                <button type="submit">Найти</button>
-            </form>
-        </div>
+                                <div class="card">
+                                    <!-- style="width: 11rem; -->
 
-        <div class="products-preview">
 
-            {% for flower in flowers %}
+                                    <a href="{{ flower.slug }}" style="text-decoration:none;">
+                                        
+                                        <img src="{{ flower.preview.url }}" class="card-img-top" alt="{{ flower.preview.url }}">
 
-                <section class="product-item-preview">
+                                        <div class="card-body text-center">
+                                            <h5 class="product-title link-primary bouquet-title">
+                                                "{{ flower.title }}" 
+                                            </h5>
 
-                    <div class="product-image-preview">
-                        {% if flower.preview %}
-                            <img src="{{ flower.preview.url }}" alt="{{ flower.title }}"  class="image-preview"><br>
-                        {% endif %}
-                    </div>
+                                            <!-- <h6 class="card-text">
+                                            </h6> -->
+                                        </div>
+                                    </a>
 
-                    <div class="product-description-preview">
-                        <a href="{{ flower.slug }}">{{ flower.title }}</a><br>
+                                    <div class="card-footer d-flex justify-content-between align-items-end">
 
-                        {% if flower.discount == 0 %}
-                            Цена: {{ flower.discount_price }} Руб.<br>
-                        {% else %}
-                            Цена: <del>{{ flower.price }}</del><br>
-                            Скидка: {{ flower.discount }}%<br>
-                            Цена со скидкой: {{ flower.discount_price }} Руб.<br>
-                        {% endif %}
-                    </div>
+                                        <div class="product-price">
 
-                </section>
+                                            {% if flower.discount == 0 %}
+                                                <div class="price-product ">
+                                                    {{ flower.discount_price|floatformat:0 }} &#8381;
+                                                </div>
+                                            {% else %}
+                                                <div class="price-product-with-discoint">
+                                                    <del>{{ flower.price|floatformat:0 }}&#8381</del><br>
+                                                    {{ flower.discount_price|floatformat:0 }} &#8381;<br>
+                                                </div>
+                                            {% endif %}
+                                        </div>
 
-            {% endfor %}
+                                        <div class="product-cart-icon">
+                                            <a href="#">
+                                                <img src="{% static 'products/icons/shopping-bag-icon.png' %}" alt="shopping-bag-icon" width="33rem">
+                                            </a>
+                                        </div>
 
-        </div>
+                                    </div>
+                                </div>
 
-    </main>
+                        </div>
+                    {% endfor %}
+                </div>
 
-    <aside>
-        Корзина
-    </aside>
 
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+
+            </div>
+        
+        </main>
+
+        {% include 'includes/footer.html' %}
+
+    </div>
 {% endblock %}
