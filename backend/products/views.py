@@ -2,7 +2,6 @@ from django.shortcuts import render, get_object_or_404, get_list_or_404
 from .models import Category, Flower, Bouquet
 from .models import GalleryFlower, GalleryBouquet, CompositionOfTheBouquet
 
-
 from django.views.generic import ListView
 
 
@@ -19,12 +18,21 @@ def contacts(request):
 def index(request):
     return render(request, template_name='products/index.html')
 
+# from django import template
+# register = template.Library()
+# @register.simple_tag
+# def update_variable(value):
+#     """Allows to update existing variable in template"""
+#     return value
+
 
 def flower_list(request):
 
     flowers = get_list_or_404(Flower, available=True)
+    gallery_flower = GalleryFlower.objects.all()
     context = {
         'flowers': flowers,
+        'gallery_flower': gallery_flower,
     }
     return render(request, template_name='products/flower_list.html', context=context)
 
@@ -43,6 +51,7 @@ def flower_detail(request, slug):
 
 def bouquet_list(request):
     bouquets = get_list_or_404(Bouquet, available=True)
+
     context = {
         'bouquets': bouquets,
     }

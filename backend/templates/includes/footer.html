@@ -1,10 +1,113 @@
-<footer class="footer-panel">
-    <nav>
-        <ul class="footer-links">
-            <li>Контакты</li>    
-            <li>Наше местоположение</li>         
-            <li>Галерея</li>           
-            <li>О нас</li>  
-        </ul>       
-    </nav>
+{% load static %}
+<link rel="stylesheet" href="{% static 'products/css/style.css' %}">
+
+<footer class="bg-dark">
+
+    <div class="container">
+
+        <div class="row row-cols-xs-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5">
+
+            <div class="col">
+
+                <h4>Магазин</h4>
+                <ul class="list-unstyled">
+
+                    <li><a href="#">Главная</a></li>
+                    <li><a href="#">Каталог</a></li>
+                    <li><a href="#">Оплата</a></li>
+                    <li><a href="#">Доставка</a></li>
+
+                </ul>
+
+            </div>
+
+            <div class="col">
+
+                <h4>Контакты</h4>
+                <ul class="list-unstyled">
+
+                    <li><a href="#">Емейл</a></li>
+                    <li><a href="#">Телефон</a></li>
+                    <li><a href="#">Местоположение</a></li>
+
+                </ul>
+
+            </div>
+
+            <div class="col">
+
+                <h4>Адрес</h4>
+
+                <ul class="list-unstyled">
+                    <li>г.Киров, ул.Октябрьский проспект, 101, ТЦ Север, 1 этаж</li>
+                    <li><a href="#">Посмотреть на карте</a></li>
+                </ul>
+
+            </div>
+
+            <div class="col">
+
+                <h4>Время работы</h4>
+                <ul class="list-unstyled">
+
+                    <li>Пн-Пт: 8:00-19:00</li>
+                    <li>Сб: 9:30-18:00</li>
+                    <li>Вс: 9:30-17:00</li>
+
+                </ul>
+
+            </div>
+
+            <div class="col">
+
+                <h4>Мы в сети</h4>
+
+                <div>
+                    <a href="#" class="footer-icons">
+                        <img src="{% static 'products/icons/instagram-icon.png' %}" alt="vk.com" width="25px">
+                    </a><a href="#" class="footer-icons">
+                        <img src="{% static 'products/icons/vk-icon.png' %}" alt="instagram.com" width="25px">
+                    </a>
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
 </footer>
+
+
+<!-- <footer>
+
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid justify-content-center">
+
+            <div>
+                <a class="navbar-brand" href="#">О нас</a>
+                <a class="navbar-brand" href="#">Галерея</a>
+                <a class="navbar-brand" href="#">Контакты</a>
+                <a class="navbar-brand" href="#">Местоположение</a>
+                <a class="navbar-brand" href="#">Доставка</a>
+            </div>
+
+            <div class="text-end">
+
+                <a class="navbar-brand" href="https://vk.com/">
+                    <img src="{% static 'products/icons/instagram-icon.png' %}" alt="vk.com" width="30px">
+                </a>
+
+                <a class="navbar-brand" href="https://instagram.com/">
+                    <img src="{% static 'products/icons/vk-icon.png' %}" alt="instagram.com" width="30px">
+                </a>
+
+            </div>
+
+        </div>
+    </nav>
+      
+</footer> -->
+

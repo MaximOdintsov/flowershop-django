@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load poll_extras %}
 
 {% block static %}
     {% load static %}
@@ -17,58 +18,128 @@
             <div class="container">
 
                 <div class="row row-cols-1 row-cols-xs-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-5 justify-content-center">
+                    
                     {% for flower in flowers %}
                         <div class="col justify-content-center">
 
-                                <div class="card">
-                                    <!-- style="width: 11rem; -->
+                            <!--Product card-->
+                            <div class="card">
 
+                                <a href="{{ flower.slug }}" target="_blank" style="text-decoration:none;" data-bs-toggle="modal" data-bs-target="#Modal{{ flower.id }}">
+                                    
+                                    <img src="{{ flower.preview.url }}" class="card-img-top" alt="{{ flower.preview.url }}">
 
-                                    <a href="{{ flower.slug }}" style="text-decoration:none;">
-                                        
-                                        <img src="{{ flower.preview.url }}" class="card-img-top" alt="{{ flower.preview.url }}">
+                                    <div class="card-body text-center">
 
-                                        <div class="card-body text-center">
-                                            <h5 class="product-title link-primary bouquet-title">
-                                                "{{ flower.title }}" 
-                                            </h5>
+                                        <h5 class="link-primary">
+                                            {{ flower.title }}
+                                        </h5>
 
-                                            <!-- <h6 class="card-text">
-                                            </h6> -->
-                                        </div>
-                                    </a>
+                                    </div>
+                                </a>
 
-                                    <div class="card-footer d-flex justify-content-between align-items-end">
+                                <div class="card-footer d-flex justify-content-between align-items-end">
 
-                                        <div class="product-price">
+                                    <div class="product-price">
 
-                                            {% if flower.discount == 0 %}
-                                                <div class="price-product ">
+                                        {% if flower.discount == 0 %}
+
+                                            <span class="price-text">
+                                                {{ flower.discount_price|floatformat:0 }} &#8381;
+                                            </span>
+
+                                        {% else %}
+
+                                            <div class="price-product-with-discount">
+                                                <span>
+                                                    <del>{{ flower.price|floatformat:0 }} &#8381;</del>
+                                                </span>
+
+                                                <br style="display: block; margin-bottom: -10px;">
+
+                                                <span class="price-text">
                                                     {{ flower.discount_price|floatformat:0 }} &#8381;
-                                                </div>
-                                            {% else %}
-                                                <div class="price-product-with-discoint">
-                                                    <del>{{ flower.price|floatformat:0 }}&#8381</del><br>
-                                                    {{ flower.discount_price|floatformat:0 }} &#8381;<br>
-                                                </div>
-                                            {% endif %}
-                                        </div>
+                                                </span>
+                                            </div>
 
-                                        <div class="product-cart-icon">
-                                            <a href="#">
-                                                <img src="{% static 'products/icons/shopping-bag-icon.png' %}" alt="shopping-bag-icon" width="33rem">
-                                            </a>
+                                        {% endif %}
+
+                                    </div>
+
+                                    <div class="product-cart-icon">
+                                        <a href="#">
+                                            <img src="{% static 'products/icons/shopping-bag-icon.png' %}" alt="shopping-bag-icon" width="35rem">
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!--Modal-->
+                        <div class="modal fade" id="Modal{{ flower.id }}" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">{{ flower.title }}</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <!--Carousel images-->
+                                        <div id="carouselModal{{ flower.slug }}" class="carousel slide" data-bs-ride="carousel">
+
+                                            <div class="carousel-inner">
+                                                {% with True as flag %}
+                                                    {% for gallery in gallery_flower %}
+
+                                                        {% if gallery.flower_gallery_id == flower.id %}
+
+                                                            {% if flag %}
+                                                                <div class="carousel-item active">
+                                                                    <img class="d-block w-100" src="{{ gallery.image.url }}" alt="flower {{ flower.title }}">
+                                                                </div>
+                                                                {% update_variable False as flag %}
+                                                            {% else %}
+                                                                <div class="carousel-item">
+                                                                    <img class="d-block w-100" src="{{ gallery.image.url }}" alt="flower {{ flower.title }}">
+                                                                </div>
+                                                            {% endif %}
+                                                
+                                                        {% endif %}
+
+                                                    {% endfor %}
+                                                {% endwith %}
+                                            </div>
+                                        
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselModal{{ flower.slug }}" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Назад</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselModal{{ flower.slug }}" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Дальше</span>
+                                            </button>
+                                        </div>
+                                        <!--Carousel images-->
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
                                         </div>
 
                                     </div>
                                 </div>
-
+                            </div>
                         </div>
+                        <!--Modal-->
+
                     {% endfor %}
+
                 </div>
 
-
-                <nav aria-label="Page navigation example">
+                <nav>
                     <ul class="pagination justify-content-center">
                         <li class="page-item">
                             <a class="page-link" href="#" aria-label="Previous">
