@@ -35,7 +35,7 @@ main {
 }
 
 .link-primary:hover {
-    color: rgba(219, 100, 100) !important;
+    color: rgb(219, 100, 100) !important;
 }
 
 .card-footer {
@@ -76,7 +76,15 @@ main {
 /* Page navigation */
 nav .pagination {
     margin: 0;
-    padding: 1rem 0;
+    padding-bottom: 1rem;
+}
+
+.pagination a, .pagination span {
+    color: black !important;
+}
+
+.pagination .active > .page-link {
+    background-color: rgba(219, 100, 100, 0.9);
 }
 /* Page navigation */
 
@@ -107,7 +115,7 @@ footer a {
 }
 
 footer a:hover {
-    color: rgba(219, 100, 100, 0.61);
+    color: rgba(219, 100, 100, 0.9);
     text-decoration: underline;
 }
 
@@ -124,7 +132,11 @@ footer li a {
 
 .modal {
     --bs-modal-border-radius: 1rem;
-    }
+}
+
+.modal-dialog-scrollable .modal-content {
+  max-height: 88%;
+}
 
 .modal-body .row {
     margin-right: calc(0 * var(--bs-gutter-x));
@@ -161,6 +173,10 @@ footer li a {
 .counter-products .counter-item {
     flex: 1 1 auto;
     margin: 0 5px;
+}
+
+.counter-products .counter-item:hover {
+    background-color: rgb(218, 218, 218);
 }
 
 .modal-footer .price-modal {
