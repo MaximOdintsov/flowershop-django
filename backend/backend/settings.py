@@ -15,8 +15,8 @@ from pathlib import Path
 # import for reading .env file
 from dotenv import load_dotenv
 import os
+from django.utils.translation import gettext_lazy as _
 
-# load .env file
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -45,10 +45,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'rest_framework',
-    'products',
     'django_extensions',
+    'rest_framework',
+    
+    # 'rest_framework.authtoken',
+    # 'djoser',
+    # 'phonenumber_field',
 
+    'products',
+    'users',
 
     # должен быть последним / нужен для удаления медиа файлов
     'django_cleanup.apps.CleanupConfig',
@@ -63,6 +68,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -85,14 +92,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-
-# Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 # replace to postgresql
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('NAME'),
+        'NAME': os.getenv('POSTGRES_NAME'),
         'USER': os.getenv('POSTGRES_USER'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
         'HOST': os.getenv('HOST'),
@@ -109,6 +114,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8,
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -118,13 +126,41 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# add custom user model
+AUTH_USER_MODEL = 'users.User'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+# authentication
+
+AUTHENTICATION_BACKENDS = [
+    'users.backends.AuthBackend'
+]
+
+# EMAIL
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_USE_SSL = True
+EMAIL_PORT = 465
+EMAIL_HOST_USER = os.getenv('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_USER')
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'en-us'
+LANGUAGES = (
+    ('en-us', _('English')),
+    ('ru', _('Russian')),
+    ('de', _('German')),
+    ('fr', _('French')),
+)
+
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -141,15 +177,17 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# add media files
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/image/"
 
-# for rest api
+LOGIN_URL = '/admin/login/'
+
+# for rest api and JWT
 REST_FRAMEWORK = {
     # for output static files
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
-    ]
+    
+    ],
 }

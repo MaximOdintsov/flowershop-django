@@ -9,12 +9,12 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     # path('', views.ListFlower.as_view()),
-    path('', views.index, name='index'),
+    path('', views.home, name='home'),
 
-    path('flowers/', views.FlowerList.as_view(), name='flower_list'),
+    path('flowers/', views.FlowerList.as_view(), name='flowers'),
     path('flowers/<slug:slug>', views.flower_detail, name='flower_detail'),
 
-    path('bouquets/', views.bouquet_list, name='bouquet_list'),
+    path('bouquets/', views.bouquet_list, name='bouquets'),
     path('bouquets/<slug:slug>', views.bouquet_detail, name='bouquet_detail'),
 
     path('contacts', views.contacts, name='contacts'),

@@ -7,6 +7,7 @@ from django.db import models, transaction
 from django.urls import reverse
 
 from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -64,7 +65,7 @@ class Flower(models.Model):
     )
     title = models.CharField(verbose_name='Название', max_length=100)
     slug = models.SlugField(verbose_name='Название на английском', max_length=150, unique=True, null=False)
-    preview = models.ImageField(verbose_name='Превью', upload_to='flowers/previews')
+    preview = models.ImageField(verbose_name='Превью', upload_to='flowers/previews', help_text='Картинка, которая будет отображаться первой')
     description = models.CharField(verbose_name='Описание', max_length=250)
 
     price = models.DecimalField(verbose_name='Цена без скидки', max_digits=8, decimal_places=2)

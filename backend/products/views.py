@@ -9,14 +9,24 @@ from . import serializers
 from rest_framework.renderers import JSONRenderer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
+from rest_framework.permissions import IsAuthenticated
 
 def contacts(request):
     return render(request, template_name='products/contacts.html')
 
 
-def index(request):
-    return render(request, template_name='products/index.html')
+def home(request):
+
+    num_visits = request.session.get('num_visits', 0)
+    request.session['num_visits'] = num_visits+1
+
+    return render(
+        request, 
+        template_name='products/index.html',
+        context={
+            'num_visits': num_visits,
+        }
+    )
 
 
 class FlowerList(generic.ListView):
@@ -24,9 +34,8 @@ class FlowerList(generic.ListView):
     model = Flower
     context_object_name = 'flowers'
     queryset = Flower.objects.filter(available=True)
-    paginate_by = 1
+    paginate_by = 20
     template_name = 'flower_list.html'
-
 
 def flower_detail(request, slug):
     id_flower = Flower.objects.get(slug=slug).id
@@ -65,6 +74,8 @@ def bouquet_detail(request, slug):
 
 class FlowerListView(APIView):
     """ Вывод списка цветов """
+
+    permission_classes = (IsAuthenticated, )
 
     def get(self, request):
         flowers = Flower.objects.filter(available=True)

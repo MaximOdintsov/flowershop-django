@@ -14,15 +14,15 @@
                 <ul class="navbar-nav">
 
                     <li class="nav-item">
-                        <a class="nav-link active col" aria-current="page" href="/">Главная</a>
+                        <a class="nav-link active col" aria-current="page" href="{% url 'home' %}">Главная</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link active col" aria-current="page" href="/flowers">Цветы</a>
+                        <a class="nav-link active col" aria-current="page" href="{% url 'flowers' %}">Цветы</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link col" href="/bouquets">Букеты</a>
+                        <a class="nav-link col" href="{% url 'bouquets' %}">Букеты</a>
                     </li>
                     
                     <li class="nav-item dropdown">
@@ -70,11 +70,17 @@
                             <img src="{% static 'products/icons/user-icon.png' %}" alt="user-icon" width="24px">
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Войти</a></li>
-                            <li><a class="dropdown-item" href="#">Зарегистрироваться</a></li>
+                            {% if user.is_authenticated %}
+                                <li><a class="dropdown-item" href="#">{{ user }}</a></li>
+                                <li><a class="dropdown-item" href="#">Профиль</a></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
+                            {% else %}
+                                <li><a class="dropdown-item" href="{% url 'login' %}">Войти</a></li>
+                                <li><a class="dropdown-item" href="{% url 'registration' %}">Зарегистрироваться</a></li>
+                            {% endif %}
                         </ul>
                     </li>
-
+                    
                 </ul>
             </div>
         </div>
