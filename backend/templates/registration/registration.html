@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block static %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
+{% endblock %}
+
+{% block title %}Регистрация{% endblock title %}
+
+{% block content %}
+    <main>
+        <div class="container-fluid container-auth">
+            <div class="row d-flex justify-content-center align-items-center">
+                
+                <div class="col col-11 col-sm-11 col-md-9 col-lg-7 col-xl-3 col-xxl-3 rounded-4 
+                bg-dark position-absolute top-50 start-50 translate-middle form-card">
+                
+                    <form method="post" action="{% url 'registration' %}" class="row g-3 needs-validation form-auth">
+                        {% csrf_token %}
+
+                        <ul class="nav nav-tabs nav-form" role="tablist">
+                            <li role="presentation">
+                                <a href="{% url 'login' %}" aria-controls="login" role="tab" data-toggle="tab">вход</a>
+                            </li>
+                            <li role="presentation" class="form-auth-active">
+                                <a href="{% url 'registration' %}" aria-controls="registration" role="tab" data-toggle="tab">регистрация</a>
+                            </li>
+                        </ul>
+                 
+                        <div class="form-floating mb-2 col-md-12 position-relative">
+                            {% if form.username.errors %}
+                                {{ form.username }}
+                                <label for="{{ form.username.id_for_label }}" class="form-label">Имя пользователя</label>
+
+                                <div class="text-danger">
+                                    <small>{{ form.username.errors }}</small>
+                                </div>
+                            {% else %}
+                                {{ form.username }}
+                                <label for="{{ form.username.id_for_label }}" class="form-label">Имя пользователя</label>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-floating mb-2 col-md-12 position-relative">
+                            {% if form.email.errors %}
+                                {{ form.email }}
+                                <label for="{{ form.email.id_for_label }}" class="form-label">Электронная почта</label>
+                                
+                                <div class="text-danger">
+                                    <small>{{ form.email.errors }}</small>
+                                </div>
+                            {% else %}
+                                {{ form.email }}
+                                <label for="{{ form.email.id_for_label }}" class="form-label">Электронная почта</label>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-floating mb-2 col-md-6 position-relative">
+                            {% if form.first_name.errors %}
+                                {{ form.first_name }}
+                                <label for="{{ form.first_name.id_for_label }}" class="form-label">Ваше имя</label>
+                                
+                                <div class="text-danger">
+                                    <small>{{ form.first_name.errors }}</small>
+                                </div>
+                            {% else %}
+                                {{ form.first_name }}
+                                <label for="{{ form.first_name.id_for_label }}" class="form-label">Ваше имя</label>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-floating mb-2 col-md-6 position-relative">
+                            {% if form.last_name.errors %}
+                                {{ form.last_name }}
+                                <label for="{{ form.last_name.id_for_label }}" class="form-label">Ваша фамилия</label>
+                                
+                                <div class="text-danger">
+                                    <small>{{ form.last_name.errors }}</small>
+                                </div>
+                            {% else %}
+                                {{ form.last_name }}
+                                <label for="{{ form.last_name.id_for_label }}" class="form-label">Ваша фамилия</label>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-check mb-2">
+                            {% if form.date_of_birth.errors %}
+                                <label class="form-check-label text-light" for="{{ form.date_of_birth.id_for_label }}">Дата рождения</label>
+                                <div class="row g-3 date_of_birth" style="padding-left: calc(var(--bs-gutter-x) * .5)">
+                                    {{ form.date_of_birth }}
+                                </div>
+                                
+                                <div class="text-danger">
+                                    <small>{{ form.date_of_birth.errors }}</small>
+                                </div>
+                            {% else %}
+                                <label class="form-check-label text-light" for="{{ form.date_of_birth.id_for_label }}">Дата рождения</label>
+                                <div class="row g-3 date_of_birth" style="padding-left: calc(var(--bs-gutter-x) * .5)">
+                                    {{ form.date_of_birth }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-check mb-2 position-relative dropdown">
+                            {% if form.sex.errors %}
+                                <label class="form-check-label text-light" for="{{form.sex.id_for_label}}">Выберите пол</label>
+                                {{ form.sex }}
+
+                                <div class="text-danger">
+                                    <small>{{ form.sex.errors }}</small>
+                                </div>
+                            {% else %}
+                                <label class="form-check-label text-light" for="{{form.sex.id_for_label}}">Выберите пол</label>
+                                {{ form.sex }}
+                            {% endif %}
+                        </div>
+
+                        <div class="form-floating mb-2 col-md-6 position-relative">
+                            {% if form.password1.errors %}
+                                {{ form.password1 }}
+                                <label for="{{ form.password1.id_for_label }}" class="form-label">Введите пароль</label>
+                                
+                                <div class="text-danger">
+                                    <small>{{ form.password1.errors }}</small>
+                                </div>
+                            {% else %}
+                                {{ form.password1 }}
+                                <label for="{{ form.password1.id_for_label }}" class="form-label">Введите пароль</label>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-floating mb-2 col-md-6 position-relative">
+                            {% if form.password2.errors %}
+                                {{ form.password2 }}
+                                <label for="{{ form.password2.id_for_label }}" class="form-label">Повторите пароль</label>
+                                
+                                <div class="text-danger">
+                                    <small>{{ form.password2.errors }}</small>
+                                </div>
+                            {% else %}
+                                {{ form.password2 }}
+                                <label for="{{ form.password2.id_for_label }}" class="form-label">Повторите пароль</label>
+                            {% endif %}
+                        </div>
+
+                        <button class='btn btn-light' type="submit">Зарегистрироваться</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock content %}

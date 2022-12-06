@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block static %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
+{% endblock %}
+
+
+{% block title %} Верификация {% endblock title %}
+{% block content %}
+
+    <div class="alert alert-success" role="alert">
+        <div class="text-center">
+            <h4 class="alert-heading">Успешно!</h4>
+            <p>Ваш аккаунт был активирован!</p>
+            <hr>
+
+            <form action="{% url 'home' %}" target="_self">
+                <button class="btn btn-success">Вернуться на главную страницу</button>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

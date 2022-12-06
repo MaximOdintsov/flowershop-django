@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block static %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
+{% endblock %}
+
+{% block title %} Подтвердите почты {% endblock %}
+
+{% block content %}
+
+    <div class="alert alert-success" role="alert">
+
+        <div class="text-center">
+            <h4 class="alert-heading">Успешно!</h4>
+            <p>Ссылка для подтверждения аккаунта отправлена на вашу электронную почту.
+                Перейдите по ней, чтоб завершить регистрацию!
+            </p>
+            <hr>
+
+            <form action="{% url 'home' %}" target="_self">
+                <button class="btn btn-success">Вернуться на главную страницу</button>
+            </form>
+        </div>
+
+    </div>
+
+{% endblock %}

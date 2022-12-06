@@ -1,0 +1,13 @@
+{% load i18n %}{% autoescape off %}
+Здравствуйте, {{ user.first_name }} {{ user.last_name }}!
+
+Пожалуйста, перейдите по ссылке, чтобы завершить регистрацию.
+{{ protocol }}://{{ domain }}{% url 'verify_email' uidb64=uid token=token %}
+
+Если вы не регистрировались на сайте {{ protocol }}://{{ domain }}/, то не делайте ничего!
+
+
+С уважением, {{ shop_name }}.
+По всем вопросам: {{ email_for_questions }}
+
+{% endautoescape %}

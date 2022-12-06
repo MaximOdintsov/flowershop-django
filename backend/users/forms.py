@@ -1,6 +1,11 @@
 from django.contrib.auth import authenticate, get_user_model, password_validation
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 
 from django.utils.translation import gettext_lazy as _
+from .utils import send_email_for_verify
 
 from django import forms
 from django.contrib.auth import forms as forms_auth
@@ -8,6 +13,7 @@ from django.contrib.auth import forms as forms_auth
 from django.core.exceptions import ValidationError
 
 from django.contrib.auth import get_user_model
+
 
 User = get_user_model()
 
@@ -157,6 +163,13 @@ class MyAuthenticationForm(forms_auth.AuthenticationForm):
         model = User
         fields = ['email', 'password']
 
+    def confirm_login_allowed(self, user):
+        if not user.is_active:
+            raise ValidationError('Пользователь заблокирован.')
+        if not user.is_verified:
+            send_email_for_verify(self.request, self.user_cache)
+            raise ValidationError('Почта не подтверждена. Проверьте сообщения на своем электронном ящике.')
+
     def __init__(self, request=None, *args, **kwargs):
         self.request = request
         self.user_cache = None
@@ -191,6 +204,55 @@ class MyPasswordResetForm(forms_auth.PasswordResetForm):
             raise ValidationError(f'Пользователя с таким адресом электронной почты не существует.\n'
                                   f'Проверьте правильность написания')
         return new_email
+
+    def save(
+        self,
+        domain_override=None,
+        subject_template_name='registration/password_reset_subject.txt',
+        email_template_name='registration/password_reset_email.html',
+        use_https=False,
+        token_generator=default_token_generator,
+        from_email=None,
+        request=None,
+        html_email_template_name=None,
+        extra_email_context=None,
+        shop_name='Цветы Киров',
+        email_for_questions='flowershop.kirov@gmail.com',
+
+    ):
+        """
+        Added shop_name and email_for_questions
+        """
+        email = self.cleaned_data['email']
+        if not domain_override:
+            current_site = get_current_site(request)
+            site_name = current_site.name
+            domain = current_site.domain
+        else:
+            site_name = domain = domain_override
+        email_field_name = User.get_email_field_name()
+        for user in self.get_users(email):
+            user_email = getattr(user, email_field_name)
+            context = {
+                'email': user_email,
+                'domain': domain,
+                'site_name': site_name,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'user': user,
+                'shop_name': shop_name,
+                'email_for_questions': email_for_questions,
+                'token': token_generator.make_token(user),
+                'protocol': 'https' if use_https else 'http',
+                **(extra_email_context or {}),
+            }
+            self.send_mail(
+                subject_template_name,
+                email_template_name,
+                context,
+                from_email,
+                user_email,
+                html_email_template_name=html_email_template_name,
+            )
 
 
 class MySetPasswordForm(forms_auth.SetPasswordForm):

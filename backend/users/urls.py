@@ -6,6 +6,10 @@ from .views import (
     MyPasswordResetView,
     MyPasswordResetConfirmView,
     MyPasswordChangeView,
+    VerifyEmail,
+    EmailConfirmation,
+    EmailConfirmationInvalid,
+    EmailConfirmationDone,
 )
 
 # for reading static files
@@ -24,12 +28,26 @@ urlpatterns = [
     ),
 
     path(
-        "verify_email/<uidb64>/<token>/",
+        'verify_email/<uidb64>/<token>/',
         VerifyEmail.as_view(),
         name="verify_email",
     ),
-    path('email_confirmation/', None.as_view(), name='email_confirmation'),
-    path('email_confirmation_done/', None.as_view(), name='email_confirmation_done'),
+    path(
+        'email_confirmation/',
+        EmailConfirmation.as_view(),
+        name='email_confirmation',
+    ),
+    path(
+        'email_confirmation_done/',
+        EmailConfirmationDone.as_view(),
+        name='email_confirmation_done',
+    ),
+    path(
+        'email_confirmation_invalid/',
+        EmailConfirmationInvalid.as_view(),
+        name='email_confirmation_invalid',
+    ),
+
 
     path('', include('django.contrib.auth.urls')),
 

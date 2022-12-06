@@ -57,7 +57,6 @@ INSTALLED_APPS = [
 
     # должен быть последним / нужен для удаления медиа файлов
     'django_cleanup.apps.CleanupConfig',
-
 ]
 
 MIDDLEWARE = [
@@ -69,7 +68,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-
 ]
 
 ROOT_URLCONF = 'backend.urls'

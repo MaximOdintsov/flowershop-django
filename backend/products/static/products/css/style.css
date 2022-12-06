@@ -207,42 +207,6 @@ footer li a {
 /* modal */
 
 
-/* alert auth */
-
-.alert a {
-    display: block;
-    color: rgb(0, 0, 0);
-    text-decoration: none;
-    transition: all .2s;
-}
-
-.alert a:hover {
-    color: rgb(0, 0, 0);
-    box-shadow: 0 5px 7px -10px rgb(0, 0, 0);
-}
-
-.alert .button-background {
-    border-radius: 0.6rem;
-    margin: 0 0.1rem;
-    transition: all .2s;
-}
-
-.alert .button-background:hover {
-    background-color: rgb(22, 170, 255) !important;
-}
-
-.alert .button-alert {
-    padding: 0.6rem 0;
-}
-
-.alert .button-alert p {
-    font-size: 18px;
-    margin-bottom: 0;
-}
-
-/* alert auth */
-
-
 /* form auth */
 
 .container-auth > .row > * {

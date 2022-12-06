@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block static %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
+{% endblock %}
+
+
+{% block title %} Вход {% endblock %}
+
+
+{% block content %}
+
+    <main>
+        <div class="container-fluid container-auth">
+            <div class="row d-flex justify-content-center align-items-center">
+                
+                <div class="col col-11 col-sm-11 col-md-9 col-lg-7 col-xl-3 col-xxl-3 rounded-4
+                bg-dark position-absolute top-50 start-50 translate-middle form-card">
+                
+                    <form method="post" action="{% url 'login' %}" class="row g-3 needs-validation form-auth">
+                        {% csrf_token %}
+
+
+                        <ul class="nav nav-tabs nav-form" role="tablist">
+                            <li role="presentation" class="form-auth-active">
+                                <a href="{% url 'login' %}" aria-controls="login" role="tab" data-toggle="tab">вход</a>
+                            </li>
+                            <li role="presentation">
+                                <a href="{% url 'registration' %}" aria-controls="registration" role="tab" data-toggle="tab">регистрация</a>
+                            </li>
+                        </ul>
+
+                        <div class="form-floating mb-2 col-md-12 position-relative">
+                            {{ form.username }}
+                            <label for="{{ form.username.id_for_label }}" class="form-label">Имя пользователя или email</label>
+                        </div>
+
+                        <div class="form-floating mb-2">
+                            {{ form.password }}
+                            <label for="{{ form.password.id_for_label }}" class="form-label">Пароль</label>
+                        </div>
+
+                        {% for error in form.non_field_errors %}
+                            <div class="invalid-feedback d-block">
+                                {{error}}
+                            </div>
+                        {% endfor %}
+
+                        <button class='btn btn-light' type="submit">Войти</button>
+                    </form>
+                    
+                    <a class="text-info auth-link" href="{% url 'password_reset' %}">Забыли пароль?</a>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

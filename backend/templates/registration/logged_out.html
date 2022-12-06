@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block static %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
+{% endblock %}
+
+
+{% block title %} Выйти {% endblock %}
+
+
+{% block content %}
+    <p>Logout</p>
+{% endblock %}
