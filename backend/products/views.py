@@ -4,6 +4,9 @@ from django.views import generic
 from .models import Category, Flower, Bouquet
 from .models import GalleryFlower, GalleryBouquet, CompositionOfTheBouquet
 
+from cart.forms import CartAddBouquetForm
+from cart.cart import Cart
+from django.conf import settings
 
 from . import serializers
 from rest_framework.renderers import JSONRenderer
@@ -38,6 +41,7 @@ class FlowerList(generic.ListView):
     paginate_by = 20
     template_name = 'flower_list.html'
 
+
 def flower_detail(request, slug):
     id_flower = Flower.objects.get(slug=slug).id
 
@@ -60,15 +64,27 @@ def bouquet_list(request):
 
 
 def bouquet_detail(request, slug):
-    id_bouquet = Bouquet.objects.get(slug=slug).id
+    bouquet_id = Bouquet.objects.get(slug=slug).id
 
-    bouquet = get_object_or_404(Bouquet, slug=slug)
-    gallery_bouquet = GalleryBouquet.objects.filter(bouquet_gallery_id=id_bouquet)
-    composition = CompositionOfTheBouquet.objects.filter(bouquet_composition_id=id_bouquet)
+    cart = Cart(request)
+
+    quantity = cart.counter(str(bouquet_id))
+    bouquet = get_object_or_404(
+        Bouquet,
+        id=bouquet_id,
+        slug=slug,
+        available=True,
+    )
+    gallery_bouquet = GalleryBouquet.objects.filter(bouquet_gallery_id=bouquet_id)
+    composition = CompositionOfTheBouquet.objects.filter(bouquet_composition_id=bouquet_id)
+    cart_bouquet_form = CartAddBouquetForm()
+
     context = {
         'bouquet': bouquet,
         'gallery_bouquet': gallery_bouquet,
         'composition': composition,
+        'cart_bouquet_form': cart_bouquet_form,
+        'quantity': quantity,
     }
     return render(request, template_name='products/bouquet_detail.html', context=context)
 

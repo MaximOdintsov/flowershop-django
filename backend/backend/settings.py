@@ -47,13 +47,13 @@ INSTALLED_APPS = [
 
     'django_extensions',
     'rest_framework',
-    
-    # 'rest_framework.authtoken',
+
     # 'djoser',
     # 'phonenumber_field',
 
     'products',
     'users',
+    'cart',
 
     # должен быть последним / нужен для удаления медиа файлов
     'django_cleanup.apps.CleanupConfig',
@@ -83,6 +83,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                
+                'cart.context_processors.cart',
             ],
         },
     },
@@ -105,7 +107,6 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -130,10 +131,12 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 # authentication
-
 AUTHENTICATION_BACKENDS = [
     'users.backends.AuthBackend'
 ]
+
+# cart
+CART_SESSION_ID = 'cart'
 
 # EMAIL
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -148,8 +151,6 @@ DEFAULT_FROM_EMAIL = os.getenv('EMAIL_USER')
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
-
-
 LANGUAGE_CODE = 'en-us'
 LANGUAGES = (
     ('en-us', _('English')),
@@ -167,12 +168,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
 STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = BASE_DIR / "media"
@@ -180,7 +179,7 @@ MEDIA_URL = "/image/"
 
 LOGIN_URL = '/admin/login/'
 
-# for rest api and JWT
+# for rest api
 REST_FRAMEWORK = {
     # for output static files
     'DEFAULT_RENDERER_CLASSES': [

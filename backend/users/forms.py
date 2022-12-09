@@ -3,6 +3,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
+from django.utils.text import capfirst
 
 from django.utils.translation import gettext_lazy as _
 from .utils import send_email_for_verify
@@ -175,6 +176,14 @@ class MyAuthenticationForm(forms_auth.AuthenticationForm):
         self.user_cache = None
         super(MyAuthenticationForm, self).__init__(request, *args, **kwargs)
 
+        # Set the max length and label for the "username" field.
+        self.username_field = User._meta.get_field(User.USERNAME_FIELD)
+        username_max_length = self.username_field.max_length or 254
+        self.fields["username"].max_length = username_max_length
+        self.fields["username"].widget.attrs["maxlength"] = username_max_length
+        if self.fields["username"].label is None:
+            self.fields["username"].label = capfirst(self.username_field.verbose_name)
+
         self.fields['username'].widget.attrs.update({
             'class': 'form-control',
             'placeholder': 'Введите имя пользователя или email',
@@ -313,8 +322,10 @@ class MyPasswordChangeForm(forms_auth.PasswordChangeForm):
         }),
     )
 
-    def __int__(self, request=None, *args, **kwargs):
+    def __int__(self, user, request=None, *args, **kwargs):
         self.request = request
+        self.user = user
+
         super(MyPasswordChangeForm, self).__init__(request, *args, **kwargs)
 
         self.fields['old_password'].widget.attrs.update({

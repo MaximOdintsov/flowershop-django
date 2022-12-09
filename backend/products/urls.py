@@ -14,7 +14,7 @@ urlpatterns = [
     path('flowers/', views.FlowerList.as_view(), name='flowers'),
     path('flowers/<slug:slug>', views.flower_detail, name='flower_detail'),
 
-    path('bouquets/', views.bouquet_list, name='bouquets'),
+    path('bouquets/', views.bouquet_list, name='bouquet_list'),
     path('bouquets/<slug:slug>', views.bouquet_detail, name='bouquet_detail'),
 
     path('contacts', views.contacts, name='contacts'),

@@ -22,7 +22,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link col" href="{% url 'bouquets' %}">Букеты</a>
+                        <a class="nav-link col" href="{% url 'bouquet_list' %}">Букеты</a>
                     </li>
                     
                     <li class="nav-item dropdown">
@@ -59,10 +59,26 @@
                         </ul>
                     </li>
 
-                    <li class="nav-item">
-                        <a href="#">
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle col" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="{% static 'products/icons/shopping-bag-icon.png' %}" alt="shopping-bag-icon" width="35rem">
                         </a>
+                        <ul class="dropdown-menu">
+                            {% with total_items=cart|length %}
+                                <li>
+                                    {% if cart|length > 0 %}
+                                        Your cart:
+                                        <a href="{% url 'cart:cart_detail' %}" class="dropdown-item">
+                                            {{ total_items }} item {{ total_items|pluralize }},
+                                            ${{ cart.get_total_price }}
+                                        </a>
+                                    {% else %}
+                                    <p class="dropdown-item">Your cart is empty.</p>
+                                    {% endif %}
+                                </li>
+                            {% endwith %}
+                        </ul>
+
                     </li>
                     
                     <li class="nav-item dropdown">

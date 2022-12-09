@@ -33,6 +33,29 @@
     {% if bouquet.status == 3 %}
         {{ bouquet.get_status_display }}<br>
     {% endif %}
+    
+    <form action="{% url 'cart:cart_remove_one' bouquet.id %}" method="post">
+        {% csrf_token %}
+        
+        <input type="submit" value="-">
+    </form>
+
+
+    
+    {{ quantity }}
+
+    <form action="{% url 'cart:cart_add_one' bouquet.id %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="+">
+    </form>
+
+    <p>Hello</p>
+    <form action="{% url 'cart:cart_add_all' bouquet.id %}" method="post">
+        {% csrf_token %}
+        
+        {{ cart_bouquet_form.quantity }}
+        <input type="submit" value="+">
+    </form>
 
     Букет состоит из:
     <ul>
