@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+
+{% block static %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
+{% endblock %}
+
+
+{% block title %} Цветы {% endblock %}
+
+
+{% block content %}
+
+    {% include 'includes/header.html' %}
+
+    <main>
+        <div class="container">
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-5 justify-content-center"
+            style="padding-bottom: 1rem;">
+                {% if products %}
+                    {% for product in products %}
+                        <div class="col justify-content-center products">
+
+                            <!--Product card-->
+                            <div class="card">
+
+                                <a href="{{ product.slug }}" target="_blank" style="text-decoration:none;" data-bs-toggle="modal" data-bs-target="#Modal{{ product.id }}">
+
+                                    <img src="{{ product.preview.url }}" class="card-img-top" alt="{{ product.title }}">
+
+                                    <div class="card-body text-center" style="height: 80px;">
+
+                                        <h5 class="link-primary">
+                                            {{ product.title }}
+                                        </h5>
+
+                                    </div>
+                                </a>
+
+                                <div class="card-footer d-flex justify-content-between align-items-end">
+
+                                    <div class="product-price">
+
+                                        {% if product.discount == 0 %}
+
+                                            <span class="price-text">
+                                                {{ product.discount_price|floatformat:0 }} &#8381;
+                                            </span>
+
+                                        {% else %}
+
+                                            <div class="price-product-with-discount">
+                                                <span>
+                                                    <del class="old-price">{{ product.price|floatformat:0 }} &#8381;</del>
+                                                </span>
+
+                                                <br style="display: block; margin-bottom: -10px;">
+
+                                                <span class="price-text-discount">
+                                                    {{ product.discount_price|floatformat:0 }} &#8381;
+                                                </span>
+                                            </div>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                    <div class="product-cart-icon">
+                                        <a href="#">
+                                            <img src="{% static 'products/icons/shopping-bag-icon.png' %}" alt="shopping-bag-icon" width="35rem">
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!--Modal-->
+                        <div class="modal fade modal-lg" id="Modal{{ product.id }}" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <div class="container">
+
+                                            <div class="row row-cols-2">
+                                                <div class="col">
+
+                                                    <!--Carousel images-->
+                                                    <div id="carouselModal{{ product.slug }}" class="carousel carousel-dark slide" data-bs-ride="carousel" data-bs-touch="true">
+
+                                                        <div class="carousel-inner">
+                                                            <div class="carousel-item active" data-bs-interval="10000">
+                                                                <img class="d-block w-100" src="{{ product.preview.url }}" alt="product {{ product.title }}">
+                                                            </div>
+
+                                                            {% for product_image in product.product_gallery.all %}
+                                                                <div class="carousel-item" data-bs-interval="10000">
+                                                                    <img class="d-block w-100" src="{{ product_image.image.url }}" alt="product {{ product.title }}">
+                                                                </div>
+                                                            {% endfor %}
+                                                        </div>
+
+                                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselModal{{ product.slug }}" data-bs-slide="prev">
+                                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                            <span class="visually-hidden">Назад</span>
+                                                        </button>
+                                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselModal{{ product.slug }}" data-bs-slide="next">
+                                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                            <span class="visually-hidden">Дальше</span>
+                                                        </button>
+
+                                                    </div>
+                                                    <!--Carousel images-->
+                                                </div>
+
+                                                <div class="col">
+                                                    <h2>
+                                                        <a href="{{ product.get_url }}">
+                                                        {{ product.title }}
+                                                        </a>
+                                                    </h2>
+                                                    <p style="font-size: 20px;">{{ product.description }}</p>
+
+                                                    <div class="">
+                                                        <p>Состоит из:</p>
+                                                        <ul>
+                                                            {% for product_component in product.get_composition %}
+                                                                <li>
+                                                                    {{ product_component.component.title }} -
+                                                                    {{ product_component.quantity }} штук
+                                                                </li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer justify-content-center">
+                                        
+                                        <div class="price-modal col-3">
+                                            {% if product.discount == 0 %}
+
+                                                <span class="price-text" style="font-size: 22px;">
+                                                    {{ product.discount_price|floatformat:0 }} &#8381;
+                                                </span>
+
+                                            {% else %}
+
+                                                <div class="">
+                                                    <span style="font-size: 16px;">
+                                                        <del class="old-price">{{ product.price|floatformat:0 }} &#8381;</del>
+                                                    </span>
+
+                                                    <br style="display: block; margin-bottom: -10px;">
+
+                                                    <span class="price-text-discount" style="font-size: 22px;">
+                                                        {{ product.discount_price|floatformat:0 }} &#8381;
+                                                    </span>
+                                                </div>
+
+                                            {% endif %}
+                                        </div>
+
+                                        <form action="{% url 'cart:cart_add_all' product.id %}" class="col-8 d-flex justify-content-center" method="post">
+                                            {% csrf_token %}
+                                            <div class="col-8 col-sm-5 col-md-5 col-lg-4 col-xl-3 counter-products border">
+
+                                                <button class="btn btn-unstyled " type="button" onclick="this.nextElementSibling.stepDown(); this.nextElementSibling.onchange();">
+                                                    <img src="{% static 'products/icons/minus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
+                                                </button>
+                                                
+                                                    {{ cart_product_form.quantity }}
+
+                                                <button class="btn btn-unstyled " type="button" onclick="this.previousElementSibling.stepUp(); this.previousElementSibling.onchange();">
+                                                    <img src="{% static 'products/icons/plus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
+                                                </button>
+                                                
+                                            </div>
+
+                                            <button type="submit" class="col-6 btn btn-primary">
+                                                Добавить в корзину
+                                            </button>
+
+                                        </form>
+
+                                    
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!--Modal-->
+
+                    {% endfor %}
+                {% else %}
+                    <div>
+                        <p>
+                            Произошла какая-то ошибка, либо продуктов нет в наличии
+                        </p>
+                        <p>Позвоните нам на номер
+                            <a class="dropdown-item" href="tel:+7-909-141-32-42">+79091413242</a>
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        {% include 'includes/paginator.html' %}
+
+    </main>
+
+    {% include 'includes/footer.html' %}
+
+    </div>
+{% endblock %}

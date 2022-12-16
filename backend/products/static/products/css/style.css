@@ -8,9 +8,29 @@ main {
     background-color: rgba(229, 215, 233, 0.877);
 }
 
+.link-decoration-none {
+    text-decoration: none;
+}
 
+.link-text-primary {
+    color: rgb(70, 70, 70) !important;
+    text-decoration: none;
+    transition: all .2s;
+}
+.link-text-primary:hover {
+    color: rgb(15, 15, 15) !important;
+    text-decoration: underline;
+}
 
-
+.text-small {
+    font-size: small;
+}
+.text-medium {
+    font-size: medium;
+}
+.text-large {
+    font-size: large;
+}
 
 /* Product card */
 .row {
@@ -20,7 +40,7 @@ main {
     margin-left: calc(2 * var(--bs-gutter-x));
 }
 
-.card {
+.products .card {
     --bs-card-bg: rgba(245, 224, 255, 0.877);
     box-shadow: 0 5px 10px -8px rgb(116, 111, 111);
 
@@ -29,8 +49,7 @@ main {
     --bs-card-cap-bg: rgba(78, 78, 78, 0.03);
     transition: all .2s;
 }
-
-.card:hover {
+.products .card:hover {
     box-shadow: 0 12px 25px -16px rgb(116, 111, 111);
 }
 
@@ -42,7 +61,7 @@ main {
     color: rgb(219, 100, 100) !important;
 }
 
-.card-footer {
+.products .card-footer {
     height: 60px;
     padding-bottom: 10px;
 }
@@ -51,7 +70,12 @@ main {
     padding-left: 12px;
 }
 
-.product-price .price-text {
+.price-text {
+    font-size: 19px
+}
+
+.price-text-discount {
+    color: #f91155;
     font-size: 19px;
 }
 
@@ -59,14 +83,13 @@ main {
     padding-right: 12px;
 }
 
-.product-price .old-price {
-    color: rgba(219, 100, 100, 0.61);
+.old-price {
     font-size: 11px;
 	position: relative;
 	text-decoration: none;
 }
 
-.product-price .old-price::before {
+.old-price::before {
 	content: "";
 	border-bottom: 1px solid rgb(221, 96, 96);
 	position: absolute;
@@ -74,6 +97,7 @@ main {
 	height: 55%;
 	transform: rotate(-5deg);
 }
+
 /* Product card */
 
 
@@ -170,42 +194,18 @@ footer li a {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: rgb(244, 244, 244);
+    background-color: rgb(243, 243, 243);
     border-radius: 0.8rem;
 }
 
-.counter-products .counter-item {
-    flex: 1 1 auto;
-    margin: 0 5px;
-}
-
-.counter-products .counter-item:hover {
-    background-color: rgb(218, 218, 218);
+.counter-products .btn {
+    --bs-btn-padding-x: 6px;
+    --bs-btn-padding-y: 3px;
 }
 
 .modal-footer .price-modal {
     display: flex;
     align-self: center;
-}
-
-.modal-footer .price-text {
-    font-size: 26px;
-}
-
-.modal-footer .old-price {
-    color: rgba(219, 100, 100, 0.61);
-    font-size: 15px;
-	position: relative;
-	text-decoration: none;
-}
-
-.modal-footer .old-price::before {
-	content: "";
-	border-bottom: 1px solid rgb(221, 96, 96);
-	position: absolute;
-	width: 100%;
-	height: 55%;
-	transform: rotate(-5deg);
 }
 
 /* modal */
@@ -275,6 +275,34 @@ footer li a {
     margin-bottom: 0;
 }
 
+.row > * {
+    padding-left: 0;
+
+}
 
 /* form auth */
 
+
+/* remove number buttons */
+
+input[type="number"] {
+	-moz-appearance: textfield;
+	-webkit-appearance: textfield;
+	appearance: textfield;
+}
+ 
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+	display: none;
+}
+
+/* remove number buttons */
+
+/* cart */
+
+.cart-card .row > * {
+    margin-top: 0;
+  }
+
+
+/* cart */

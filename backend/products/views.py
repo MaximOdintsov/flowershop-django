@@ -1,18 +1,11 @@
-from django.shortcuts import render, get_object_or_404, get_list_or_404
+from django.db.models import Q
+from django.shortcuts import render, get_object_or_404
 from django.views import generic
 
-from .models import Category, Flower, Bouquet
-from .models import GalleryFlower, GalleryBouquet, CompositionOfTheBouquet
+from .models import (Product)
 
-from cart.forms import CartAddBouquetForm
+from cart.forms import CartAddProductForm
 from cart.cart import Cart
-from django.conf import settings
-
-from . import serializers
-from rest_framework.renderers import JSONRenderer
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 
 
 def contacts(request):
@@ -33,98 +26,37 @@ def home(request):
     )
 
 
-class FlowerList(generic.ListView):
+class ProductList(generic.ListView):
 
-    model = Flower
-    context_object_name = 'flowers'
-    queryset = Flower.objects.filter(available=True)
-    paginate_by = 20
-    template_name = 'flower_list.html'
+    model = Product
+    context_object_name = 'products'
+    queryset = Product.objects.filter(Q(available=True) & (Q(status=2) | Q(status=3)))
+    paginate_by = 30
 
-
-def flower_detail(request, slug):
-    id_flower = Flower.objects.get(slug=slug).id
-
-    flower = get_object_or_404(Flower, slug=slug)
-    gallery_flower = GalleryFlower.objects.filter(flower_gallery_id=id_flower)
-    context = {
-        'flower': flower,
-        'gallery_flower': gallery_flower,
+    cart_product_form = CartAddProductForm()
+    extra_context = {
+        'cart_product_form': cart_product_form,
     }
-    return render(request, template_name='products/flower_detail.html', context=context)
+    template_name = 'products/product_list.html'
 
 
-def bouquet_list(request):
-    bouquets = get_list_or_404(Bouquet, available=True)
-
-    context = {
-        'bouquets': bouquets,
-    }
-    return render(request, template_name='products/bouquet_list.html', context=context)
-
-
-def bouquet_detail(request, slug):
-    bouquet_id = Bouquet.objects.get(slug=slug).id
+def product_detail(request, slug):
+    product_id = Product.objects.get(slug=slug).id
 
     cart = Cart(request)
+    quantity = cart.counter(str(product_id))
+    product = get_object_or_404(Product,
+                                Q(id=product_id),
+                                Q(slug=slug),
+                                Q(available=True),
+                                Q(status=2) | Q(status=3))
 
-    quantity = cart.counter(str(bouquet_id))
-    bouquet = get_object_or_404(
-        Bouquet,
-        id=bouquet_id,
-        slug=slug,
-        available=True,
-    )
-    gallery_bouquet = GalleryBouquet.objects.filter(bouquet_gallery_id=bouquet_id)
-    composition = CompositionOfTheBouquet.objects.filter(bouquet_composition_id=bouquet_id)
-    cart_bouquet_form = CartAddBouquetForm()
+    cart_product_form = CartAddProductForm()
 
     context = {
-        'bouquet': bouquet,
-        'gallery_bouquet': gallery_bouquet,
-        'composition': composition,
-        'cart_bouquet_form': cart_bouquet_form,
+        'product': product,
+        'cart_bouquet_form': cart_product_form,
         'quantity': quantity,
     }
-    return render(request, template_name='products/bouquet_detail.html', context=context)
-
-
-class FlowerListView(APIView):
-    """ Вывод списка цветов """
-
-    permission_classes = (IsAuthenticated, )
-
-    def get(self, request):
-        flowers = Flower.objects.filter(available=True)
-        serializer = serializers.FlowerListSerializer(flowers, many=True).data
-        return Response({'posts': serializer})
-
-
-class FlowerDetailView(APIView):
-    """ Вывод отдельно взятого цветка """
-
-    def get(self, request, pk):
-        flower = Flower.objects.get(id=pk, available=True)
-        serializer = serializers.FlowerDetailSerializer(flower)
-        return Response(serializer.data)
-
-
-class FlowerGalleryView(APIView):
-    """ Вывод списка цветов """
-
-    renderer_classes = [JSONRenderer]
-
-    def get(self, request, pk):
-        queryset = GalleryFlower.objects.filter(flower_gallery_id=pk).count()
-        content = {'flower_gallery_image': queryset}
-        # serializer = serializers.GalleryFlowerSerializer
-
-        return Response({'model_to_return': queryset})
-
-
-# class FlowerGalleryView(generics.ListAPIView):
-#     """ Показывает правильные ссылки """
-#
-#     queryset = GalleryFlower.objects.all()
-#     serializer_class = serializers.GalleryFlowerSerializer
+    return render(request, template_name='products/product_detail.html', context=context)
 

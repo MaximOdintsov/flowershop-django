@@ -6,7 +6,7 @@ class GalleryFlowerSerializer(serializers.ModelSerializer):
     """ Галерея отдельно взятого цветка """
 
     class Meta:
-        model = models.GalleryFlower
+        model = models.ProductGallery
         fields = ('image', )
 
 
@@ -46,7 +46,7 @@ class FlowerDetailSerializer(serializers.ModelSerializer):
     flower_gallery = GalleryFlowerSerializer(read_only=True, many=True)
 
     class Meta:
-        model = models.Flower
+        model = models.Product
         exclude = (
             'slug',
             'new_arrival',

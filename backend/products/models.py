@@ -1,5 +1,6 @@
 import os
 
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models, transaction
 
@@ -13,43 +14,108 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
-class Category(models.Model):
-    """ Класс добавления категории цветов """
+def save_slug(pk, slug, title):
+    """
+    Переводит поле title с ru на en и сохраняет в slug
+    """
 
-    title = models.CharField(max_length=100, verbose_name='Имя категории')
-    slug = models.SlugField(verbose_name='Название на английском', max_length=150, unique=True, null=False)
+    if (slug == str(pk)) or (len(slug) == 0):
+        try:
+            import translators as ts
+            translated_title = ts.google(title)
+            slug = slugify(translated_title)
+            return slug
+        except Exception:
+            slug = pk
+            return slug
+    else:
+        return slug
+
+
+class ProductCategory(models.Model):
+    """
+    Категория продукта
+    """
+    title = models.CharField('Имя категории', max_length=100)
+    slug = models.SlugField('Название на английском', max_length=150, unique=True, null=False)
 
     class Meta:
-        verbose_name = 'Категория цветка'
-        verbose_name_plural = 'Категории цветов'
+        verbose_name = 'Категория продукта'
+        verbose_name_plural = 'Категории продуктов'
 
     def __str__(self):
         return self.title
 
-    # def get_absolute_url(self):
-    #     return reverse('category_flower', kwargs={'slug': self.slug})
-
     def save(self, *args, **kwargs):
-        """ Переводит поле title с ru на en и сохраняет в slug """
+        super(ProductCategory, self).save()
+        self.slug = save_slug(pk=self.id, slug=self.slug, title=self.title)
 
-        # сохраняем для определения id
-        super(Category, self).save()
-
-        # for translate slug
-        if len(self.slug) < 3:
-            try:
-                import translators as ts
-                translated_title = ts.google(self.title)
-                self.slug = slugify(translated_title)
-            except Exception:
-                self.slug = self.id
-
-        super(Category, self).save(*args, **kwargs)
+        super(ProductCategory, self).save(*args, **kwargs)
 
 
-class Flower(models.Model):
-    """ Класс добавления цветка """
+class ProductComponent(models.Model):
+    """
+    Класс компонента, из которого состоит продукт
+    """
+    SALE = 1
+    ORDER = 2
 
+    STATUS_CHOICES = [
+        (SALE, 'Доступно'),
+        (ORDER, 'Только под заказ'),
+    ]
+
+    title = models.CharField('Название', max_length=100)
+    slug = models.SlugField('Название на английском', max_length=150, unique=True, null=False)
+
+    price = models.DecimalField('Цена', max_digits=8, decimal_places=2)
+
+    new_arrival = models.PositiveSmallIntegerField('Новое поступление', default=0)
+
+    total_count = models.PositiveSmallIntegerField('Весь запас', default=0)
+    quantity_in_product = models.PositiveSmallIntegerField('Компоненты в продуктах', default=0)
+    quantity_for_sale = models.PositiveSmallIntegerField('Остаток для продажи', default=0)
+
+    status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES,
+                                              verbose_name='Статус')
+    available = models.BooleanField(verbose_name='Доступен', default=False)
+
+    class Meta:
+        verbose_name = 'Компонент'
+        verbose_name_plural = 'Компоненты'
+        unique_together = ('slug', )
+
+    def __str__(self):
+        return self.title
+
+    def update_new_arrival(self):
+        """
+        Обновляет количество компонентов при новом поступлении
+        """
+        if self.new_arrival != 0:
+            self.total_count += self.new_arrival
+            self.new_arrival = 0
+
+    def update_quantity_for_sale(self):
+        """
+        Обновляет количество остатка компонентов для продажи
+        """
+        self.quantity_for_sale = self.total_count - self.quantity_in_product
+
+    @transaction.atomic
+    def save(self, *args, **kwargs):
+        super(ProductComponent, self).save()
+        self.slug = save_slug(pk=self.id, slug=self.slug, title=self.title)
+        self.update_new_arrival()
+        self.update_quantity_for_sale()
+
+        super(ProductComponent, self).save(*args, **kwargs)
+
+
+class Product(models.Model):
+    """
+    Класс продукта
+    """
     UNCHECKED = 1
     SALE = 2
     ORDER = 3
@@ -60,247 +126,210 @@ class Flower(models.Model):
         (ORDER, 'Только под заказ'),
     ]
 
-    category = models.ForeignKey(
-        Category, verbose_name='Категория', on_delete=models.PROTECT
-    )
-    title = models.CharField(verbose_name='Название', max_length=100)
-    slug = models.SlugField(verbose_name='Название на английском', max_length=150, unique=True, null=False)
-    preview = models.ImageField(verbose_name='Превью', upload_to='flowers/previews', help_text='Картинка, которая будет отображаться первой')
-    description = models.CharField(verbose_name='Описание', max_length=250)
+    category = models.ForeignKey(ProductCategory,
+                                 verbose_name='Категория',
+                                 on_delete=models.PROTECT)
 
-    price = models.DecimalField(verbose_name='Цена без скидки', max_digits=8, decimal_places=2)
-    discount_price = models.DecimalField(verbose_name='Цена со скидкой', max_digits=8, decimal_places=2, default=0.00)
-    discount = models.PositiveSmallIntegerField(
-        verbose_name='Скидка в %',
-        default=0,
-        validators=[MinValueValidator(0), MaxValueValidator(80)]
-    )
+    title = models.CharField('Название', max_length=150)
+    slug = models.SlugField('Название на английском', max_length=150, unique=True, null=False)
+    description = models.CharField('Описание', max_length=250)
 
-    new_arrival = models.PositiveSmallIntegerField(verbose_name='Новое поступление', default=0)
-    whole_stock = models.PositiveSmallIntegerField(verbose_name='Весь запас', default=0)
-    stock_in_bouquets = models.PositiveSmallIntegerField(verbose_name='Цветы в букетах', default=0)
-    stock_for_sale = models.PositiveSmallIntegerField(verbose_name='Остаток для продажи', default=0)
+    preview = models.ImageField('Превью', upload_to='products/previews')
 
-    status = models.PositiveSmallIntegerField(
-        choices=STATUS_CHOICES,
-        default=UNCHECKED,
-        verbose_name='Статус',
-    )
+    price = models.DecimalField('Цена без скидки', max_digits=8, decimal_places=2, default=0)
+    discount = models.PositiveSmallIntegerField('Скидка в %',
+                                                default=0,
+                                                validators=[MinValueValidator(0), MaxValueValidator(80)])
+    discount_price = models.DecimalField('Цена со скидкой', max_digits=8, decimal_places=2, default=0)
 
-    available = models.BooleanField(verbose_name='Доступен', default=False)
+    quantity = models.PositiveSmallIntegerField('Количество продуктов', default=0)
+    quantity_update = models.PositiveSmallIntegerField('Обновление количества', default=0)
+
+    status = models.PositiveSmallIntegerField('Статус',
+                                              choices=STATUS_CHOICES,
+                                              default=UNCHECKED)
+
+    available = models.BooleanField('Доступен', default=False)
 
     class Meta:
-        verbose_name = 'Цветок'
-        verbose_name_plural = 'Цветы'
-        unique_together = ('slug', )  # делает поле уникальным
+        verbose_name = 'Товар'
+        verbose_name_plural = 'Товары'
+        unique_together = ('slug',)
 
     def __str__(self):
         return self.title
 
-    def get_absolute_url(self):
-        return reverse('flower_detail', kwargs={'slug': self.slug})
+    def get_url(self):
+        return reverse('product_detail', args=[self.slug])
 
-    # при сохранении букетов может возникнуть ошибка, для отката изменений
-    @transaction.atomic
-    def save(self, *args, **kwargs):
-        """ Переводит поле title с ru на en и сохраняет в slug
-        Обновляет stocks"""
+    def get_composition(self):
+        composition = Product.objects.get(id=self.id).product_composition.all()
+        return composition
 
-        # сохраняем для определения id
-        super(Flower, self).save()
-
-        # for translate slug
-        if len(self.slug) < 3:
-            try:
-                import translators as ts
-                translated_title = ts.google(self.title)
-                self.slug = slugify(translated_title)
-            except Exception:
-                self.slug = self.id
-
-        # прибавляем поступление цветов
-        self.whole_stock += self.new_arrival
-        # обнуляем поступление цветов
-        self.new_arrival = 0
-
-        # обновляем значение цветов, доступных для продажи
-        self.stock_for_sale = self.whole_stock - self.stock_in_bouquets
-
-        # рассчитываем цену со скидкой
-        sale = (self.price/100) * self.discount
-        self.discount_price = self.price - sale
-
-        super(Flower, self).save(*args, **kwargs)
-
-    @transaction.atomic
-    def delete(self, *args, **kwargs):
-        if self.stock_in_bouquets == 0:
-            super(Flower, self).delete(*args, **kwargs)
+    def check_quantity_update(self):
+        """
+        Проверяет, было ли обновлено self.quantity
+        """
+        if self.quantity_update != self.quantity:
+            self.quantity_update = self.quantity
+            return True
         else:
-            raise Exception(f'Сначала нужно удалить цветок {self.title} во всех букетах\n'
-                            f'После этого можно будет удалить этот цветок из каталога\n')
+            return False
 
-
-class GalleryFlower(models.Model):
-    """ Класс добавления картинок в цветок """
-
-    image = models.ImageField(upload_to='flowers/images')
-    flower_gallery = models.ForeignKey(Flower, on_delete=models.CASCADE, related_name='flower_gallery')
-
-    class Meta:
-        verbose_name = 'Картинка'
-        verbose_name_plural = 'Картинки'
-
-    def __str__(self):
-        return self.image.name
-
-
-class Bouquet(models.Model):
-    """ Класс создания букета """
-
-    UNCHECKED = 1
-    SALE = 2
-    ORDER = 3
-
-    STATUS_CHOICES = [
-        (UNCHECKED, 'Находится на проверке'),
-        (SALE, 'Доступно для продажи'),
-        (ORDER, 'Только под заказ'),
-    ]
-
-    title = models.CharField(verbose_name='Название', max_length=150)
-    preview = models.ImageField(verbose_name='Превью', upload_to='bouquets/previews')
-    slug = models.SlugField(verbose_name='Название на английском', max_length=150, unique=True, null=False)
-    description = models.CharField(verbose_name='Описание', max_length=250)
-
-    price = models.DecimalField(verbose_name='Цена без скидки', max_digits=8, decimal_places=2)
-    discount_price = models.DecimalField(verbose_name='Цена со скидкой', max_digits=8, decimal_places=2, default=0.00)
-    discount = models.PositiveSmallIntegerField(
-        verbose_name='Скидка в %',
-        default=0,
-        validators=[MinValueValidator(0), MaxValueValidator(80)]
-    )
-
-    stock = models.PositiveSmallIntegerField(verbose_name='Количество букетов', default=0)
-
-    status = models.PositiveSmallIntegerField(
-        choices=STATUS_CHOICES,
-        default=UNCHECKED,
-        verbose_name='Статус',
-    )
-
-    available = models.BooleanField(verbose_name='Доступен', default=False)
-
-    class Meta:
-        verbose_name = 'Букет'
-        verbose_name_plural = 'Букеты'
-        unique_together = ('slug',)  # делает поле уникальным
-
-    def __str__(self):
-        return self.title
-
-    def get_absolute_url(self):
-        return reverse('bouquet_detail', kwargs={'slug': self.slug})
-
-    # декоратор для отмены всех сохранений в бд, если произошла ошибка
-    @transaction.atomic
-    def save(self, *args, **kwargs):
-        """ Переводит поле title с ru на en и сохраняет в slug """
-
-        # сохраняем для определения id
-        super(Bouquet, self).save()
-
-        # for translate slug
-        if len(self.slug) < 3:
-            try:
-                import translators as ts
-                translated_title = ts.google(self.title)
-                self.slug = slugify(translated_title)
-            except Exception:
-                self.slug = self.id
-
-        # расчеты flower и composition
-        compositions = Bouquet.objects.get(id=self.id).bouquet_composition.all()
+    def update_product_price(self):
+        """
+        Обнуляем цену продукта и
+        рассчитываем цену из всех его компонентов
+        """
+        compositions = Product.objects.get(id=self.id).product_composition.all()
+        self.price = 0
         for composition in compositions:
-            flower = Flower.objects.get(id=composition.flower.id)
+            self.price += composition.price_counter()
 
-            # удаляем старое значение из общего количества цветов в букетах
-            flower.stock_in_bouquets -= composition.total_count
-            # присваиваем новое значение
-            composition.total_count = self.stock * composition.count
-
-            # прибавляем к количеству цветов в букете total_count
-            flower.stock_in_bouquets += composition.total_count
-
-            # сохранение composition и flower, если проверка прошла успешно
-            if flower.whole_stock >= flower.stock_in_bouquets:
-                composition.save()
-                flower.save()
-            else:
-                raise Exception(f'На складе нет такого количества цветов {flower.title}, '
-                                f'нельзя добавить такое количество - {self.stock} букетов')
-
-        # рассчитываем цену со скидкой
+    def update_discount_price(self):
+        """ Расчет цены со скидкой """
         sale = (self.price / 100) * self.discount
         self.discount_price = self.price - sale
-        super(Bouquet, self).save(*args, **kwargs)
+        return self.discount_price
+
+    def save_composition(self):
+        """
+        Сохраняет все связанные объекты ProductComposition
+        Нужно для того, чтобы делать расчеты для
+        Component и Composition при изменении self.quantity
+        """
+        compositions = Product.objects.get(id=self.id).product_composition.all()
+        for composition in compositions:
+            composition.save()
+
+    def delete_composition(self):
+        """
+        Удаляет все связанные объекты ProductComposition
+        """
+        compositions = Product.objects.get(id=self.id).product_composition.all()
+        for composition in compositions:
+            composition.delete()
+
+    @transaction.atomic
+    def save(self, *args, **kwargs):
+        super(Product, self).save()
+        self.slug = save_slug(pk=self.id, slug=self.slug, title=self.title)
+
+        if self.check_quantity_update() is True:
+            self.save_composition()
+
+        self.update_product_price()
+        self.update_discount_price()
+
+        super(Product, self).save(*args, **kwargs)
 
     @transaction.atomic
     def delete(self, *args, **kwargs):
-        compositions = Bouquet.objects.get(id=self.id).bouquet_composition.all()
-        for composition in compositions:
-            # удаляем каждый цветок в букете
-            composition.delete()
-            self.save()
-
-        super(Bouquet, self).delete(*args, **kwargs)
+        self.delete_composition()
+        super(Product, self).delete(*args, **kwargs)
 
 
-class GalleryBouquet(models.Model):
-    """ Класс добавления картинок в букет """
-    image = models.ImageField(upload_to='bouquets/images')
-    bouquet_gallery = models.ForeignKey(Bouquet, on_delete=models.CASCADE, related_name='bouquet_gallery')
+class ProductGallery(models.Model):
+    """
+    Добавляет картинки в продукт
+    """
+    product_gallery = models.ForeignKey(Product,
+                                        on_delete=models.CASCADE,
+                                        related_name='product_gallery')
+
+    image = models.ImageField(upload_to='products/images')
 
     class Meta:
         verbose_name = 'Изображение'
         verbose_name_plural = 'Изображения'
 
 
-class CompositionOfTheBouquet(models.Model):
-    """ Класс сохранения цветов в букете """
-    # для связи между букетом и композицией
-    bouquet_composition = models.ForeignKey(
-        Bouquet, verbose_name='Букет', on_delete=models.CASCADE, related_name='bouquet_composition'
-    )
-    # для выбора цветка в букет
-    flower = models.ForeignKey(
-        Flower, verbose_name='Выбрать цветок',
-        on_delete=models.CASCADE,
-        db_column='flower',
-        related_name='flower_composition',
-    )
-    # количество цветка в букете
-    count = models.PositiveSmallIntegerField(verbose_name='Количество цветов', default=0)
-    # общее количество цветов в букетах (количество букетов * количество цветка в букете)
-    total_count = models.PositiveSmallIntegerField(
-        verbose_name='Общее количество цветов в этом букете',
-        default=0
-    )
+class ProductComposition(models.Model):
+    """
+    Определяет состав продукта
+    """
+    product_composition = models.ForeignKey(Product,
+                                            verbose_name='Товар',
+                                            on_delete=models.CASCADE,
+                                            related_name='product_composition')
 
-    def __str__(self):
-        return f'Composition id {self.id}, flower - {self.flower.title}, доступное количество для продажи: {self.flower.stock_for_sale}'
+    component_composition = models.ForeignKey(ProductComponent,
+                                              verbose_name='Выбрать цветок',
+                                              on_delete=models.PROTECT,
+                                              db_column='component',
+                                              related_name='component_composition')
+
+    quantity = models.PositiveSmallIntegerField('Количество компонентов', default=0)
+    quantity_update = models.PositiveSmallIntegerField('Обновление количества компонентов', default=0)
+
+    # общее количество в экземпляре продукта
+    # (количество продуктов * количество компонентов в 1 продукте)
+    total_quantity = models.PositiveSmallIntegerField('Общее количество', default=0)
 
     class Meta:
         verbose_name = 'Цветок'
         verbose_name_plural = 'Цветы'
 
+    def __str__(self):
+        return f'Composition id {self.id}, component_composition - ' \
+               f'{self.component_composition.title}, ' \
+               f'доступное количество для продажи: {self.component_composition.quantity_for_sale}'
+
+    def check_quantity_update(self):
+        """
+        Проверяет, было ли обновлено self.quantity
+        """
+        if self.quantity_update != self.quantity:
+            self.quantity_update = self.quantity
+            return True
+        else:
+            return False
+
+    def save_product(self):
+        product = Product.objects.get(id=self.product_composition.id)
+        product.save()
+
+    def price_counter(self):
+        """
+        Рассчитывает цену продукта из всех компонентов
+        """
+        price = self.component_composition.price * self.quantity
+        return price
+
+    def update_total_quantity(self):
+        """
+        Удаляем старое значение self.total_quantity
+        из Component.quantity_in_product
+        и обновляем self.total_quantity
+
+        Сохраняем Component
+        """
+        self.component_composition.quantity_in_product -= self.total_quantity
+        self.total_quantity = self.product_composition.quantity * self.quantity
+        self.component_composition.quantity_in_product += self.total_quantity
+
+        self.component_composition.save()
+
+    def delete_component(self):
+        """
+        Удаляет quantity_in_product из ProductComponent
+        """
+        self.component_composition.quantity_in_product -= self.total_quantity
+        self.component_composition.save()
+
+    @transaction.atomic
+    def save(self, *args, **kwargs):
+
+        if self.check_quantity_update() is True:
+            super(ProductComposition, self).save()
+            self.save_product()
+
+        self.update_total_quantity()
+        super(ProductComposition, self).save(*args, **kwargs)
+
     @transaction.atomic
     def delete(self, *args, **kwargs):
-        flowers = Flower.objects.get(id=self.flower.id)
-        # удаляем значение из общего количества цветов в букетах
-        flowers.stock_in_bouquets -= self.total_count
-        flowers.save()
-        self.bouquet_composition.save()
-        super(CompositionOfTheBouquet, self).delete(*args, **kwargs)
+        self.delete_component()
+        super(ProductComposition, self).delete(*args, **kwargs)
 
 
