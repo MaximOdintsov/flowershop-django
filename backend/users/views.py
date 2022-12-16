@@ -50,23 +50,6 @@ class MyRegistrationView(views.View):
 
             return redirect('email_confirmation')
 
-            # user = authenticate(
-            #     username=email,
-            #     password=password,
-            # )
-
-            # if user is not None:
-            #     if user.is_active:
-            #         login(self.request, user)
-            #         return HttpResponse('Вы успешно вошли')
-            #     else:
-            #         return HttpResponse('Ваш аккаунт неактивен')
-            # else:
-            #     return HttpResponse('Такого юзера нет')
-
-            # user = authenticate(username=username, password=password)
-            # login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-
         return render(request, self.template_name, context={'form': form})
 
 

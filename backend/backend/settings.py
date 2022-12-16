@@ -49,11 +49,12 @@ INSTALLED_APPS = [
     'rest_framework',
 
     # 'djoser',
-    # 'phonenumber_field',
+    'phonenumber_field',
 
     'products',
     'users',
     'cart',
+    'orders',
 
     # должен быть последним / нужен для удаления медиа файлов
     'django_cleanup.apps.CleanupConfig',

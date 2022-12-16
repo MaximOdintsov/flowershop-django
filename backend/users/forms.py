@@ -15,7 +15,6 @@ from django.core.exceptions import ValidationError
 
 from django.contrib.auth import get_user_model
 
-
 User = get_user_model()
 
 
@@ -42,10 +41,13 @@ class MyRegistrationForm(forms_auth.UserCreationForm):
         error_messages=error_messages,
     )
     first_name = forms.CharField(
+        required=False,
         label=_('First name'),
         error_messages=error_messages
+
     )
     last_name = forms.CharField(
+        required=False,
         label=_('Last name'),
         error_messages=error_messages
     )
@@ -75,6 +77,14 @@ class MyRegistrationForm(forms_auth.UserCreationForm):
         if existing:
             raise ValidationError(f'Пользователь с таким адресом электронной почты уже существует.')
         return new_email
+
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get('first_name').title()
+        return first_name
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get('last_name').title()
+        return last_name
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
@@ -135,7 +145,7 @@ class MyRegistrationForm(forms_auth.UserCreationForm):
             'placeholder': 'Выберите пол',
         })
         self.fields['date_of_birth'].widget.attrs.update({
-            'class': 'form-select col-md-4',
+            'class': 'form-select col-sm-4',
             'style': 'margin-right: calc(var(--bs-gutter-x) * .5)',
             'placeholder': 'Дата рождения',
         })

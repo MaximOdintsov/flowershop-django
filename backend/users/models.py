@@ -18,9 +18,11 @@ class User(AbstractUser):
 
     email = models.EmailField(_('Email'), unique=True)
     # phone = PhoneNumberField(_('phone number'), region='RU', unique=True, null=True, blank=True)
-    sex = models.CharField('Пол', max_length=1, choices=SEX_CHOICES, null=True, blank=True, default='N')
+    sex = models.CharField('Пол', max_length=1, choices=SEX_CHOICES, null=True, blank=True,
+                           default='N')
     date_of_birth = models.DateField('День рождения', null=True, blank=True)
-    is_verified = models.BooleanField('Пользователь верифицирован', default=False)
+    is_verified = models.BooleanField('Пользователь верифицирован', default=False,
+                                      help_text='Указывает, что пользователь подтвердил свой email')
 
     objects = UserManager()
 

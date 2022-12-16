@@ -1,7 +1,7 @@
 from decimal import Decimal
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from products.models import Bouquet
+from products.models import Product
 
 
 class Cart(object):
@@ -18,9 +18,9 @@ class Cart(object):
             cart = self.session[settings.CART_SESSION_ID] = {}
         self.cart = cart
 
-    def counter(self, bouquet_id):
+    def counter(self, product_id):
         try:
-            cart = self.cart[bouquet_id]['quantity']
+            cart = self.cart[product_id]['quantity']
             if cart is None:
                 return 0
             else:
@@ -28,42 +28,44 @@ class Cart(object):
         except Exception:
             return 0
 
-    def add(self, bouquet, quantity=1, update_quantity=False):
+    def add(self, product, quantity=1, update_quantity=False):
         """
         Добавляем продукт в корзину или обновляем его количество.
         """
-        bouquet_id = str(bouquet.id)
+        product_id = str(product.id)
 
-        if bouquet_id not in self.cart:
-            self.cart[bouquet_id] = {'quantity': 0,
-                                     'price': str(bouquet.discount_price)}
+        if product_id not in self.cart:
+            self.cart[product_id] = {'quantity': 0,
+                                     'old_price': str(product.price),
+                                     'discount_price': str(product.discount_price)}
 
         if update_quantity is True:
-            self.cart[bouquet_id]['quantity'] = quantity
+            self.cart[product_id]['quantity'] = quantity
         else:
-            self.cart[bouquet_id]['quantity'] = quantity
+            self.cart[product_id]['quantity'] = quantity
 
-        if self.cart[bouquet_id]['quantity'] >= 0:
+        if self.cart[product_id]['quantity'] >= 0:
             self.save()
         else:
             raise ValidationError('Это значение не должно быть отрицательным')
 
-    def add_one(self, bouquet, quantity=1, update_quantity=False):
+    def add_one(self, product, quantity=1, update_quantity=False):
         """
         Добавляем продукт в корзину или обновляем его количество.
         """
-        bouquet_id = str(bouquet.id)
+        product_id = str(product.id)
 
-        if bouquet_id not in self.cart:
-            self.cart[bouquet_id] = {'quantity': 0,
-                                     'price': str(bouquet.discount_price)}
+        if product_id not in self.cart:
+            self.cart[product_id] = {'quantity': 0,
+                                     'old_price': str(product.price),
+                                     'discount_price': str(product.discount_price)}
 
         if update_quantity is True:
-            self.cart[bouquet_id]['quantity'] += quantity
+            self.cart[product_id]['quantity'] += quantity
         else:
-            self.cart[bouquet_id]['quantity'] = quantity
+            self.cart[product_id]['quantity'] = quantity
 
-        if self.cart[bouquet_id]['quantity'] >= 0:
+        if self.cart[product_id]['quantity'] >= 0:
             self.save()
         else:
             raise ValidationError('Это значение не должно быть отрицательным')
@@ -74,28 +76,31 @@ class Cart(object):
         # Отмечаем сеанс как "измененный", чтобы убедиться, что он сохранен
         self.session.modified = True
 
-    def remove(self, bouquet):
+    def remove(self, product):
         """
         Удаляем товар из корзины.
         """
-        bouquet_id = str(bouquet.id)
-        if bouquet_id in self.cart:
-            del self.cart[bouquet_id]
+        product_id = str(product.id)
+        if product_id in self.cart:
+            del self.cart[product_id]
             self.save()
 
     def __iter__(self):
         """
         Перебираем элементы в корзине и получаем продукты из базы данных.
         """
-        bouquet_ids = self.cart.keys()
+        product_ids = self.cart.keys()
         # получение объектов product и добавление их в корзину
-        bouquets = Bouquet.objects.filter(id__in=bouquet_ids)
-        for bouquet in bouquets:
-            self.cart[str(bouquet.id)]['bouquet'] = bouquet
+        products = Product.objects.filter(id__in=product_ids)
+        for product in products:
+            self.cart[str(product.id)]['product'] = product
 
         for item in self.cart.values():
-            item['price'] = Decimal(item['price'])
-            item['total_price'] = item['price'] * item['quantity']
+            item['discount_price'] = Decimal(item['discount_price'])
+            item['old_price'] = Decimal(item['old_price'])
+            item['total_old_price'] = item['old_price'] * item['quantity']
+            item['total_price'] = item['discount_price'] * item['quantity']
+
             yield item
 
     def __len__(self):
@@ -104,11 +109,18 @@ class Cart(object):
         """
         return sum(item['quantity'] for item in self.cart.values())
 
+    def get_old_price(self):
+        """
+        Подсчитываем стоимость товаров в корзине без скидки.
+        """
+        return sum(Decimal(item['old_price']) * item['quantity']
+                   for item in self.cart.values())
+
     def get_total_price(self):
         """
         Подсчитываем стоимость товаров в корзине.
         """
-        return sum(Decimal(item['price']) * item['quantity']
+        return sum(Decimal(item['discount_price']) * item['quantity']
                    for item in self.cart.values())
 
     def clear(self):
