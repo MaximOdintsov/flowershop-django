@@ -1,0 +1,295 @@
+{% extends 'base.html' %}
+
+{% block static %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
+{% endblock %}
+
+
+{% block title %} Оформление заказа {% endblock %}
+
+
+{% block content %}
+
+
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-7">
+                
+                    <form method="post" action="{% url 'order_create' %}" class="row g-3 needs-validation form-auth">
+                        {% csrf_token %}
+
+                        <div class="form-floating mb-2 col-md-6 position-relative">
+                            {% if form.first_name.errors %}
+                                {{ form.first_name }}
+                                <label for="{{ form.first_name.id_for_label }}" class="form-label">Ваше имя</label>
+                                
+                                <div class="text-danger">
+                                    <small>{{ form.first_name.errors }}</small>
+                                </div>
+                            {% else %}
+                                {{ form.first_name }}
+                                <label for="{{ form.first_name.id_for_label }}" class="form-label">Ваше имя</label>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-floating mb-2 col-md-6 position-relative">
+                            {% if form.last_name.errors %}
+                                {{ form.last_name }}
+                                <label for="{{ form.last_name.id_for_label }}" class="form-label">Ваша фамилия</label>
+                                
+                                <div class="text-danger">
+                                    <small>{{ form.last_name.errors }}</small>
+                                </div>
+                            {% else %}
+                                {{ form.last_name }}
+                                <label for="{{ form.last_name.id_for_label }}" class="form-label">Ваша фамилия</label>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-floating mb-2 col-md-12 position-relative">
+                            {% if form.phone.errors %}
+                                {{ form.phone }}
+                                <label for="{{ form.phone.id_for_label }}" class="form-label">Номер телефона</label>
+                                
+                                <div class="text-danger">
+                                    <small>{{ form.phone.errors }}</small>
+                                </div>
+                            {% else %}
+                                {{ form.phone }}
+                                <label for="{{ form.phone.id_for_label }}" class="form-label">Номер телефона</label>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-floating mb-2 col-md-12 position-relative">
+                            {% if form.email.errors %}
+                                {{ form.email }}
+                                <label for="{{ form.email.id_for_label }}" class="form-label">Электронная почта для отправки чека</label>
+                                
+                                <div class="text-danger">
+                                    <small>{{ form.email.errors }}</small>
+                                </div>
+                            {% else %}
+                                {{ form.email }}
+                                <label for="{{ form.email.id_for_label }}" class="form-label">Электронная почта для отправки чека</label>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-floating mb-2 col-md-12 position-relative">
+                            {% if form.address.errors %}
+                                {{ form.address }}
+                                <label for="{{ form.address.id_for_label }}" class="form-label">Адрес получателя</label>
+                                
+                                <div class="text-danger">
+                                    <small>{{ form.address.errors }}</small>
+                                </div>
+                            {% else %}
+                                {{ form.address }}
+                                <label for="{{ form.address.id_for_label }}" class="form-label">Адрес получателя</label>
+                            {% endif %}
+                        </div>
+
+
+                        <fieldset class="row mb-2">
+                            <legend class="col-form-label col-sm-4 pt-0">Способ получения</legend>
+
+                            <div class="col-sm-8">
+                                {% for radio in form.receipt %}
+                                    {% if radio.errors %}
+                                        <div class="">
+                                            {{ radio.tag }}
+                                            <label class="form-check-label" for="{{radio.id_for_label}}">
+                                                {{ radio.choice_label }}
+                                            </label>
+                                        </div>
+
+                                        <div class="text-danger">
+                                            <small>{{ radio.errors }}</small>
+                                        </div>
+                                    {% else %}
+                                        <div class="">
+                                            {{ radio.tag }}
+                                            <label class="form-check-label" for="{{radio.id_for_label}}">
+                                                {{ radio.choice_label }}
+                                            </label>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="row mb-2">
+                            <legend class="col-form-label col-sm-4 pt-0">Способ оплаты</legend>
+
+                            <div class="col-sm-8">
+
+                                {% if form.payment_method.errors %}
+                                    <div class="accordion accordion-flush" id="accordionExample">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingOne">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                    Оплата при получении
+                                                </button>
+                                            </h2>
+                                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                    <div class="border-bottom mb-3 pb-3">
+                                                        <input type="radio" name="payment_method" value="1" class="form-check-input" id="id_payment_method_0" required="" data-bs-target="#cash">
+                                                        <label class="form-check-label" for="id_payment_method_0">
+                                                            Наличные
+                                                        </label>
+                                                    
+                                                        <input type="radio" name="payment_method" value="2" class="form-check-input" id="id_payment_method_1" required="" data-bs-target="#nonCash">
+                                                        <label class="form-check-label" for="id_payment_method_1">
+                                                            Безналичные
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="text-danger">
+                                                        <small>{{ radio.errors }}</small>
+                                                    </div>
+
+                                                    <button class='btn btn-danger' type="submit">
+                                                        Заказать
+                                                    </button> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingTwo" tabindex="0" data-bs-toggle="tooltip" id="example" data-bs-title="Онлайн оплата сейчас недоступна.">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" 
+                                                aria-expanded="false" aria-controls="collapseTwo" disabled>
+                                                    Оплата онлайн
+                                                </button>
+                                            </h2>
+                                            
+
+                                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                    <div class="border-bottom mb-3 pb-3">
+                                                        <input type="radio" name="payment_method" value="3" class="form-check-input" id="id_payment_method_2" required="" data-bs-target="#nonCash">
+                                                        <label class="form-check-label" for="id_payment_method_2">
+                                                            Оплата картой
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="text-danger">
+                                                        <small>{{ radio.errors }}</small>
+                                                    </div>
+
+                                                    <button class='btn btn-danger' type="submit">   
+                                                        Оформить сейчас
+                                                    </button>                                            
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                {% else %}
+                                    <div class="accordion accordion-flush" id="accordionExample">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingTwo" tabindex="0" data-bs-toggle="tooltip" id="example" data-bs-title="Онлайн оплата сейчас недоступна.">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" 
+                                                aria-expanded="false" aria-controls="collapseTwo" disabled>
+                                                    Оплата онлайн
+                                                </button>
+                                            </h2>
+                                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                    <div class="border-bottom mb-3 pb-3">
+                                                        <input type="radio" name="payment_method" value="1" class="form-check-input" id="id_payment_method_0" required="" data-bs-target="#cash">
+                                                        <label class="form-check-label" for="id_payment_method_0">
+                                                            Наличные
+                                                        </label>
+                                                    
+                                                        <input type="radio" name="payment_method" value="2" class="form-check-input" id="id_payment_method_1" required="" data-bs-target="#nonCash">
+                                                        <label class="form-check-label" for="id_payment_method_1">
+                                                            Безналичные
+                                                        </label>
+                                                    </div>
+                                                    
+                                                    <button class='btn btn-danger' type="submit">Заказать</button> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            
+                                                <button data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="This top tooltip is themed via CSS variables.">></button>
+                                                <!-- <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" 
+                                                disabled aria-expanded="false" aria-controls="collapseTwo"
+
+                                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                                data-bs-custom-class="custom-tooltip"
+                                                data-bs-title="This top tooltip is themed via CSS variables.">
+                                                    Оплата онлайн
+                                                </button> -->
+                                            
+                                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                    <div class="border-bottom mb-3 pb-3">
+                                                        <input type="radio" name="payment_method" value="3" class="form-check-input" id="id_payment_method_2" required="" data-bs-target="#nonCash">
+                                                        <label class="form-check-label" for="id_payment_method_2">
+                                                            Оплата картой
+                                                        </label>
+                                                    </div>
+                                                    
+                                                    <button class='btn btn-danger' type="submit">   
+                                                        Оформить сейчас
+                                                    </button>                                            
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                            </div>
+                        </fieldset>
+                    </form>
+
+                    <script>
+                        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+                        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+                    </script>
+
+                </div>
+
+                <div class="col-5">
+                    <h3>Ваш заказ</h3>
+                    <ul>
+                        {% for item in cart %}
+                            {% with product=item.bouquet %}
+                                <li>
+                                    {% if product.preview %}
+                                        <img src="{{ product.preview.url }}" class="" alt="{{ product.name }}" width="100px">
+                                    {% endif %}
+
+                                    <p>Наименование товара</p>
+                                    {{ product.title }} 
+
+                                    <p>Стоимость 1 товара</p>
+                                    {% if product.discount != 0 %}
+                                        <del>{{ product.price }}</del>  
+                                        {{ product.discount_price }}
+                                    {% else %}
+                                        {{ product.discount_price }}
+                                    {% endif %}
+
+                                    <p>Количество</p>
+                                    {{ item.quantity }}
+
+                                    <p>Общая стоимость</p>
+                                    <span>{{ item.total_price }} руб</span>
+                                </li>
+                            {% endwith %}
+                        {% endfor %}
+                    </ul>
+                    <p>Цена заказа: {{ cart.get_total_price }}</p>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+
+{% endblock %}

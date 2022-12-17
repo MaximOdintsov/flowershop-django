@@ -41,7 +41,6 @@ class MyRegistrationView(views.View):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
-            email = form.cleaned_data.get('email')
             password = form.cleaned_data.get('password2')
 
             user = authenticate(username=username, password=password)
@@ -49,8 +48,8 @@ class MyRegistrationView(views.View):
             send_email_for_verify(request, user)
 
             return redirect('email_confirmation')
-
-        return render(request, self.template_name, context={'form': form})
+        else:
+            return render(request, self.template_name, context={'form': form})
 
 
 class VerifyEmail(views.View):
