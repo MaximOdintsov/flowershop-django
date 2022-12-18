@@ -51,7 +51,7 @@
                                                     <div class="p-2">
                                                         <ul class="list-group list-group-horizontal">
                                                             <li class="list-group-item">
-                                                                <a href="{% url 'cart:cart_remove_one' product.id %}" class="link-decoration-none">
+                                                                <a href="{% url 'cart:cart_remove_one' product.id %}">
                                                                     <img src="{% static 'products/icons/minus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
                                                                 </a>
                                                             </li>
@@ -59,7 +59,7 @@
                                                                 <span>{{ item.quantity }}</span>
                                                             </li>
                                                             <li class="list-group-item">
-                                                                <a href="{% url 'cart:cart_add_one' product.id %}" class="link-decoration-none">
+                                                                <a href="{% url 'cart:cart_add_one' product.id %}">
                                                                     <img src="{% static 'products/icons/plus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
                                                                 </a>
                                                             </li>
@@ -135,13 +135,46 @@
                                 </div>
 
                                 <div class="mt-3 pt-3 border-top">
-                                    
-                                        <form action="{% url 'order_create' %}" target="_self">
-                                            <button class="btn btn-warning">Перейти к оформлению</button>
-                                        </form>
-                                    <br>
 
-                                    <form action="{% url 'product_list' %}" target="_self">
+                                    {% if user.is_authenticated %}
+                                        <div class="">
+                                            <form action="{% url 'order_create' %}" target="_self">
+                                                <button class="btn btn-warning">Перейти к оформлению</button>
+                                            </form>
+                                        </div>
+                                    {% else %}
+                                        <div class="">
+                                            
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAuth">
+                                                Перейти к оформлению
+                                            </button>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="modalAuth" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Для того, чтобы оформить заказ - нужно войти в свой аккаунт</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <form action="{% url 'login' %}" target="_blank">
+                                                                <button type="submit" class="btn btn-secondary">Войти в аккаунт</button>
+                                                            </form>
+                                                            <form action="{% url 'registration' %}" target="_blank">
+                                                                <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Modal -->
+                                        </div>
+                                    {% endif %}
+
+                                    <form action="{% url 'product_list' %}" class="border-top mt-2 pt-2" target="_self">
                                         <button class="btn btn-primary">Перейти к каталогу</button>
                                     </form>
                                 </div>

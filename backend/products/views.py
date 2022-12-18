@@ -31,7 +31,7 @@ class ProductList(generic.ListView):
     model = Product
     context_object_name = 'products'
     queryset = Product.objects.filter(Q(available=True) & (Q(status=2) | Q(status=3)))
-    paginate_by = 30
+    paginate_by = 10
 
     cart_product_form = CartAddProductForm()
     extra_context = {

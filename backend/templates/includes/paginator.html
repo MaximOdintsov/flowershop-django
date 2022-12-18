@@ -1,49 +1,5 @@
 {% load paginator_tag %}
 
-<!-- {% if is_paginated %}
-<nav>
-    <ul class="pagination justify-content-center">
-
-        {% if page_obj.has_previous %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-        {% endif %}
-
-        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
-
-        {% if page_obj.paginator.num_pages > 0 %}
-            <li class="page-item">
-                <a class="page-link" href="?page=1">1</a>
-            </li>
-        {% endif %}
-        
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page }}"> page </a>
-            </li>
-        
-
-        {% if page_obj.has_next %}
-
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
-                    {{ page_obj.paginator.num_pages }}
-                </a>
-            </li>
-
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-
-        {% endif %} 
-    </ul>
-</nav>
-{% endif %} -->
-
 {% if is_paginated %}
     {% get_proper_elided_page_range paginator page_obj.number 2 1 as page_range %}
     <nav>
@@ -53,7 +9,7 @@
 
                 {% if page_obj.number == page_num %}
                     <li class="active page-item">
-                        <span class="page-link">{{ page_num }}</span>
+                        <span class="page-link c-btn-primary">{{ page_num }}</span>
                     </li>
                 {% elif page_num == paginator.ELLIPSIS %}
                     <li class="page-item">
@@ -61,12 +17,11 @@
                     </li>
                 {% else %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                        <a class="page-link c-black" href="?page={{ page_num }}">{{ page_num }}</a>
                     </li>
                 {% endif %}
 
             {% endfor %}
-
 
         </ul>
     </nav>

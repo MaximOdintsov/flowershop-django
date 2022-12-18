@@ -23,18 +23,14 @@
                         <div class="col justify-content-center products">
 
                             <!--Product card-->
-                            <div class="card">
+                            <div class="card c-bg-card">
 
-                                <a href="{{ product.slug }}" target="_blank" style="text-decoration:none;" data-bs-toggle="modal" data-bs-target="#Modal{{ product.id }}">
+                                <a href="{{ product.slug }}" class="c-link-main text-decoration-none" target="_blank" data-bs-toggle="modal" data-bs-target="#Modal{{ product.id }}">
 
                                     <img src="{{ product.preview.url }}" class="card-img-top" alt="{{ product.title }}">
 
                                     <div class="card-body text-center" style="height: 80px;">
-
-                                        <h5 class="link-primary">
-                                            {{ product.title }}
-                                        </h5>
-
+                                        <h5>{{ product.title }}</h5>
                                     </div>
                                 </a>
 
@@ -44,7 +40,7 @@
 
                                         {% if product.discount == 0 %}
 
-                                            <span class="price-text">
+                                            <span class="fs-19">
                                                 {{ product.discount_price|floatformat:0 }} &#8381;
                                             </span>
 
@@ -57,7 +53,7 @@
 
                                                 <br style="display: block; margin-bottom: -10px;">
 
-                                                <span class="price-text-discount">
+                                                <span class="c-new-price fs-19">
                                                     {{ product.discount_price|floatformat:0 }} &#8381;
                                                 </span>
                                             </div>
@@ -67,9 +63,13 @@
                                     </div>
 
                                     <div class="product-cart-icon">
-                                        <a href="#">
-                                            <img src="{% static 'products/icons/shopping-bag-icon.png' %}" alt="shopping-bag-icon" width="35rem">
-                                        </a>
+                                        <form action="{% url 'cart:cart_add_one' product.id %}" class="col-8 d-flex justify-content-center" method="post">
+                                            {% csrf_token %}
+                                            
+                                            <button class="btn">
+                                                <img src="{% static 'products/icons/shopping-bag-icon.png' %}" alt="shopping-bag-icon" width="35rem">
+                                            </button>
+                                        </form>
                                     </div>
 
                                 </div>
@@ -123,11 +123,10 @@
 
                                                 <div class="col">
                                                     <h2>
-                                                        <a href="{{ product.get_url }}">
+                                                        <a href="{{ product.get_url }}" class="c-link-main fs-24">
                                                         {{ product.title }}
                                                         </a>
                                                     </h2>
-                                                    <p style="font-size: 20px;">{{ product.description }}</p>
 
                                                     <div class="">
                                                         <p>Состоит из:</p>
@@ -152,7 +151,7 @@
                                         <div class="price-modal col-3">
                                             {% if product.discount == 0 %}
 
-                                                <span class="price-text" style="font-size: 22px;">
+                                                <span class="fs-19" style="font-size: 22px;">
                                                     {{ product.discount_price|floatformat:0 }} &#8381;
                                                 </span>
 
@@ -160,12 +159,12 @@
 
                                                 <div class="">
                                                     <span style="font-size: 16px;">
-                                                        <del class="old-price">{{ product.price|floatformat:0 }} &#8381;</del>
+                                                        <del class="old-price fs-11">{{ product.price|floatformat:0 }} &#8381;</del>
                                                     </span>
 
                                                     <br style="display: block; margin-bottom: -10px;">
 
-                                                    <span class="price-text-discount" style="font-size: 22px;">
+                                                    <span class="c-new-price fs-19" style="font-size: 22px;">
                                                         {{ product.discount_price|floatformat:0 }} &#8381;
                                                     </span>
                                                 </div>
@@ -175,21 +174,21 @@
 
                                         <form action="{% url 'cart:cart_add_all' product.id %}" class="col-8 d-flex justify-content-center" method="post">
                                             {% csrf_token %}
-                                            <div class="col-8 col-sm-5 col-md-5 col-lg-4 col-xl-3 counter-products border">
+                                            <div class="col-8 col-sm-5 col-md-5 col-lg-4 col-xl-3 counter-products border me-2">
 
-                                                <button class="btn btn-unstyled " type="button" onclick="this.nextElementSibling.stepDown(); this.nextElementSibling.onchange();">
+                                                <button class="btn" type="button" onclick="this.nextElementSibling.stepDown(); this.nextElementSibling.onchange();">
                                                     <img src="{% static 'products/icons/minus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
                                                 </button>
                                                 
                                                     {{ cart_product_form.quantity }}
 
-                                                <button class="btn btn-unstyled " type="button" onclick="this.previousElementSibling.stepUp(); this.previousElementSibling.onchange();">
+                                                <button class="btn" type="button" onclick="this.previousElementSibling.stepUp(); this.previousElementSibling.onchange();">
                                                     <img src="{% static 'products/icons/plus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
                                                 </button>
                                                 
                                             </div>
 
-                                            <button type="submit" class="col-6 btn btn-primary">
+                                            <button type="submit" class="btn c-btn-primary col-6">
                                                 Добавить в корзину
                                             </button>
 

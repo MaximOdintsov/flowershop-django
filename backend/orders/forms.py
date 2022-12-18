@@ -31,19 +31,6 @@ class OrderCreateForm(forms.ModelForm):
             }
         ),
     )
-    last_name = forms.CharField(
-        label='Ваша фамилия',
-        min_length=1,
-        max_length=50,
-        required=True,
-        error_messages=error_messages,
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Ваша фамилия',
-            }
-        ),
-    )
     phone = PhoneNumberField(
         label='Номер телефона',
         region='RU',
@@ -59,6 +46,7 @@ class OrderCreateForm(forms.ModelForm):
         label='Электронная почта для отправки чека',
         min_length=1,
         error_messages=error_messages,
+        required=False,
         widget=forms.EmailInput(
             attrs={
                 'class': 'form-control',
@@ -100,33 +88,20 @@ class OrderCreateForm(forms.ModelForm):
     class Meta:
         model = Order
 
-        fields = ['first_name', 'last_name',
+        fields = ['first_name',
                   'phone', 'email', 'address']
 
-    def save(self, commit=True, *args, **kwargs):
-        if len(args) == 0:
-            order = Order.objects.create(
-                first_name=self.cleaned_data['first_name'],
-                last_name=self.cleaned_data['last_name'],
-                phone=self.cleaned_data['phone'],
-                email=self.cleaned_data['email'],
-                address=self.cleaned_data['address'],
-                receipt=self.cleaned_data['receipt'],
-                payment_method=self.cleaned_data['payment_method'],
-            )
-        elif len(args) != 0:
-            order = Order.objects.create(
-                user_id=args[0],
-                first_name=self.cleaned_data['first_name'],
-                last_name=self.cleaned_data['last_name'],
-                phone=self.cleaned_data['phone'],
-                email=self.cleaned_data['email'],
-                address=self.cleaned_data['address'],
-                receipt=self.cleaned_data['receipt'],
-                payment_method=self.cleaned_data['payment_method'],
-            )
+    def save(self, user, commit=True, *args, **kwargs):
 
-        if commit:
-            order.save()
-        return order
+        order = Order.objects.create(
+            user_id=args[0],
+            first_name=self.cleaned_data['first_name'],
+            phone=self.cleaned_data['phone'],
+            email=self.cleaned_data['email'],
+            address=self.cleaned_data['address'],
+            receipt=self.cleaned_data['receipt'],
+            payment_method=self.cleaned_data['payment_method'],
+        )
+        order.save()
+
 

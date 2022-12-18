@@ -10,12 +10,12 @@ class OrderItemInline(admin.TabularInline):
 
 @admin.register(Order)
 class Order(admin.ModelAdmin):
-    fields = ('user', 'first_name', 'last_name',
+    fields = ('user', 'first_name',
               'phone', 'email', 'address',
-              'paid', 'readiness_status')
+              'paid', 'readiness_status', 'receipt', 'payment_method')
 
-    list_display = ['id', 'first_name', 'last_name', 'phone', 'address',
-                    'price', 'paid', 'readiness_status']
-    list_editable = ['paid', 'readiness_status']
+    list_display = ['id', 'first_name', 'phone', 'address',
+                    'price', 'receipt', 'paid', 'received', 'readiness_status']
+    list_editable = ['paid', 'received', 'readiness_status']
     list_filter = ['readiness_status']
     inlines = [OrderItemInline, ]

@@ -102,6 +102,15 @@ class ProductComponent(models.Model):
         """
         self.quantity_for_sale = self.total_count - self.quantity_in_product
 
+    # def save_price(self):
+    #     """
+    #     При изменении цены компонента нужно обновить все связанные продукты
+    #     """
+    #     compositions = ProductComposition.objects.filter(component_composition=self.id)
+    #     for composition in compositions:
+    #         composition.check_quantity_update(update=True)
+    #         composition.save()
+
     @transaction.atomic
     def save(self, *args, **kwargs):
         super(ProductComponent, self).save()
@@ -132,7 +141,6 @@ class Product(models.Model):
 
     title = models.CharField('Название', max_length=150)
     slug = models.SlugField('Название на английском', max_length=150, unique=True, null=False)
-    description = models.CharField('Описание', max_length=250)
 
     preview = models.ImageField('Превью', upload_to='products/previews')
 
@@ -187,7 +195,9 @@ class Product(models.Model):
             self.price += composition.price_counter()
 
     def update_discount_price(self):
-        """ Расчет цены со скидкой """
+        """
+        Рассчитывает цену со скидкой
+        """
         sale = (self.price / 100) * self.discount
         self.discount_price = self.price - sale
         return self.discount_price
@@ -286,6 +296,7 @@ class ProductComposition(models.Model):
             return False
 
     def save_product(self):
+        super(ProductComposition, self).save()
         product = Product.objects.get(id=self.product_composition.id)
         product.save()
 
@@ -321,7 +332,6 @@ class ProductComposition(models.Model):
     def save(self, *args, **kwargs):
 
         if self.check_quantity_update() is True:
-            super(ProductComposition, self).save()
             self.save_product()
 
         self.update_total_quantity()

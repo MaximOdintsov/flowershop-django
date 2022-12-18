@@ -17,20 +17,21 @@
                         <a class="nav-link active col" aria-current="page" href="{% url 'product_list' %}">Каталог</a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link active col" aria-current="page" href="#">Доставка</a>
-                    </li>
-
                     <li class="nav-item dropdown">
 
                         <a class="nav-link dropdown-toggle col" href="/contacts" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Наши адреса
+                            Наш адрес
                         </a>
 
                         <ul class="dropdown-menu">
                             <li>
-                                <span class="dropdown-item">Адрес: г.Киров, ул.Октябрьский проспект 999а, ТЦ Север, 1 этаж</span>
-                                <a class="dropdown-item text-info" href="https://yandex.ru/maps/-/CCUb6LFw9D">Показать на карте</a>
+                                <span class="dropdown-item">
+                                    Октябрьский проспект, 2А, ТЦ Север, 1 этаж
+                                </span>
+                                <a class="dropdown-item" 
+                                href="https://yandex.ru/maps/46/kirov/?ll=49.613600%2C58.638401&mode=poi&poi%5Bpoint%5D=49.613509%2C58.638403&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D1675676940&z=21">
+                                    Посмотреть на карте
+                                </a>
                             </li>
                         </ul>
 
@@ -41,16 +42,14 @@
 
                         <ul class="dropdown-menu">
                             <li>
-                                <a class="dropdown-item">Телефон: +7-999-000-00-00</a>
-                                <a class="dropdown-item" href="tel:+7-999-000-00-00">Позвонить</a>
+                                <a class="dropdown-item" href="tel:+7-909-141-32-42">+7-909-141-32-42</a>
                             </li>
 
                             <li>
-                                <a class="dropdown-item">Почта: flowershop.kirov@gmail.com</a>
-                                <a class="dropdown-item" href="mailto:flowershop.kirov@gmail.com">Написать</a>
+                                <a class="dropdown-item" href="mailto:flowershop.kirov@gmail.com">flowershop.kirov@gmail.com</a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="#">Мы в соц.сетях</a>
+                                <a class="dropdown-item" href="https://vk.com/id141455317">VK</a>
                             </li>
                         </ul>
                     </li>
@@ -69,10 +68,11 @@
                             
                             <li>
                                 {% if total_items > 0 %}
-                                    Your cart:
+                                    Корзина
                                     <a href="{% url 'cart:cart_detail' %}" class="dropdown-item">
-                                        {{ total_items }} товар(ов) {{ total_items|pluralize }},
-                                        {{ cart.get_total_price }}
+                                        {{ total_items }} товар(ов)
+                                        <br>
+                                        {{ cart.get_total_price }} руб.
                                     </a>
                                 {% else %}
                                 <p class="dropdown-item">Корзина пуста</p>

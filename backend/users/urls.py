@@ -12,9 +12,6 @@ from .views import (
     EmailConfirmationDone,
 )
 
-# for reading static files
-from django.conf import settings
-
 urlpatterns = [
 
     path('login/', MyLoginView.as_view(), name='login'),
