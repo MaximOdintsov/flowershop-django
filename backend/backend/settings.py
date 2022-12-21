@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django_extensions',
+    'django.contrib.postgres',
     'rest_framework',
 
     # 'djoser',

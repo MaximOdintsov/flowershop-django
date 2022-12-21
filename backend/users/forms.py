@@ -94,7 +94,6 @@ class MyRegistrationForm(forms_auth.UserCreationForm):
         return password2
 
     def save(self, commit=True):
-        # user = super(RegistrationForm, self).save(commit=False)
         user = User.objects.create(
             username=self.cleaned_data['username'],
             email=self.cleaned_data['email'],

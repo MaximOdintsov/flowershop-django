@@ -17,20 +17,17 @@
         <div class="container">
             <div class="row">
                 {% if cart %}
+                    <h1 class="text-center">Корзина</h1>
                     <div class="col-12 col-md-6 col-xl-8">
-                    
-                
-                        <h1>Корзина</h1>
-
                     
                         {% for item in cart %}
                             
                             {% with product=item.product %}
                                 {% if item.quantity >= 1  %}
-                                <div class="card mb-3 cart-card" style="max-width: 540px;">
+                                <div class="card mb-3 cart-card">
                                     <div class="row g-0">
 
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             {% if product.preview %}
                                                 <img src="{{ product.preview.url }}"
                                                 alt="product.title" class="img-fluid rounded-start">
@@ -40,7 +37,7 @@
                                             {% endif %}
                                         </div>
 
-                                        <div class="col-md-8">
+                                        <div class="col-md-9">
                                             <div class="card-body border-bottom">
                                                 <h5 class="card-title">{{ product.title }}</h5>
                                                 <p class="card-text">{{ product.description }}</p>
@@ -65,24 +62,20 @@
                                                             </li>
                                                         </ul>
                                                     </div>
-
-                                                    {% if item.total_price == item.total_old_price %}
-                                                    <div class="p-2">
-                                                        <span class="fs-5">{{ item.total_price }} &#8381</span>
-                                                    </div>
-                                                    {% else %}
-                                                    <div class="p-2 ">
-                                                        <span>
-                                                            <del class="old-price">{{ item.total_old_price }} &#8381</del>
-                                                        </span>
-
-                                                        <br style="display: block; margin-bottom: -10px;">
-
-                                                        <span class="fs-5 price-text-discount">{{ item.total_price }} &#8381</span>
-                                                        
-                                                    </div>
-                                                    {% endif %}
                                                     
+                                                    <div class="p-2">
+                                                        {% if item.total_price == item.total_old_price %}
+                                                            <span class="fs-5">{{ item.total_price }} &#8381</span>
+                                                        {% else %}
+                                                            <span>
+                                                                <del class="old-price">{{ item.total_old_price }} &#8381</del>
+                                                            </span>
+
+                                                            <br style="display: block; margin-bottom: -10px;">
+
+                                                            <span class="fs-5 price-text-discount">{{ item.total_price }} &#8381</span>
+                                                        {% endif %}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

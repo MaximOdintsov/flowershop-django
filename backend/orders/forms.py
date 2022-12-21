@@ -91,17 +91,20 @@ class OrderCreateForm(forms.ModelForm):
         fields = ['first_name',
                   'phone', 'email', 'address']
 
-    def save(self, user, commit=True, *args, **kwargs):
+    def save(self, user, commit=True):
+        data = self.cleaned_data
 
-        order = Order.objects.create(
-            user_id=args[0],
-            first_name=self.cleaned_data['first_name'],
-            phone=self.cleaned_data['phone'],
-            email=self.cleaned_data['email'],
-            address=self.cleaned_data['address'],
-            receipt=self.cleaned_data['receipt'],
-            payment_method=self.cleaned_data['payment_method'],
+        order = Order(
+            user_id=user,
+            first_name=data['first_name'],
+            phone=data['phone'],
+            email=data['email'],
+            address=data['address'],
+            receipt=data['receipt'],
+            payment_method=data['payment_method'],
         )
-        order.save()
+        if commit:
+            order.save()
+        return order
 
 

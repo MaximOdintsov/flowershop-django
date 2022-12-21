@@ -15,9 +15,11 @@
 
     <main>
         <div class="container">
+            {% include 'includes/filter.html' %}
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-5 justify-content-center"
             style="padding-bottom: 1rem;">
+
                 {% if products %}
                     {% for product in products %}
                         <div class="col justify-content-center products">
