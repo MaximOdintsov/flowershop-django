@@ -13,7 +13,34 @@
 
     {% include 'includes/header.html' %}
 
+    <!-- Modal for seach in header -->
+    <div class="modal fade" id="modalSearch" tabindex="-1" aria-labelledby="modalSearchLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content c-bg-body">
+
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalSearchLabel">Поиск товаров</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+
+                <form action="{% url 'product_search' %}" method="get" class="col text-center">
+                    <div class="modal-body place-holder-color d-flex">
+                        {{ search_form.search_text }}
+                        
+                        <button type="submit" class="btn c-bg-button" aria-label="modalSearchLabel">  
+                            <img src="{% static 'products/icons/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="29" height="29">
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
     <main>
+
+
         <div class="container">
             {% include 'includes/filter.html' %}
 
@@ -50,7 +77,7 @@
 
                                             <div class="price-product-with-discount">
                                                 <span>
-                                                    <del class="old-price">{{ product.price|floatformat:0 }} &#8381;</del>
+                                                    <del class="old-price fs-11">{{ product.price|floatformat:0 }} &#8381;</del>
                                                 </span>
 
                                                 <br style="display: block; margin-bottom: -10px;">
@@ -69,7 +96,7 @@
                                             {% csrf_token %}
                                             
                                             <button class="btn">
-                                                <img src="{% static 'products/icons/shopping-bag-icon.png' %}" alt="shopping-bag-icon" width="35rem">
+                                                <img src="{% static 'products/icons/add-to-cart-icon.png' %}" alt="shopping-bag-icon" width="35rem">
                                             </button>
                                         </form>
                                     </div>
@@ -135,7 +162,7 @@
                                                         <ul>
                                                             {% for product_component in product.get_composition %}
                                                                 <li>
-                                                                    {{ product_component.component.title }} -
+                                                                    {{ product_component.component_composition.title }} -
                                                                     {{ product_component.quantity }} штук
                                                                 </li>
                                                             {% endfor %}
@@ -159,9 +186,9 @@
 
                                             {% else %}
 
-                                                <div class="">
-                                                    <span style="font-size: 16px;">
-                                                        <del class="old-price fs-11">{{ product.price|floatformat:0 }} &#8381;</del>
+                                                <div>
+                                                    <span>
+                                                        <del class="old-price fs-13">{{ product.price|floatformat:0 }} &#8381;</del>
                                                     </span>
 
                                                     <br style="display: block; margin-bottom: -10px;">
@@ -206,11 +233,12 @@
 
                     {% endfor %}
                 {% else %}
-                    <div>
+                    <div class="text-center">
                         <p>
-                            Произошла какая-то ошибка, либо продуктов нет в наличии
+                            Продуктов по данному фильтру нет
                         </p>
-                        <p>Позвоните нам на номер
+                        <br>
+                        <p>Позвоните нам
                             <a class="dropdown-item" href="tel:+7-909-141-32-42">+79091413242</a>
                         </p>
                     </div>

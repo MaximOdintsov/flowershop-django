@@ -10,8 +10,15 @@
 
 
 {% block content %}
+    <div class="alert alert-success" role="alert">
+        <div class="text-center">
+            <h4 class="alert-heading">Заказ принят!</h4>
+            <p>Ожидайте, скоро мы вым перезвоним!</p>
+            <hr>
 
-    Заказ принят!
-    Ожидайте, скоро мы вым перезвоним!
-
+            <form action="{% url 'product_list' %}" target="_self">
+                <button class="btn btn-success">Вернуться на главную страницу</button>
+            </form>
+        </div>
+    </div>
 {% endblock %}

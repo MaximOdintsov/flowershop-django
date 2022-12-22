@@ -5,40 +5,81 @@ from django import views
 from django.contrib.postgres.search import TrigramDistance, SearchVector
 
 from .models import Product, ProductCategory
-from .forms import ProductFilterForm
+from .forms import ProductSearchForm, ProductFilterForm
 
 from cart.forms import CartAddProductForm
 from cart.cart import Cart
 
 
-class FilterView:
-    """Жанры и года выхода фильмов"""
+class ProductFilterView(generic.ListView):
+    """Фильтрация товаров"""
 
-    def get_category(self):
-        return ProductCategory.objects.all()
+    model = Product
+    context_object_name = 'products'
+
+    cart_product_form = CartAddProductForm()
+    search_form = ProductSearchForm()
+    filter_form = ProductFilterForm()
+
+    extra_context = {
+        'cart_product_form': cart_product_form,
+        'search_form': search_form,
+        'filter_form': filter_form,
+    }
+
+    def get_queryset(self):
+
+        if self.request.GET.get('price') == 'A':
+            price = 'discount_price'
+        elif self.request.GET.get('price') == 'D':
+            price = '-discount_price'
+
+        query = Q(available=True) & (Q(status=2) | Q(status=3))
+
+        if self.request.GET.get('category'):
+            if self.request.GET.get('price'):
+                products = Product.objects.filter(
+                    query,
+                    category__in=self.request.GET.get('category'),
+                ).order_by(price)
+            else:
+                products = Product.objects.filter(
+                    query,
+                    category__in=self.request.GET.get('category')
+                )
+        elif self.request.GET.get('price'):
+            products = Product.objects.filter(query).order_by(price)
+        else:
+            products = Product.objects.filter(query)
+
+        return products
 
 
-
-    # def get_years(self):
-    #     return Movie.objects.filter(draft=False).values("year")
-
-
-class ProductSearchView(FilterView, generic.ListView):
+class ProductSearchView(generic.ListView):
+    """Поиск товаров"""
 
     paginate_by = 35
     model = Product
     context_object_name = 'products'
 
     cart_product_form = CartAddProductForm()
+    search_form = ProductSearchForm()
     filter_form = ProductFilterForm()
+
     extra_context = {
         'cart_product_form': cart_product_form,
+        'search_form': search_form,
         'filter_form': filter_form,
     }
 
     def get_queryset(self):
-        products = Product.objects.filter(Q(available=True) & (Q(status=2) | Q(status=3)),
-                                          title__icontains=self.request.GET.get('search_text'))
+        query = Q(available=True) & (Q(status=2) | Q(status=3))
+        if self.request.GET.get('search_text'):
+            products = Product.objects.filter(query,
+                                              title__icontains=self.request.GET.get('search_text'))
+        else:
+            products = Product.objects.filter(query)
+
         return products
 
     def get_context_data(self, *args, **kwargs):
@@ -47,7 +88,7 @@ class ProductSearchView(FilterView, generic.ListView):
         return context
 
 
-class ProductList(FilterView, generic.ListView):
+class ProductList(generic.ListView):
 
     model = Product
     context_object_name = 'products'
@@ -55,10 +96,12 @@ class ProductList(FilterView, generic.ListView):
     paginate_by = 35
 
     cart_product_form = CartAddProductForm()
+    search_form = ProductSearchForm()
     filter_form = ProductFilterForm()
 
     extra_context = {
         'cart_product_form': cart_product_form,
+        'search_form': search_form,
         'filter_form': filter_form,
     }
     template_name = 'products/product_list.html'

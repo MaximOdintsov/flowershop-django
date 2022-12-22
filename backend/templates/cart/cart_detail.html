@@ -102,11 +102,7 @@
 
                                 <div class="justify-content-between d-flex align-items-end">
                                     <div>
-                                        {% if cart|length == 1 %}
-                                            <span>{{ cart|length }} товар</span>
-                                        {% else %}
-                                            <span>{{ cart|length }} товаров</span>
-                                        {% endif %}
+                                        <span>Товаров: {{ cart|length }} шт.</span>
                                     </div>
 
                                     {% if cart.get_total_price == cart.get_old_price %}
