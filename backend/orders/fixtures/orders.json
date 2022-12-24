@@ -1,0 +1,308 @@
+[
+{
+    "model": "products.productcategory",
+    "pk": 1,
+    "fields": {
+        "title": "Букет",
+        "slug": "bouquet"
+    }
+},
+{
+    "model": "products.productcategory",
+    "pk": 2,
+    "fields": {
+        "title": "цветы",
+        "slug": "flowers"
+    }
+},
+{
+    "model": "products.productcomponent",
+    "pk": 5,
+    "fields": {
+        "title": "белая роза",
+        "slug": "white-rose",
+        "price": "10.00",
+        "old_price": "10.00",
+        "new_arrival": 0,
+        "total_count": 120,
+        "quantity_in_product": 0,
+        "quantity_for_sale": 120,
+        "status": 1,
+        "available": true
+    }
+},
+{
+    "model": "products.productcomponent",
+    "pk": 6,
+    "fields": {
+        "title": "красная роза",
+        "slug": "red-rose",
+        "price": "10.00",
+        "old_price": "10.00",
+        "new_arrival": 0,
+        "total_count": 100,
+        "quantity_in_product": 0,
+        "quantity_for_sale": 100,
+        "status": 1,
+        "available": true
+    }
+},
+{
+    "model": "products.productcomponent",
+    "pk": 7,
+    "fields": {
+        "title": "Ромашка",
+        "slug": "chamomile",
+        "price": "10.00",
+        "old_price": "10.00",
+        "new_arrival": 0,
+        "total_count": 114,
+        "quantity_in_product": 0,
+        "quantity_for_sale": 114,
+        "status": 1,
+        "available": true
+    }
+},
+{
+    "model": "products.productcomponent",
+    "pk": 8,
+    "fields": {
+        "title": "Лилия",
+        "slug": "lily",
+        "price": "10.00",
+        "old_price": "10.00",
+        "new_arrival": 0,
+        "total_count": 100,
+        "quantity_in_product": 0,
+        "quantity_for_sale": 100,
+        "status": 1,
+        "available": true
+    }
+},
+{
+    "model": "products.product",
+    "pk": 19,
+    "fields": {
+        "category": 1,
+        "title": "Букет из ромашек и роз",
+        "slug": "bouquet-of-daisies-and-roses",
+        "preview": "products/previews/our6.jpg",
+        "price": "200.00",
+        "discount": 0,
+        "discount_price": "200.00",
+        "quantity": 0,
+        "old_quantity": 0,
+        "status": 2,
+        "available": true
+    }
+},
+{
+    "model": "products.product",
+    "pk": 20,
+    "fields": {
+        "category": 1,
+        "title": "Букет из ромашек",
+        "slug": "bouquet-of-daisies",
+        "preview": "products/previews/our1.jpg",
+        "price": "100.00",
+        "discount": 0,
+        "discount_price": "100.00",
+        "quantity": 0,
+        "old_quantity": 0,
+        "status": 2,
+        "available": true
+    }
+},
+{
+    "model": "products.product",
+    "pk": 21,
+    "fields": {
+        "category": 2,
+        "title": "Ромашка",
+        "slug": "chamomile",
+        "preview": "products/previews/our5_qUr36rd.jpg",
+        "price": "10.00",
+        "discount": 0,
+        "discount_price": "10.00",
+        "quantity": 0,
+        "old_quantity": 0,
+        "status": 2,
+        "available": true
+    }
+},
+{
+    "model": "products.product",
+    "pk": 22,
+    "fields": {
+        "category": 2,
+        "title": "Белая роза",
+        "slug": "white-rose",
+        "preview": "products/previews/our5_hG5xUmU.jpg",
+        "price": "10.00",
+        "discount": 0,
+        "discount_price": "10.00",
+        "quantity": 0,
+        "old_quantity": 0,
+        "status": 2,
+        "available": true
+    }
+},
+{
+    "model": "products.productgallery",
+    "pk": 14,
+    "fields": {
+        "product_gallery": 19,
+        "image": "products/images/our2.jpg"
+    }
+},
+{
+    "model": "products.productgallery",
+    "pk": 15,
+    "fields": {
+        "product_gallery": 19,
+        "image": "products/images/our1.jpg"
+    }
+},
+{
+    "model": "products.productgallery",
+    "pk": 16,
+    "fields": {
+        "product_gallery": 20,
+        "image": "products/images/our5.jpg"
+    }
+},
+{
+    "model": "products.productgallery",
+    "pk": 17,
+    "fields": {
+        "product_gallery": 20,
+        "image": "products/images/our4.jpg"
+    }
+},
+{
+    "model": "products.productgallery",
+    "pk": 18,
+    "fields": {
+        "product_gallery": 21,
+        "image": "products/images/our6.jpg"
+    }
+},
+{
+    "model": "products.productcomposition",
+    "pk": 11,
+    "fields": {
+        "product_composition": 19,
+        "component_composition": 5,
+        "quantity": 10,
+        "old_quantity": 10,
+        "total_quantity": 0
+    }
+},
+{
+    "model": "products.productcomposition",
+    "pk": 12,
+    "fields": {
+        "product_composition": 19,
+        "component_composition": 7,
+        "quantity": 10,
+        "old_quantity": 10,
+        "total_quantity": 0
+    }
+},
+{
+    "model": "products.productcomposition",
+    "pk": 13,
+    "fields": {
+        "product_composition": 20,
+        "component_composition": 7,
+        "quantity": 10,
+        "old_quantity": 10,
+        "total_quantity": 0
+    }
+},
+{
+    "model": "products.productcomposition",
+    "pk": 14,
+    "fields": {
+        "product_composition": 21,
+        "component_composition": 7,
+        "quantity": 1,
+        "old_quantity": 1,
+        "total_quantity": 0
+    }
+},
+{
+    "model": "products.productcomposition",
+    "pk": 15,
+    "fields": {
+        "product_composition": 22,
+        "component_composition": 5,
+        "quantity": 1,
+        "old_quantity": 1,
+        "total_quantity": 0
+    }
+},
+{
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$390000$jTPsbrEHVdO9SFZiijwwri$EOnI+0iLf/nf0znbAT/SE7Po6yYf3I40rYbo9mKMoTs=",
+        "last_login": "2022-12-23T18:11:52.307Z",
+        "is_superuser": true,
+        "username": "maxim",
+        "first_name": "",
+        "last_name": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2022-12-11T19:26:17.191Z",
+        "email": "",
+        "sex": "N",
+        "date_of_birth": null,
+        "is_verified": true,
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "orders.order",
+    "pk": 86,
+    "fields": {
+        "user": 1,
+        "price": "300.00",
+        "first_name": "Максим",
+        "phone": "+79914507480",
+        "email": "macsim05.macsim@mail.ru",
+        "address": "г.Киров, ул.Садаковская, д.8а, кв.21",
+        "create": "2022-12-24T17:39:51.221Z",
+        "update": null,
+        "ready_time": null,
+        "receipt": 1,
+        "payment_method": 1,
+        "paid": false,
+        "received": false,
+        "readiness_status": 1
+    }
+},
+{
+    "model": "orders.orderitem",
+    "pk": 48,
+    "fields": {
+        "order": 86,
+        "product": 21,
+        "quantity": 10,
+        "old_quantity": 10,
+        "price": "100.00"
+    }
+},
+{
+    "model": "orders.orderitem",
+    "pk": 49,
+    "fields": {
+        "order": 86,
+        "product": 19,
+        "quantity": 1,
+        "old_quantity": 1,
+        "price": "200.00"
+    }
+}
+]

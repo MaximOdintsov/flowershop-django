@@ -14,6 +14,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
+
 def save_slug(pk, slug, title):
     """
     Переводит поле title с ru на en и сохраняет в slug
@@ -46,6 +47,7 @@ class ProductCategory(models.Model):
     def __str__(self):
         return self.title
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
         super(ProductCategory, self).save()
         self.slug = save_slug(pk=self.id, slug=self.slug, title=self.title)
@@ -68,7 +70,8 @@ class ProductComponent(models.Model):
     title = models.CharField('Название', max_length=100)
     slug = models.SlugField('Название на английском', max_length=150, unique=True, null=False)
 
-    price = models.DecimalField('Цена', max_digits=8, decimal_places=2)
+    price = models.DecimalField('Цена', max_digits=8, decimal_places=2, default=0)
+    old_price = models.DecimalField('Цена', max_digits=8, decimal_places=2, default=0)
 
     new_arrival = models.PositiveSmallIntegerField('Новое поступление', default=0)
 
@@ -88,6 +91,15 @@ class ProductComponent(models.Model):
     def __str__(self):
         return self.title
 
+    def check_old_price(self):
+        """
+        Проверяет, не изменилась ли цена
+        """
+        if self.old_price != self.price:
+            return True
+        else:
+            return False
+
     def update_new_arrival(self):
         """
         Обновляет количество компонентов при новом поступлении
@@ -102,23 +114,38 @@ class ProductComponent(models.Model):
         """
         self.quantity_for_sale = self.total_count - self.quantity_in_product
 
-    # def save_price(self):
-    #     """
-    #     При изменении цены компонента нужно обновить все связанные продукты
-    #     """
-    #     compositions = ProductComposition.objects.filter(component_composition=self.id)
-    #     for composition in compositions:
-    #         composition.check_quantity_update(update=True)
-    #         composition.save()
+    def update_price(self):
+        """
+        При изменении цены компонента нужно обновить все связанные продукты
+        """
+        compositions = ProductComposition.objects.filter(component_composition=self.id)
+        for composition in compositions:
+            composition.save_product()
+            composition.old_quantity = composition.quantity
+            composition.save()
 
     @transaction.atomic
     def save(self, *args, **kwargs):
         super(ProductComponent, self).save()
+
+        if self.check_old_price() is True:
+            self.update_price()
+            self.old_price = self.price
+
         self.slug = save_slug(pk=self.id, slug=self.slug, title=self.title)
         self.update_new_arrival()
         self.update_quantity_for_sale()
 
         super(ProductComponent, self).save(*args, **kwargs)
+
+    @transaction.atomic
+    def save_quantity(self):
+        """
+        Функция сохранения компонента для других классов
+        """
+        self.update_quantity_for_sale()
+
+        super(ProductComponent, self).save()
 
 
 class Product(models.Model):
@@ -150,8 +177,8 @@ class Product(models.Model):
                                                 validators=[MinValueValidator(0), MaxValueValidator(80)])
     discount_price = models.DecimalField('Цена со скидкой', max_digits=8, decimal_places=2, default=0)
 
-    quantity = models.PositiveSmallIntegerField('Количество продуктов', default=0)
-    quantity_update = models.PositiveSmallIntegerField('Обновление количества', default=0)
+    quantity = models.PositiveSmallIntegerField('Количество продуктов', default=1)
+    old_quantity = models.PositiveSmallIntegerField('Старое количества', default=0)
 
     status = models.PositiveSmallIntegerField('Статус',
                                               choices=STATUS_CHOICES,
@@ -171,6 +198,9 @@ class Product(models.Model):
         return reverse('product_detail', args=[self.slug])
 
     def get_composition(self):
+        """
+        Получает композицию продукта
+        """
         composition = Product.objects.get(id=self.id).product_composition.all()
         return composition
 
@@ -178,8 +208,7 @@ class Product(models.Model):
         """
         Проверяет, было ли обновлено self.quantity
         """
-        if self.quantity_update != self.quantity:
-            self.quantity_update = self.quantity
+        if self.old_quantity != self.quantity:
             return True
         else:
             return False
@@ -189,7 +218,7 @@ class Product(models.Model):
         Обнуляем цену продукта и
         рассчитываем цену из всех его компонентов
         """
-        compositions = Product.objects.get(id=self.id).product_composition.all()
+        compositions = self.get_composition()
         self.price = 0
         for composition in compositions:
             self.price += composition.price_counter()
@@ -208,7 +237,7 @@ class Product(models.Model):
         Нужно для того, чтобы делать расчеты для
         Component и Composition при изменении self.quantity
         """
-        compositions = Product.objects.get(id=self.id).product_composition.all()
+        compositions = self.get_composition()
         for composition in compositions:
             composition.save()
 
@@ -216,7 +245,7 @@ class Product(models.Model):
         """
         Удаляет все связанные объекты ProductComposition
         """
-        compositions = Product.objects.get(id=self.id).product_composition.all()
+        compositions = self.get_composition()
         for composition in compositions:
             composition.delete()
 
@@ -227,6 +256,7 @@ class Product(models.Model):
 
         if self.check_quantity_update() is True:
             self.save_composition()
+            self.old_quantity = self.quantity
 
         self.update_product_price()
         self.update_discount_price()
@@ -269,8 +299,8 @@ class ProductComposition(models.Model):
                                               db_column='component',
                                               related_name='component_composition')
 
-    quantity = models.PositiveSmallIntegerField('Количество компонентов', default=0)
-    quantity_update = models.PositiveSmallIntegerField('Обновление количества компонентов', default=0)
+    quantity = models.PositiveSmallIntegerField('Количество компонентов', default=1)
+    old_quantity = models.PositiveSmallIntegerField('Обновление количества компонентов', default=0)
 
     # общее количество в экземпляре продукта
     # (количество продуктов * количество компонентов в 1 продукте)
@@ -289,8 +319,7 @@ class ProductComposition(models.Model):
         """
         Проверяет, было ли обновлено self.quantity
         """
-        if self.quantity_update != self.quantity:
-            self.quantity_update = self.quantity
+        if self.old_quantity != self.quantity:
             return True
         else:
             return False
@@ -319,20 +348,21 @@ class ProductComposition(models.Model):
         self.total_quantity = self.product_composition.quantity * self.quantity
         self.component_composition.quantity_in_product += self.total_quantity
 
-        self.component_composition.save()
+        self.component_composition.save_quantity()
 
     def delete_component(self):
         """
         Удаляет quantity_in_product из ProductComponent
         """
         self.component_composition.quantity_in_product -= self.total_quantity
-        self.component_composition.save()
+        self.component_composition.save_quantity()
 
     @transaction.atomic
     def save(self, *args, **kwargs):
 
         if self.check_quantity_update() is True:
             self.save_product()
+            self.old_quantity = self.quantity
 
         self.update_total_quantity()
         super(ProductComposition, self).save(*args, **kwargs)

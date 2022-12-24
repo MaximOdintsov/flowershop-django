@@ -8,6 +8,12 @@ from .cart import Cart
 from .forms import CartAddProductForm
 
 
+def update_price(request, product_id):
+    cart = Cart(request)
+    product = Product.objects.get(id=product_id)
+    cart.update_price(product=product)
+
+
 def cart_add_all(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
@@ -21,13 +27,6 @@ def cart_add_all(request, product_id):
     return redirect('cart:cart_detail')
 
 
-def cart_remove_all(request, product_id):
-    cart = Cart(request)
-    product = get_object_or_404(Product, id=product_id)
-    cart.remove(product)
-    return redirect('cart:cart_detail')
-
-
 def cart_add_one(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
@@ -36,6 +35,13 @@ def cart_add_one(request, product_id):
                  quantity=1,
                  update_quantity=True)
     return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+
+
+def cart_remove_all(request, product_id):
+    cart = Cart(request)
+    product = get_object_or_404(Product, id=product_id)
+    cart.remove(product)
+    return redirect('cart:cart_detail')
 
 
 def cart_remove_one(request, product_id):

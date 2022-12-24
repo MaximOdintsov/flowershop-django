@@ -1,14 +1,15 @@
 from django.contrib import admin
-from .models import Order, OrderItem
+from . import models
+from django.db import transaction
 
 
 class OrderItemInline(admin.TabularInline):
-    model = OrderItem
+    model = models.OrderItem
     extra = 0
     fields = ('product', 'quantity', )
 
 
-@admin.register(Order)
+@admin.register(models.Order)
 class Order(admin.ModelAdmin):
     fields = ('user', 'first_name',
               'phone', 'email', 'address',
@@ -19,3 +20,14 @@ class Order(admin.ModelAdmin):
     list_editable = ['paid', 'received', 'readiness_status']
     list_filter = ['readiness_status']
     inlines = [OrderItemInline, ]
+
+    @transaction.atomic
+    def delete_queryset(self, request, queryset):
+        """
+        Переопределение действия 'Удалить выбранные объекты'
+        """
+        orders = queryset
+        for order in orders:
+            order.delete()
+
+

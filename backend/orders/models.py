@@ -3,7 +3,7 @@ import datetime
 from django.utils import timezone
 
 from django.db import models
-from products.models import Product
+from products.models import Product, ProductComposition
 
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -65,6 +65,10 @@ class Order(models.Model):
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
+        ordering = ['id']
+
+    def __str__(self):
+        return f'Заказ №{self.id}'
 
     def check_readiness_status(self):
         """
@@ -96,48 +100,103 @@ class Order(models.Model):
         time = datetime.time(hours, minutes, seconds)
         return time
 
-    def save(self, *args, **kwargs):
+    def delete_order_items(self):
+        """
+        Удаляет все компоненты заказа
+        """
+        items = OrderItem.objects.filter(order_id=self.id)
 
+        for item in items:
+            item.delete()
+
+    def save(self, *args, **kwargs):
         if self.check_readiness_status() is True:
             self.update_date()
             self.ready_time = self.return_ready_time()
 
         super(Order, self).save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs):
+        self.delete_order_items()
+        super(Order, self).delete(*args, **kwargs)
+
 
 class OrderItem(models.Model):
-    product = models.ForeignKey(Product,
-                                verbose_name='Товар',
-                                on_delete=models.CASCADE,
-                                related_name='order_item_product')
     order = models.ForeignKey(Order,
                               verbose_name='Заказ',
                               on_delete=models.CASCADE,
                               related_name='order')
-    quantity = models.IntegerField('Количество товара', default=1)
-    price_item = models.DecimalField('Цена 1 товара', max_digits=8,
-                                     decimal_places=2, default=0)
-    price = models.DecimalField('Общая цена', max_digits=8,
+    product = models.ForeignKey(Product,
+                                verbose_name='Товар',
+                                on_delete=models.PROTECT,
+                                related_name='order_item_product')
+    quantity = models.PositiveSmallIntegerField('Количество товара в заказе', default=1)
+    old_quantity = models.PositiveSmallIntegerField('Старое количество товара', default=0)
+    price = models.DecimalField('Цена товара в заказе', max_digits=8,
                                 decimal_places=2, default=0)
 
     class Meta:
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
 
-    def save(self, *args, **kwargs):
-        # удаляем старое значение из цены и обнуляем
-        self.order.price -= self.price_item
-        self.price_item = 0
+    def check_quantity_update(self):
+        """
+        Проверяет, было ли обновлено self.quantity
+        """
+        if self.old_quantity != self.quantity:
+            return True
+        else:
+            return False
 
-        # создаем новое значение и добавляем к общей цене
-        self.price_item = self.product.discount_price * self.quantity
-        self.order.price += self.price_item
+    def update_quantity_components(self):
+        """
+        Обновляет количество компонентов на складе при добавлении товара в заказ
+        """
+        compositions = ProductComposition.objects.filter(product_composition_id=self.product.id)
+        for composition in compositions:
+            composition.component_composition.total_count += self.old_quantity * composition.quantity
+            composition.component_composition.total_count -= self.quantity * composition.quantity
+            composition.component_composition.save()
+
+    def update_order_price(self):
+        """
+        Обновляем значение цены заказа
+        """
+        self.order.price -= self.price
+        self.price = 0
+
+        self.price = self.product.discount_price * self.quantity
+        self.order.price += self.price
 
         self.order.save()
+
+    def delete_quantity_components(self):
+        """
+        Прибавляет количество компонентов на складе при удалении товара из заказа
+        """
+        compositions = ProductComposition.objects.filter(product_composition_id=self.product.id)
+        for composition in compositions:
+            composition.component_composition.total_count += self.old_quantity * composition.quantity
+            composition.component_composition.save()
+
+    def delete_order_price(self):
+        """
+        Обновляем цену заказа при удалении продукта из заказа
+        """
+        self.order.price -= self.price
+        self.order.save()
+
+    def save(self, *args, **kwargs):
+
+        if self.check_quantity_update() is True:
+            self.update_quantity_components()
+            self.old_quantity = self.quantity
+
+        self.update_order_price()
 
         super(OrderItem, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        self.order.price -= self.price_item
-        self.order.save()
+        self.delete_quantity_components()
+        self.delete_order_price()
         super(OrderItem, self).delete(*args, **kwargs)

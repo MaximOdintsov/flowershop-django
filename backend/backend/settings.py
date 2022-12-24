@@ -140,6 +140,10 @@ AUTHENTICATION_BACKENDS = [
 # cart
 CART_SESSION_ID = 'cart'
 
+# sessions
+SESSION_COOKIE_AGE = 604800
+SESSION_COOKIE_SECURE = True
+
 # EMAIL
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

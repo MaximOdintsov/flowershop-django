@@ -78,9 +78,10 @@ class Product(admin.ModelAdmin):
     actions = ['save_composition', ]
 
     @transaction.atomic
-    @admin.action(description='Удалить выбранные объекты')
     def delete_queryset(self, request, queryset):
-        # переопределяем метод delete в actions
+        """
+        Переопределение действия 'Удалить выбранные объекты'
+        """
         products = queryset
         for product in products:
             product.delete()

@@ -3,6 +3,8 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from products.models import Product
 
+from django.views.decorators.http import require_POST
+
 
 class Cart(object):
 
@@ -39,12 +41,10 @@ class Cart(object):
                                      'old_price': str(product.price),
                                      'discount_price': str(product.discount_price)}
 
-        if update_quantity is True:
-            self.cart[product_id]['quantity'] = quantity
-        else:
-            self.cart[product_id]['quantity'] = quantity
+        self.cart[product_id]['quantity'] = quantity
 
         if self.cart[product_id]['quantity'] >= 0:
+            self.update_price(product)
             self.save()
         else:
             raise ValidationError('Это значение не должно быть отрицательным')
@@ -66,9 +66,16 @@ class Cart(object):
             self.cart[product_id]['quantity'] = quantity
 
         if self.cart[product_id]['quantity'] >= 0:
+            self.update_price(product)
             self.save()
         else:
             raise ValidationError('Это значение не должно быть отрицательным')
+
+    # def update_price(self, product):
+    #     product_id = str(product.id)
+    #
+    #     self.cart[product_id]['old_price'] = str(product.price)
+    #     self.cart[product_id]['discount_price'] = str(product.discount_price)
 
     def save(self):
         # Обновляем сессию cart
