@@ -3,6 +3,8 @@ import os
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models, transaction
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # import for get_absolute_url
 from django.urls import reverse
@@ -193,6 +195,11 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
+    def save_orderitem(self):
+        items = self.orderitem_set.all()
+        for item in items:
+            item.save()
+
     def get_url(self):
         return reverse('product_detail', args=[self.slug])
 
@@ -266,6 +273,13 @@ class Product(models.Model):
     def delete(self, *args, **kwargs):
         self.delete_composition()
         super(Product, self).delete(*args, **kwargs)
+
+
+@receiver(post_save, sender=Product)
+def resave_related_order_items_after_save(sender, instance, **kwargs):
+    product = instance
+    product.save_orderitem()
+
 
 
 class ProductGallery(models.Model):

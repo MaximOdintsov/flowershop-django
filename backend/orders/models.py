@@ -21,10 +21,12 @@ class Order(models.Model):
     STATUS_WAITING_FOR_PAYMENT = 1
     STATUS_PAID = 2
     STATUS_CART = 3
+    STATUS_CANCELED = 4
     STATUS_CHOICES = [
         (STATUS_WAITING_FOR_PAYMENT, 'Ожидает оплату'),
         (STATUS_PAID, 'Оплачен'),
         (STATUS_CART, 'Корзина'),
+        (STATUS_CANCELED, 'Заказ отменен')
     ]
     RECEIPT_PICKUP = 1
     RECEIPT_DELIVERY = 2

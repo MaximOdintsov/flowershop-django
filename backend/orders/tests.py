@@ -51,7 +51,7 @@ class TestDataBase(TestCase):
 
     def test_function_cart(self):
         """
-        Check cart number
+        Checking quantity carts:
         1. No cart
         2. Create cart
         3. Delete cart
@@ -84,6 +84,32 @@ class TestDataBase(TestCase):
         cart = Order.get_cart(self.user)
         self.assertEqual((timezone.now() - cart.creation_time).days, 0)
 
+    def test_price_setting_for_orderitem(self):
+        """
+        Checking to set price to product for orderitem:
+        1. When saving orderitem
+        2. When product price is changes
+        ================================
+        Add: @receiver orderitem_price_setting()
+             Product.save_orderitem()
+             @receiver Product.resave_related_order_items_after_save()
+        """
+
+        # 1. When saving orderitem
+        cart = Order.get_cart(self.user)
+        item = OrderItem.objects.create(id=5000, order=cart, product=self.product_3, quantity=1)
+        self.assertEqual(item.price, self.product_3.discount_price)
+
+        # 2. When product price is changes
+        component = ProductComponent.objects.get(title='Ромашка')
+        component.price = Decimal(1000)
+        component.save()
+
+        product = Product.objects.get(title='Букет из ромашек и роз')
+        item = OrderItem.objects.get(id=5000)
+
+        self.assertEqual(item.price, product.discount_price)
+
     def test_order_amount_recalculation_after_changed_orderitem(self):
         """
         Checking cart price:
@@ -92,11 +118,10 @@ class TestDataBase(TestCase):
         3. -----------""----------- after deleting 1 item
         4. -----------""----------- after deleting items
         =================================================
-        Add: @receiver orderitem_price_setting()
-        ---- @property Orderitem.amount
-        ---- Order.get_amount()
-        ---- @receiver recalculate_order_amount_after_save()
-        ---- @receiver recalculate_order_amount_after_delete()
+        Add: @property Orderitem.amount
+             Order.get_amount()
+             @receiver recalculate_order_amount_after_save()
+             @receiver recalculate_order_amount_after_delete()
         """
 
         # 1. Getting the order amount before any changes
@@ -128,7 +153,7 @@ class TestDataBase(TestCase):
 
     def test_cart_status_changing_after_applying_make_order(self):
         """
-        Check cart status change after Order.make_order():
+        Checking cart status change after Order.make_order():
         1. Attempt to change the status for an empty cart
         2. ---------------""--------------- a non-empty cart
         ====================================================
@@ -147,7 +172,7 @@ class TestDataBase(TestCase):
 
     def test_method_get_amount_of_unpaid_orders(self):
         """
-        Check @staticmethod get_amount_of_unpaid_orders() for several cases:
+        Checking @staticmethod get_amount_of_unpaid_orders() for several cases:
         1. Before creating cart
         2. After creating cart
         3. After cart.make_order()
@@ -187,4 +212,3 @@ class TestDataBase(TestCase):
         Order.objects.all().delete()
         amount = Order.get_amount_of_unpaid_orders(self.user)
         self.assertEqual(amount, Decimal(0))
-
