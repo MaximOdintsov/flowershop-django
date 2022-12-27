@@ -34,3 +34,6 @@ class User(AbstractUser):
         verbose_name_plural = _('users')
         unique_together = ('username', 'email')
 
+    def __str__(self):
+        return self.first_name
+

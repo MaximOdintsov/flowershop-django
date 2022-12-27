@@ -30,7 +30,7 @@ class Cart(object):
         except Exception:
             return 0
 
-    def add(self, product, quantity=1, update_quantity=False):
+    def add(self, product, quantity=1):
         """
         Добавляем продукт в корзину или обновляем его количество.
         """
@@ -44,7 +44,6 @@ class Cart(object):
         self.cart[product_id]['quantity'] = quantity
 
         if self.cart[product_id]['quantity'] >= 0:
-            self.update_price(product)
             self.save()
         else:
             raise ValidationError('Это значение не должно быть отрицательным')
@@ -66,16 +65,17 @@ class Cart(object):
             self.cart[product_id]['quantity'] = quantity
 
         if self.cart[product_id]['quantity'] >= 0:
-            self.update_price(product)
             self.save()
         else:
             raise ValidationError('Это значение не должно быть отрицательным')
 
-    # def update_price(self, product):
-    #     product_id = str(product.id)
-    #
-    #     self.cart[product_id]['old_price'] = str(product.price)
-    #     self.cart[product_id]['discount_price'] = str(product.discount_price)
+    def update_cart(self, product_ids):
+        for product_id in product_ids:
+            product = Product.objects.get(id=product_id)
+
+            product_id = str(product_id)
+            self.cart[product_id]['old_price'] = str(product.price)
+            self.cart[product_id]['discount_price'] = str(product.discount_price)
 
     def save(self):
         # Обновляем сессию cart
@@ -97,6 +97,7 @@ class Cart(object):
         Перебираем элементы в корзине и получаем продукты из базы данных.
         """
         product_ids = self.cart.keys()
+
         # получение объектов product и добавление их в корзину
         products = Product.objects.filter(id__in=product_ids)
         for product in products:

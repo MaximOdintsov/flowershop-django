@@ -14,7 +14,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
-
 def save_slug(pk, slug, title):
     """
     Переводит поле title с ru на en и сохраняет в slug

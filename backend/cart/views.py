@@ -59,6 +59,8 @@ def cart_remove_one(request, product_id):
 
 def cart_detail(request):
     cart = Cart(request)
+    ids = cart.cart.keys()
+    cart.update_cart(product_ids=ids)
 
     context = {
         'cart': cart
