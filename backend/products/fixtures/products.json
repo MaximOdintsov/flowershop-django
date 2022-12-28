@@ -1,266 +1,346 @@
 [
 {
+    "model": "sessions.session",
+    "pk": "9z9c7gz6tcurbbfrean87ic6b58ijbye",
+    "fields": {
+        "session_data": ".eJxVizsOgzAQBe-ydYS8XvyjCxex1vZajiKlwFAh7h6QaCjnzbwdMi8rTPvxgsjb2uLWZYmfAhMgPLbE-Su_S1zYh5v78D6T-ZaPR-PeztxoLq6agoFTYe08l-ApZacsOfGIRqyMY_JaKZ8N2aB1oFqDUSiEBMcfbRc0xQ:1pAcXt:qPYm5QEPKkf3b37_M8nZ4gal2IX3_CIYu4IjUdeEflE",
+        "expire_date": "2023-01-04T19:57:01.012Z"
+    }
+},
+{
     "model": "products.productcategory",
     "pk": 1,
     "fields": {
-        "title": "Букет",
-        "slug": "bouquet"
+        "title": "Букеты",
+        "slug": "bouquets"
     }
 },
 {
     "model": "products.productcategory",
     "pk": 2,
     "fields": {
-        "title": "цветы",
+        "title": "Цветы",
         "slug": "flowers"
     }
 },
 {
     "model": "products.productcomponent",
-    "pk": 5,
+    "pk": 1,
     "fields": {
-        "title": "белая роза",
-        "slug": "white-rose",
-        "price": "10.00",
-        "old_price": "10.00",
-        "new_arrival": 0,
-        "total_count": 120,
-        "quantity_in_product": 0,
-        "quantity_for_sale": 120,
-        "status": 1,
-        "available": true
-    }
-},
-{
-    "model": "products.productcomponent",
-    "pk": 6,
-    "fields": {
-        "title": "красная роза",
-        "slug": "red-rose",
-        "price": "10.00",
-        "old_price": "10.00",
-        "new_arrival": 0,
-        "total_count": 100,
-        "quantity_in_product": 0,
-        "quantity_for_sale": 100,
-        "status": 1,
-        "available": true
-    }
-},
-{
-    "model": "products.productcomponent",
-    "pk": 7,
-    "fields": {
-        "title": "Ромашка",
-        "slug": "chamomile",
-        "price": "10.00",
-        "old_price": "10.00",
-        "new_arrival": 0,
-        "total_count": 114,
-        "quantity_in_product": 0,
-        "quantity_for_sale": 114,
-        "status": 1,
-        "available": true
-    }
-},
-{
-    "model": "products.productcomponent",
-    "pk": 8,
-    "fields": {
-        "title": "Лилия",
-        "slug": "lily",
-        "price": "10.00",
-        "old_price": "10.00",
-        "new_arrival": 0,
-        "total_count": 100,
-        "quantity_in_product": 0,
-        "quantity_for_sale": 100,
-        "status": 1,
-        "available": true
-    }
-},
-{
-    "model": "products.product",
-    "pk": 19,
-    "fields": {
-        "category": 1,
-        "title": "Букет из ромашек и роз",
-        "slug": "bouquet-of-daisies-and-roses",
-        "preview": "products/previews/our6.jpg",
+        "title": "Красная роза",
+        "slug": "red-roze",
         "price": "200.00",
-        "discount": 0,
-        "discount_price": "200.00",
-        "quantity": 0,
-        "old_quantity": 0,
-        "status": 2,
+        "new_arrival": 0,
+        "total_count": 100,
+        "quantity_in_product": 0,
+        "quantity_for_sale": 0,
+        "quantity_of_sold": 0,
         "available": true
     }
 },
 {
-    "model": "products.product",
-    "pk": 20,
+    "model": "products.productcomponent",
+    "pk": 2,
     "fields": {
-        "category": 1,
-        "title": "Букет из ромашек",
-        "slug": "bouquet-of-daisies",
-        "preview": "products/previews/our1.jpg",
-        "price": "100.00",
-        "discount": 0,
-        "discount_price": "100.00",
-        "quantity": 0,
-        "old_quantity": 0,
-        "status": 2,
-        "available": true
-    }
-},
-{
-    "model": "products.product",
-    "pk": 21,
-    "fields": {
-        "category": 2,
         "title": "Ромашка",
         "slug": "chamomile",
-        "preview": "products/previews/our5_qUr36rd.jpg",
-        "price": "10.00",
-        "discount": 0,
-        "discount_price": "10.00",
-        "quantity": 0,
-        "old_quantity": 0,
-        "status": 2,
-        "available": true
+        "price": "100.00",
+        "new_arrival": 0,
+        "total_count": 100,
+        "quantity_in_product": 0,
+        "quantity_for_sale": 0,
+        "quantity_of_sold": 0,
+        "available": false
     }
 },
 {
     "model": "products.product",
-    "pk": 22,
+    "pk": 2,
     "fields": {
-        "category": 2,
-        "title": "Белая роза",
-        "slug": "white-rose",
-        "preview": "products/previews/our5_hG5xUmU.jpg",
-        "price": "10.00",
-        "discount": 0,
-        "discount_price": "10.00",
-        "quantity": 0,
-        "old_quantity": 0,
-        "status": 2,
-        "available": true
-    }
-},
-{
-    "model": "products.productgallery",
-    "pk": 14,
-    "fields": {
-        "product_gallery": 19,
-        "image": "products/images/our2.jpg"
-    }
-},
-{
-    "model": "products.productgallery",
-    "pk": 15,
-    "fields": {
-        "product_gallery": 19,
-        "image": "products/images/our1.jpg"
-    }
-},
-{
-    "model": "products.productgallery",
-    "pk": 16,
-    "fields": {
-        "product_gallery": 20,
-        "image": "products/images/our5.jpg"
-    }
-},
-{
-    "model": "products.productgallery",
-    "pk": 17,
-    "fields": {
-        "product_gallery": 20,
-        "image": "products/images/our4.jpg"
-    }
-},
-{
-    "model": "products.productgallery",
-    "pk": 18,
-    "fields": {
-        "product_gallery": 21,
-        "image": "products/images/our6.jpg"
-    }
-},
-{
-    "model": "products.productcomposition",
-    "pk": 11,
-    "fields": {
-        "product_composition": 19,
-        "component_composition": 5,
-        "quantity": 10,
-        "old_quantity": 10,
-        "total_quantity": 0
-    }
-},
-{
-    "model": "products.productcomposition",
-    "pk": 12,
-    "fields": {
-        "product_composition": 19,
-        "component_composition": 7,
-        "quantity": 10,
-        "old_quantity": 10,
-        "total_quantity": 0
-    }
-},
-{
-    "model": "products.productcomposition",
-    "pk": 13,
-    "fields": {
-        "product_composition": 20,
-        "component_composition": 7,
-        "quantity": 10,
-        "old_quantity": 10,
-        "total_quantity": 0
-    }
-},
-{
-    "model": "products.productcomposition",
-    "pk": 14,
-    "fields": {
-        "product_composition": 21,
-        "component_composition": 7,
+        "category": 1,
+        "title": "Букет из роз и ромашек",
+        "slug": "bouquet-of-roses-and-daisies",
+        "preview": "products/previews/our3_YaR6RrP.jpg",
+        "price": "0.00",
+        "discount": 10,
+        "new_price": "0.00",
         "quantity": 1,
-        "old_quantity": 1,
-        "total_quantity": 0
+        "status": 2
+    }
+},
+{
+    "model": "products.productgallery",
+    "pk": 2,
+    "fields": {
+        "product": 2,
+        "image": "products/images/our6_e3VUtiK.jpg"
     }
 },
 {
     "model": "products.productcomposition",
-    "pk": 15,
+    "pk": 2,
     "fields": {
-        "product_composition": 22,
-        "component_composition": 5,
-        "quantity": 1,
-        "old_quantity": 1,
-        "total_quantity": 0
+        "product": 2,
+        "component": 1,
+        "quantity": 10,
+        "price": "0.00"
+    }
+},
+{
+    "model": "products.productcomposition",
+    "pk": 3,
+    "fields": {
+        "product": 2,
+        "component": 2,
+        "quantity": 10,
+        "price": "0.00"
     }
 },
 {
     "model": "users.user",
-    "pk": 1,
     "fields": {
-        "password": "pbkdf2_sha256$390000$jTPsbrEHVdO9SFZiijwwri$EOnI+0iLf/nf0znbAT/SE7Po6yYf3I40rYbo9mKMoTs=",
-        "last_login": "2022-12-23T18:11:52.307Z",
+        "password": "pbkdf2_sha256$390000$RmZmvQKv56kcNhhvzIhrgU$g/EUB+sXWQ6huJj2YxgTdbhIqGcQWpT4BLHzIPXm+Lo=",
+        "last_login": "2022-12-28T18:36:54Z",
         "is_superuser": true,
         "username": "maxim",
-        "first_name": "",
-        "last_name": "",
+        "first_name": "Максим",
+        "last_name": "Одинцов",
         "is_staff": true,
         "is_active": true,
-        "date_joined": "2022-12-11T19:26:17.191Z",
-        "email": "",
-        "sex": "N",
-        "date_of_birth": null,
+        "date_joined": "2022-12-28T18:36:46Z",
+        "email": "macsim05.macsim@mail.ru",
+        "sex": "M",
+        "date_of_birth": "2003-08-02",
         "is_verified": true,
         "groups": [],
         "user_permissions": []
+    }
+},
+{
+    "model": "orders.order",
+    "pk": 2,
+    "fields": {
+        "user": [
+            "maxim"
+        ],
+        "amount": "0.00",
+        "receipt_method": 1,
+        "payment_method": 1,
+        "order_status": 3,
+        "readiness_status": 1,
+        "creation_time": "2022-12-28T18:48:23.251Z",
+        "first_name": null,
+        "phone": null,
+        "email": null,
+        "address": null
+    }
+},
+{
+    "model": "orders.orderitem",
+    "pk": 1,
+    "fields": {
+        "order": 2,
+        "product": 2,
+        "quantity": 1,
+        "price": "0.00"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 1,
+    "fields": {
+        "action_time": "2022-12-28T18:37:27.154Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "users",
+            "user"
+        ],
+        "object_id": "1",
+        "object_repr": "Максим",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"First name\", \"Last name\", \"Email\", \"\\u041f\\u043e\\u043b\", \"\\u0414\\u0435\\u043d\\u044c \\u0440\\u043e\\u0436\\u0434\\u0435\\u043d\\u0438\\u044f\", \"\\u041f\\u043e\\u043b\\u044c\\u0437\\u043e\\u0432\\u0430\\u0442\\u0435\\u043b\\u044c \\u0432\\u0435\\u0440\\u0438\\u0444\\u0438\\u0446\\u0438\\u0440\\u043e\\u0432\\u0430\\u043d\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 2,
+    "fields": {
+        "action_time": "2022-12-28T18:37:58.499Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "products",
+            "productcategory"
+        ],
+        "object_id": "1",
+        "object_repr": "Букеты",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 3,
+    "fields": {
+        "action_time": "2022-12-28T18:38:08.210Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "products",
+            "productcategory"
+        ],
+        "object_id": "1",
+        "object_repr": "Букеты",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"\\u041d\\u0430\\u0437\\u0432\\u0430\\u043d\\u0438\\u0435 \\u043d\\u0430 \\u0430\\u043d\\u0433\\u043b\\u0438\\u0439\\u0441\\u043a\\u043e\\u043c\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 4,
+    "fields": {
+        "action_time": "2022-12-28T18:40:07.413Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "products",
+            "productcomponent"
+        ],
+        "object_id": "1",
+        "object_repr": "Красная роза",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 5,
+    "fields": {
+        "action_time": "2022-12-28T18:40:11.982Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "products",
+            "productcomponent"
+        ],
+        "object_id": "1",
+        "object_repr": "Красная роза",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"\\u0414\\u043e\\u0441\\u0442\\u0443\\u043f\\u0435\\u043d\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 6,
+    "fields": {
+        "action_time": "2022-12-28T18:44:27.858Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "products",
+            "productcomponent"
+        ],
+        "object_id": "2",
+        "object_repr": "Ромашка",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 7,
+    "fields": {
+        "action_time": "2022-12-28T18:46:29.225Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "products",
+            "product"
+        ],
+        "object_id": "2",
+        "object_repr": "Букет из роз и ромашек",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}, {\"added\": {\"name\": \"\\u0418\\u0437\\u043e\\u0431\\u0440\\u0430\\u0436\\u0435\\u043d\\u0438\\u0435\", \"object\": \"ProductGallery object (2)\"}}, {\"added\": {\"name\": \"\\u0421\\u043e\\u0441\\u0442\\u0430\\u0432\", \"object\": \"\\u041a\\u0440\\u0430\\u0441\\u043d\\u0430\\u044f \\u0440\\u043e\\u0437\\u0430 composition for \\u0411\\u0443\\u043a\\u0435\\u0442 \\u0438\\u0437 \\u0440\\u043e\\u0437 \\u0438 \\u0440\\u043e\\u043c\\u0430\\u0448\\u0435\\u043a\"}}, {\"added\": {\"name\": \"\\u0421\\u043e\\u0441\\u0442\\u0430\\u0432\", \"object\": \"\\u0420\\u043e\\u043c\\u0430\\u0448\\u043a\\u0430 composition for \\u0411\\u0443\\u043a\\u0435\\u0442 \\u0438\\u0437 \\u0440\\u043e\\u0437 \\u0438 \\u0440\\u043e\\u043c\\u0430\\u0448\\u0435\\u043a\"}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 8,
+    "fields": {
+        "action_time": "2022-12-28T18:46:37.173Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "products",
+            "product"
+        ],
+        "object_id": "2",
+        "object_repr": "Букет из роз и ромашек",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"\\u041a\\u043e\\u043b\\u0438\\u0447\\u0435\\u0441\\u0442\\u0432\\u043e \\u043f\\u0440\\u043e\\u0434\\u0443\\u043a\\u0442\\u043e\\u0432\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 9,
+    "fields": {
+        "action_time": "2022-12-28T18:48:23.256Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "orders",
+            "order"
+        ],
+        "object_id": "2",
+        "object_repr": "Заказ №2",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}, {\"added\": {\"name\": \"\\u0422\\u043e\\u0432\\u0430\\u0440\", \"object\": \"\\u0422\\u043e\\u0432\\u0430\\u0440 \\u0437\\u0430\\u043a\\u0430\\u0437\\u0430 \\u21162 - \\\"\\u0411\\u0443\\u043a\\u0435\\u0442 \\u0438\\u0437 \\u0440\\u043e\\u0437 \\u0438 \\u0440\\u043e\\u043c\\u0430\\u0448\\u0435\\u043a\\\" \"}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 10,
+    "fields": {
+        "action_time": "2022-12-28T19:31:32.787Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "products",
+            "productcategory"
+        ],
+        "object_id": "2",
+        "object_repr": "Цветы",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 11,
+    "fields": {
+        "action_time": "2022-12-28T19:56:00.943Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "products",
+            "productcomponent"
+        ],
+        "object_id": "2",
+        "object_repr": "Ромашка",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"\\u041d\\u0430\\u0437\\u0432\\u0430\\u043d\\u0438\\u0435 \\u043d\\u0430 \\u0430\\u043d\\u0433\\u043b\\u0438\\u0439\\u0441\\u043a\\u043e\\u043c\"]}}]"
     }
 }
 ]

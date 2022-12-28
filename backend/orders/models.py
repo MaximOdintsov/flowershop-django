@@ -112,7 +112,6 @@ class Order(models.Model):
         return amount or Decimal(0)
 
 
-
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, verbose_name='Заказ', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, verbose_name='Товар', on_delete=models.PROTECT)
@@ -133,7 +132,7 @@ class OrderItem(models.Model):
 
 @receiver(pre_save, sender=OrderItem)
 def orderitem_price_setting(sender, instance, **kwargs):
-    instance.price = instance.product.discount_price
+    instance.price = instance.product.new_price
 
 
 @receiver(post_save, sender=OrderItem)

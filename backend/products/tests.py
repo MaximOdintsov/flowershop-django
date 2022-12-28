@@ -1,326 +1,61 @@
 from django.test import TestCase
-from .models import Category, Flower, Bouquet
-from .models import GalleryFlower, CompositionOfTheBouquet
+from .models import ProductCategory, ProductComponent, Product, ProductComposition
 
 from django.core.files import File
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
-class ProductsModelsTest(TestCase):
+class TestDataBase(TestCase):
+    fixtures = [
+        "products/fixtures/products.json"
+    ]
 
-    def test_category_model_save_and_retrieve(self):
-        # add category_1
-        category_1 = Category(
-            name='Цветы_1',
-            slug='flower_1',
-        )
-        category_1.save()
+    def setUp(self):
+        self.user = User.objects.get(username='maxim')
+        category = ProductCategory.objects.get(slug='flowers')
+        component_1 = ProductComponent.objects.get(slug='chamomile')
+        component_2 = ProductComponent.objects.get(slug='red-roze')
 
-        # add category_2
-        category_2 = Category(
-            name='Цветы_2',
-            slug='flower_2',
-        )
-        category_2.save()
+    def test_data(self):
+        components = ProductComponent.objects.all().count()
+        categories = ProductCategory.objects.all().count()
+        products = Product.objects.all().count()
+        compositions = ProductComposition.objects.all().count()
 
-        all_categories = Category.objects.all()
+        self.assertGreater(components, 1)
+        self.assertGreater(categories, 0)
+        self.assertGreater(products, 0)
+        self.assertGreater(compositions, 0)
 
-        # check: there must be 2 objects
-        self.assertEqual(len(all_categories), 2)
+    def test_calculate_productcomposition_price(self):
+        """
+        Checking calculate ProductComposition price:
+        1. When changing ProductComposition.quantity
+        2. ------""----- ProductComponent.price
+        ============================================
+        Add:
+        """
+        pass
 
-        # checking the 1st element
-        # check: name db == saved name
-        self.assertEqual(
-            all_categories[0].name, category_1.name,
-        )
-        # check: slug db == saved slug
-        self.assertEqual(
-            all_categories[0].slug, category_1.slug,
-        )
+    def test_calculate_product_price(self):
+        """
+        Checking calculate product price:
+        1. When adding ProductComposition to products
+        2. When changing ProductComposition.price
+        3. ------""----- Product.discount
+        =============================================
+        Add:
+        """
+        pass
 
-        # checking the 2nd element
-        # check: name db == saved name
-        self.assertEqual(
-            all_categories[1].name, category_2.name,
-        )
-        # check: slug db == saved slug
-        self.assertEqual(
-            all_categories[1].slug, category_2.slug,
-        )
-
-    def test_flower_model_save_and_retrieve(self):
-        # add category 1
-        category_1 = Category(
-            name='Цветы_1',
-            slug='flower_1',
-        )
-        category_1.save()
-        # add category 2
-        category_2 = Category(
-            name='Цветы_2',
-            slug='flower_2',
-        )
-        category_2.save()
-
-        # add flower_1
-        flower_1 = Flower(
-            category=Category.objects.all()[0],
-            title="Роза",
-            slug="Roze",
-            description="Белая роза",
-            price=1000,
-            discount=10,
-            # image=File(open('products/img/1.jpg', 'rb')),
-            all_stock=4,
-            available=True,
-        )
-        flower_1.save()
-
-        # add flower_2
-        flower_2 = Flower(
-            category=Category.objects.all()[1],
-            title="Тюльпан",
-            slug="Tulpan",
-            description="Красивый тюльпанчик",
-            price=1300,
-            discount=0,
-            # image=File(open('products/img/2.jpg', 'rb')),
-            all_stock=0,
-            available=False,
-        )
-        flower_2.save()
-
-        # upload all images from db
-        all_flowers = Flower.objects.all()
-
-        # check: there must be 2 objects
-        self.assertEqual(len(all_flowers), 2)
-
-        # checking the 1st element
-        # check: category db == saved category
-        self.assertEqual(
-            all_flowers[0].category, flower_1.category,
-        )
-        # check: title db == saved title
-        self.assertEqual(
-            all_flowers[0].title, flower_1.title,
-        )
-        # check: slug db == saved slug
-        self.assertEqual(
-            all_flowers[0].slug, flower_1.slug,
-        )
-        # check: description db == saved description
-        self.assertEqual(
-            all_flowers[0].description, flower_1.description,
-        )
-        # check: price db == saved price
-        self.assertEqual(
-            all_flowers[0].price, flower_1.price,
-        )
-        # check: discount db == saved discount
-        self.assertEqual(
-            all_flowers[0].discount, flower_1.discount,
-        )
-
-        # check: the image from the db is equal to the saved image
-        # self.assertEqual(
-        #     all_flowers[0].image, flower_1.image,
-        # )
-
-        # check: stock db == saved stock
-        self.assertEqual(
-            all_flowers[0].all_stock, flower_1.all_stock,
-        )
-        # check: available db == saved available
-        self.assertEqual(
-            all_flowers[0].available, flower_1.available,
-        )
-
-        # checking the 2nd element
-        # check: category db == saved category
-        self.assertEqual(
-            all_flowers[1].category, flower_2.category,
-        )
-        # check: title db == saved title
-        self.assertEqual(
-            all_flowers[1].title, flower_2.title,
-        )
-        # check: slug db == saved slug
-        self.assertEqual(
-            all_flowers[1].slug, flower_2.slug,
-        )
-        # check: description db == saved description
-        self.assertEqual(
-            all_flowers[1].description, flower_2.description,
-        )
-        # check: price db == saved price
-        self.assertEqual(
-            all_flowers[1].price, flower_2.price,
-        )
-        # check: discount db == saved discount
-        self.assertEqual(
-            all_flowers[1].discount, flower_2.discount,
-        )
-
-        # check: stock db == saved stock
-        self.assertEqual(
-            all_flowers[1].all_stock, flower_2.all_stock,
-        )
-        # check: available db == saved available
-        self.assertEqual(
-            all_flowers[1].available, flower_2.available,
-        )
-
-    def test_bouquet_model_save_and_retrieve(self):
-        # add bouquet_1
-        bouquet_1 = Bouquet(
-            title="Букет из 100 роз",
-            slug="buket_iz_100_roz",
-            description="Красивый букет из разных видов роз",
-            price=15.000,
-            discount=10,
-            # image=File(open('products/img/1.jpg', 'rb')),
-            stock=3,
-            available=True,
-            only_on_order=False,
-        )
-        bouquet_1.save()
-
-        # add bouquet_2
-        bouquet_2 = Bouquet(
-            title="Свадебный букет",
-            slug="svadebny_buket",
-            description="Свадебный букет из тюльпанов",
-            price=7000,
-            discount=0,
-            stock=1,
-            available=False,
-            only_on_order=True,
-        )
-        bouquet_2.save()
-
-        # upload all images from db
-        all_bouquets = Bouquet.objects.all()
-
-        # check: there must be 2 objects
-        self.assertEqual(len(all_bouquets), 2)
-
-        # checking the 1st element
-        # check: title db == saved title
-        self.assertEqual(
-            all_bouquets[0].title, bouquet_1.title,
-        )
-        # check: slug db == saved slug
-        self.assertEqual(
-            all_bouquets[0].slug, bouquet_1.slug,
-        )
-        # check: description db == saved description
-        self.assertEqual(
-            all_bouquets[0].description, bouquet_1.description,
-        )
-        # check: price db == saved price
-        self.assertEqual(
-            all_bouquets[0].price, bouquet_1.price,
-        )
-        # check: discount db == saved discount
-        self.assertEqual(
-            all_bouquets[0].discount, bouquet_1.discount,
-        )
-        # check: stock db == saved stock
-        self.assertEqual(
-            all_bouquets[0].stock, bouquet_1.stock,
-        )
-        # check: available db == saved available
-        self.assertEqual(
-            all_bouquets[0].available, bouquet_1.available,
-        )
-        # check: only_on_order db == saved only_on_order
-        self.assertEqual(
-            all_bouquets[0].only_on_order, bouquet_1.only_on_order,
-        )
-
-        # checking the 2nd element
-        # check: title db == saved title
-        self.assertEqual(
-            all_bouquets[1].title, bouquet_2.title,
-        )
-        # check: slug db == saved slug
-        self.assertEqual(
-            all_bouquets[1].slug, bouquet_2.slug,
-        )
-        # check: description db == saved description
-        self.assertEqual(
-            all_bouquets[1].description, bouquet_2.description,
-        )
-        # check: price db == saved price
-        self.assertEqual(
-            all_bouquets[1].price, bouquet_2.price,
-        )
-        # check: discount db == saved discount
-        self.assertEqual(
-            all_bouquets[1].discount, bouquet_2.discount,
-        )
-        # check: stock db == saved stock
-        self.assertEqual(
-            all_bouquets[1].stock, bouquet_2.stock,
-        )
-        # check: available db == saved available
-        self.assertEqual(
-            all_bouquets[1].available, bouquet_2.available,
-        )
-        # check: only_on_order db == saved only_on_order
-        self.assertEqual(
-            all_bouquets[1].only_on_order, bouquet_2.only_on_order,
-        )
-
-    def test_count_stock(self):
-        # add category 1
-        category_1 = Category(
-            name='Цветы_1',
-            slug='flower_1',
-        )
-        category_1.save()
-
-        # add flower_1
-        flower_1 = Flower(
-            category=Category.objects.all()[0],
-            title="Роза",
-            slug="Roze",
-            description="Белая роза",
-            price=1000,
-            discount=10,
-            all_stock=4,
-            stock_in_bouquets=0,
-            available=True,
-        )
-        flower_1.save()
-
-        # add bouquet_1
-        bouquet_1 = Bouquet(
-            title="Букет из 100 роз",
-            slug="buket_iz_100_roz",
-            description="Красивый букет из разных видов роз",
-            price=15.000,
-            discount=10,
-            stock=5,
-            available=True,
-            only_on_order=False,
-        )
-        bouquet_1.save()
-
-        composition_1 = CompositionOfTheBouquet(
-            flower=Flower.objects.all()[0],
-            bouquet=Bouquet.objects.all()[0],
-            count=1,
-        )
-        composition_1.save()
-
-        flower = Flower.objects.all()[composition_1.flower.id-1]
-        flower.stock_in_bouquets = composition_1.bouquet.stock * composition_1.count
-        flower.save()
-
-        self.assertEqual(
-            flower.stock_in_bouquets, composition_1.count * bouquet_1.stock
-        )
-        self.assertEqual(
-            composition_1.flower.id-1, 0
-        )
+    def test_update_quantity_productcomponent(self):
+        """
+        Checking update quantity_in_product and quantity_for_sale in ProductComponent
+        1. Update quantity when product.save()
+        2. ---------““--------- ProductComposition.save()
+        3. ---------““--------- OrderItem.save()
+           if Order.order_status = STATUS_WAITING_FOR_PAYMENT or STATUS_PAID
+        """
+        pass
