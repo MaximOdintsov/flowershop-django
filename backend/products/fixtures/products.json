@@ -3,8 +3,8 @@
     "model": "sessions.session",
     "pk": "9z9c7gz6tcurbbfrean87ic6b58ijbye",
     "fields": {
-        "session_data": ".eJxVizsOgzAQBe-ydYS8XvyjCxex1vZajiKlwFAh7h6QaCjnzbwdMi8rTPvxgsjb2uLWZYmfAhMgPLbE-Su_S1zYh5v78D6T-ZaPR-PeztxoLq6agoFTYe08l-ApZacsOfGIRqyMY_JaKZ8N2aB1oFqDUSiEBMcfbRc0xQ:1pAcXt:qPYm5QEPKkf3b37_M8nZ4gal2IX3_CIYu4IjUdeEflE",
-        "expire_date": "2023-01-04T19:57:01.012Z"
+        "session_data": ".eJxVizsOgzAQBe-ydYS8XvyjCxex1vZajiKlwFAh7h6QaCjnzbwdMi8rTPvxgsjb2uLWZYmfAhMgPLbE-Su_S1zYh5v78D6T-ZaPR-PeztxoLq6agoFTYe08l-ApZacsOfGIRqyMY_JaKZ8N2aB1oFqDUSiEBMcfbRc0xQ:1pAs1C:b-6vEAJFpYVX6oCv87GEiQY3X-8aymq22rSGuL6Cfns",
+        "expire_date": "2023-01-05T12:28:18.354Z"
     }
 },
 {
@@ -30,6 +30,7 @@
         "title": "Красная роза",
         "slug": "red-roze",
         "price": "200.00",
+        "old_price": "20.00",
         "new_arrival": 0,
         "total_count": 100,
         "quantity_in_product": 0,
@@ -45,6 +46,7 @@
         "title": "Ромашка",
         "slug": "chamomile",
         "price": "100.00",
+        "old_price": "10.00",
         "new_arrival": 0,
         "total_count": 100,
         "quantity_in_product": 0,
@@ -69,6 +71,21 @@
     }
 },
 {
+    "model": "products.product",
+    "pk": 3,
+    "fields": {
+        "category": 1,
+        "title": "Пустой букет",
+        "slug": "empty-bouquet",
+        "preview": "products/previews/our1_fWf1caj.jpg",
+        "price": "0.00",
+        "discount": 0,
+        "new_price": "0.00",
+        "quantity": 1,
+        "status": 2
+    }
+},
+{
     "model": "products.productgallery",
     "pk": 2,
     "fields": {
@@ -82,8 +99,7 @@
     "fields": {
         "product": 2,
         "component": 1,
-        "quantity": 10,
-        "price": "0.00"
+        "quantity": 11
     }
 },
 {
@@ -92,8 +108,7 @@
     "fields": {
         "product": 2,
         "component": 2,
-        "quantity": 10,
-        "price": "0.00"
+        "quantity": 11
     }
 },
 {
@@ -341,6 +356,222 @@
         "object_repr": "Ромашка",
         "action_flag": 2,
         "change_message": "[{\"changed\": {\"fields\": [\"\\u041d\\u0430\\u0437\\u0432\\u0430\\u043d\\u0438\\u0435 \\u043d\\u0430 \\u0430\\u043d\\u0433\\u043b\\u0438\\u0439\\u0441\\u043a\\u043e\\u043c\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 12,
+    "fields": {
+        "action_time": "2022-12-29T12:14:28.813Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "products",
+            "product"
+        ],
+        "object_id": "2",
+        "object_repr": "Букет из роз и ромашек",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 13,
+    "fields": {
+        "action_time": "2022-12-29T12:14:33.684Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "products",
+            "product"
+        ],
+        "object_id": "2",
+        "object_repr": "Букет из роз и ромашек",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"name\": \"\\u0421\\u043e\\u0441\\u0442\\u0430\\u0432\", \"object\": \"\\u041a\\u0440\\u0430\\u0441\\u043d\\u0430\\u044f \\u0440\\u043e\\u0437\\u0430 composition for \\u0411\\u0443\\u043a\\u0435\\u0442 \\u0438\\u0437 \\u0440\\u043e\\u0437 \\u0438 \\u0440\\u043e\\u043c\\u0430\\u0448\\u0435\\u043a\", \"fields\": [\"\\u041a\\u043e\\u043b\\u0438\\u0447\\u0435\\u0441\\u0442\\u0432\\u043e \\u043a\\u043e\\u043c\\u043f\\u043e\\u043d\\u0435\\u043d\\u0442\\u043e\\u0432\"]}}, {\"changed\": {\"name\": \"\\u0421\\u043e\\u0441\\u0442\\u0430\\u0432\", \"object\": \"\\u0420\\u043e\\u043c\\u0430\\u0448\\u043a\\u0430 composition for \\u0411\\u0443\\u043a\\u0435\\u0442 \\u0438\\u0437 \\u0440\\u043e\\u0437 \\u0438 \\u0440\\u043e\\u043c\\u0430\\u0448\\u0435\\u043a\", \"fields\": [\"\\u041a\\u043e\\u043b\\u0438\\u0447\\u0435\\u0441\\u0442\\u0432\\u043e \\u043a\\u043e\\u043c\\u043f\\u043e\\u043d\\u0435\\u043d\\u0442\\u043e\\u0432\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 14,
+    "fields": {
+        "action_time": "2022-12-29T12:14:55.683Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "products",
+            "productcomponent"
+        ],
+        "object_id": "2",
+        "object_repr": "Ромашка",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"\\u0426\\u0435\\u043d\\u0430\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 15,
+    "fields": {
+        "action_time": "2022-12-29T12:15:16.419Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "products",
+            "product"
+        ],
+        "object_id": "3",
+        "object_repr": "ff",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}, {\"added\": {\"name\": \"\\u0421\\u043e\\u0441\\u0442\\u0430\\u0432\", \"object\": \"\\u041a\\u0440\\u0430\\u0441\\u043d\\u0430\\u044f \\u0440\\u043e\\u0437\\u0430 composition for ff\"}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 16,
+    "fields": {
+        "action_time": "2022-12-29T12:15:53.902Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "products",
+            "product"
+        ],
+        "object_id": "3",
+        "object_repr": "ff",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 17,
+    "fields": {
+        "action_time": "2022-12-29T12:16:55.379Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "products",
+            "product"
+        ],
+        "object_id": "3",
+        "object_repr": "ff",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"name\": \"\\u0421\\u043e\\u0441\\u0442\\u0430\\u0432\", \"object\": \"\\u041a\\u0440\\u0430\\u0441\\u043d\\u0430\\u044f \\u0440\\u043e\\u0437\\u0430 composition for ff\", \"fields\": [\"\\u041a\\u043e\\u043b\\u0438\\u0447\\u0435\\u0441\\u0442\\u0432\\u043e \\u043a\\u043e\\u043c\\u043f\\u043e\\u043d\\u0435\\u043d\\u0442\\u043e\\u0432\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 18,
+    "fields": {
+        "action_time": "2022-12-29T12:17:13.183Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "products",
+            "productcomponent"
+        ],
+        "object_id": "1",
+        "object_repr": "Красная роза",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"\\u0426\\u0435\\u043d\\u0430\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 19,
+    "fields": {
+        "action_time": "2022-12-29T12:27:11.377Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "products",
+            "productcomponent"
+        ],
+        "object_id": "2",
+        "object_repr": "Ромашка",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"\\u0426\\u0435\\u043d\\u0430\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 20,
+    "fields": {
+        "action_time": "2022-12-29T12:27:11.380Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "products",
+            "productcomponent"
+        ],
+        "object_id": "1",
+        "object_repr": "Красная роза",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"\\u0426\\u0435\\u043d\\u0430\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 21,
+    "fields": {
+        "action_time": "2022-12-29T12:27:58.694Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "products",
+            "product"
+        ],
+        "object_id": "3",
+        "object_repr": "Пустой букет",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"\\u041d\\u0430\\u0437\\u0432\\u0430\\u043d\\u0438\\u0435\", \"\\u041d\\u0430\\u0437\\u0432\\u0430\\u043d\\u0438\\u0435 \\u043d\\u0430 \\u0430\\u043d\\u0433\\u043b\\u0438\\u0439\\u0441\\u043a\\u043e\\u043c\", \"\\u0421\\u0442\\u0430\\u0442\\u0443\\u0441\"]}}, {\"deleted\": {\"name\": \"\\u0421\\u043e\\u0441\\u0442\\u0430\\u0432\", \"object\": \"\\u041a\\u0440\\u0430\\u0441\\u043d\\u0430\\u044f \\u0440\\u043e\\u0437\\u0430 composition for \\u041f\\u0443\\u0441\\u0442\\u043e\\u0439 \\u0431\\u0443\\u043a\\u0435\\u0442\"}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 22,
+    "fields": {
+        "action_time": "2022-12-29T12:28:03.310Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "products",
+            "product"
+        ],
+        "object_id": "3",
+        "object_repr": "Пустой букет",
+        "action_flag": 2,
+        "change_message": "[]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 23,
+    "fields": {
+        "action_time": "2022-12-29T12:28:18.315Z",
+        "user": [
+            "maxim"
+        ],
+        "content_type": [
+            "products",
+            "product"
+        ],
+        "object_id": "3",
+        "object_repr": "Пустой букет",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"\\u041a\\u043e\\u043b\\u0438\\u0447\\u0435\\u0441\\u0442\\u0432\\u043e \\u043f\\u0440\\u043e\\u0434\\u0443\\u043a\\u0442\\u043e\\u0432\"]}}]"
     }
 }
 ]

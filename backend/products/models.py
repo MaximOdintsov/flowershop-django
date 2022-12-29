@@ -1,23 +1,10 @@
-import os
-
-from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.db import models, transaction
-from django.db.models.signals import post_save
+from django.db import models
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
-
-# import for get_absolute_url
-from django.urls import reverse
-
-from django.utils.text import slugify
-from django.utils.translation import gettext_lazy as _
-
-from django.conf import settings
-from django.conf.urls.static import static
 
 
 class ProductCategory(models.Model):
-    """Категория продукта"""
     title = models.CharField('Имя категории', max_length=100)
     slug = models.SlugField('Название на английском', max_length=150, unique=True, null=False)
 
@@ -30,14 +17,13 @@ class ProductCategory(models.Model):
 
 
 class ProductComponent(models.Model):
-    """Класс компонента, из которого состоит продукт"""
-
     title = models.CharField('Название', max_length=150)
     slug = models.SlugField('Название на английском', max_length=150, unique=True)
 
     price = models.DecimalField('Цена', max_digits=10, decimal_places=2)
-    new_arrival = models.PositiveSmallIntegerField('Новое поступление', default=0)
+    old_price = models.DecimalField('Старая цена', max_digits=10, decimal_places=2, default=-1)
 
+    new_arrival = models.PositiveSmallIntegerField('Новое поступление', default=0)
     total_count = models.PositiveSmallIntegerField('Весь запас', default=0)
     quantity_in_product = models.PositiveSmallIntegerField('Количество в продуктах', default=0)
     quantity_for_sale = models.PositiveSmallIntegerField('Количество для продажи', default=0)
@@ -54,11 +40,23 @@ class ProductComponent(models.Model):
     def __str__(self):
         return self.title
 
+    def resave_productcomposition(self):
+        """Saves all related ProductComposition when price changes"""
+        super(ProductComponent, self).save()
+
+        compositions = self.productcomposition_set.all()
+        for composition in compositions:
+            composition.save()
+        self.old_price = self.price
+
+    def save(self, *args, **kwargs):
+        if self.old_price != self.price:
+            self.resave_productcomposition()
+
+        super(ProductComponent, self).save(*args, **kwargs)
+
 
 class Product(models.Model):
-    """
-    Класс продукта
-    """
     STATUS_REVIEW = 1
     STATUS_AVAILABLE = 2
     STATUS_ONLY_ORDER = 3
@@ -92,6 +90,24 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def get_price(self):
+        price = 0
+        for composition in self.productcomposition_set.all():
+            price += composition.recalculate_composition_price
+        return price
+
+    @property
+    def get_new_price(self):
+        return (self.price/100) * (100-self.discount)
+
+
+@receiver(pre_save, sender=Product)
+def recalculate_new_price(sender, instance, **kwargs):
+    product = instance
+    product.new_price = product.get_new_price
+
+
 #     def save_orderitem(self):
 #         items = self.orderitem_set.all()
 #         for item in items:
@@ -105,7 +121,6 @@ class Product(models.Model):
 
 
 class ProductGallery(models.Model):
-    """Добавляет изображения в класс продукта"""
     product = models.ForeignKey(Product, verbose_name='Товар', on_delete=models.CASCADE)
     image = models.ImageField('Изображение', upload_to='products/images')
 
@@ -115,11 +130,9 @@ class ProductGallery(models.Model):
 
 
 class ProductComposition(models.Model):
-    """Определяет состав класса продукта"""
     product = models.ForeignKey(Product, verbose_name='Товар', on_delete=models.CASCADE)
     component = models.ForeignKey(ProductComponent, verbose_name='Выбрать цветок', on_delete=models.PROTECT)
     quantity = models.PositiveSmallIntegerField('Количество компонентов', default=0)
-    price = models.DecimalField('Общая цена компонентов', max_digits=10, decimal_places=2, default=0)
 
     class Meta:
         verbose_name = 'Состав'
@@ -127,6 +140,16 @@ class ProductComposition(models.Model):
     def __str__(self):
         return f'{self.component} composition for {self.product}'
 
+    @property
+    def recalculate_composition_price(self):
+        return self.quantity * self.component.price
+
+
+@receiver(post_save, sender=ProductComposition)
+def recalculate_price_and_new_price_product_after_save(sender, instance, **kwargs):
+    product = instance.product
+    product.price = product.get_price()
+    product.save()
 
 # def save_slug(pk, slug, title):
 #     """

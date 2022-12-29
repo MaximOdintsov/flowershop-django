@@ -170,6 +170,22 @@ class TestDataBase(TestCase):
         cart.make_order()
         self.assertEqual(cart.order_status, Order.STATUS_WAITING_FOR_PAYMENT)
 
+    def test_product_status_changing_after_applying_make_order(self):
+        """
+        Checking:
+        1. Updates ProductComponent.quantity_in_product when OrderItem.save()
+               if Order.order_status = STATUS_WAITING_FOR_PAYMENT or STATUS_PAID
+        """
+        pass
+
+    def test_update_productcomponent_quantity_of_sold_and_total_count(self):
+        """
+        Checking:
+        1. Updates quantity_of_sold when Order.readiness_status = READINESS_PREPARING
+        2. Updates quantity_of_sold and total_count when Order.order_status = STATUS_CANCELED
+        """
+        pass
+
     def test_method_get_amount_of_unpaid_orders(self):
         """
         Checking @staticmethod get_amount_of_unpaid_orders() for several cases:
