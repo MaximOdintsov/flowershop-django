@@ -55,6 +55,7 @@ class TestDataBase(TestCase):
         1. No cart
         2. Create cart
         3. Delete cart
+
         ==============
         Add: @staticmethod Order.get_cart(user: User)
         """
@@ -89,6 +90,7 @@ class TestDataBase(TestCase):
         Checking to set price to product for orderitem:
         1. When saving orderitem
         2. When product price is changes
+
         ================================
         Add: @receiver orderitem_price_setting()
              Product.save_orderitem()
@@ -117,6 +119,7 @@ class TestDataBase(TestCase):
         2. -----------""----------- after adding items
         3. -----------""----------- after deleting 1 item
         4. -----------""----------- after deleting items
+
         =================================================
         Add: @property Orderitem.amount
              Order.get_amount()
@@ -156,6 +159,7 @@ class TestDataBase(TestCase):
         Checking cart status change after Order.make_order():
         1. Attempt to change the status for an empty cart
         2. ---------------""--------------- a non-empty cart
+
         ====================================================
         Add: Order.make_order()
         """
@@ -194,6 +198,7 @@ class TestDataBase(TestCase):
         3. After cart.make_order()
         4. After order is paid
         5. After delete all orders
+
         ==========================
         Add: Order.get_amount_of_unpaid_orders(user: User)
         """

@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models.signals import post_save, pre_save
@@ -21,12 +23,9 @@ class ProductComponent(models.Model):
     slug = models.SlugField('Название на английском', max_length=150, unique=True)
 
     price = models.DecimalField('Цена', max_digits=10, decimal_places=2)
-    old_price = models.DecimalField('Старая цена', max_digits=10, decimal_places=2, default=-1)
 
     new_arrival = models.PositiveSmallIntegerField('Новое поступление', default=0)
-    total_count = models.PositiveSmallIntegerField('Весь запас', default=0)
-    quantity_in_product = models.PositiveSmallIntegerField('Количество в продуктах', default=0)
-    quantity_for_sale = models.PositiveSmallIntegerField('Количество для продажи', default=0)
+    quantity_in_stock = models.PositiveSmallIntegerField('Запас', default=0)
     quantity_of_sold = models.PositiveSmallIntegerField('Количество проданных', default=0)
 
     available = models.BooleanField(verbose_name='Доступен', default=False)
@@ -40,20 +39,27 @@ class ProductComponent(models.Model):
     def __str__(self):
         return self.title
 
-    def resave_productcomposition(self):
-        """Saves all related ProductComposition when price changes"""
-        super(ProductComponent, self).save()
-
+    def save_related_productcompositions(self):
+        """Saves all related ProductComposition when ProductComponent.price changes"""
         compositions = self.productcomposition_set.all()
         for composition in compositions:
             composition.save()
-        self.old_price = self.price
 
-    def save(self, *args, **kwargs):
-        if self.old_price != self.price:
-            self.resave_productcomposition()
+    def add_new_arrival(self):
+        self.quantity_in_stock += self.new_arrival
+        self.new_arrival = 0
 
-        super(ProductComponent, self).save(*args, **kwargs)
+
+@receiver(pre_save, sender=ProductComponent)
+def recalculate_quantity_in_stock_before_save(sender, instance, **kwargs):
+    component = instance
+    component.add_new_arrival()
+
+
+@receiver(post_save, sender=ProductComponent)
+def save_productcomposition(sender, instance, **kwargs):
+    component = instance
+    component.save_related_productcompositions()
 
 
 class Product(models.Model):
@@ -78,7 +84,6 @@ class Product(models.Model):
     discount = models.PositiveSmallIntegerField('Скидка в %', default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     new_price = models.DecimalField('Цена со скидкой', max_digits=10, decimal_places=2, default=0)
 
-    quantity = models.PositiveSmallIntegerField('Количество продуктов', default=0)
     status = models.PositiveSmallIntegerField('Статус', choices=STATUS_CHOICES, default=STATUS_REVIEW)
 
     class Meta:
@@ -92,14 +97,34 @@ class Product(models.Model):
 
     @property
     def get_price(self):
-        price = 0
+        price = Decimal(0)
         for composition in self.productcomposition_set.all():
-            price += composition.recalculate_composition_price
+            price += composition.get_composition_price
         return price
 
     @property
     def get_new_price(self):
         return (self.price/100) * (100-self.discount)
+
+    @property
+    def get_available_quantity_of_products(self):
+        compositions = self.productcomposition_set.all()
+        number_of_composition_available = []
+
+        for composition in compositions:
+            quantity = composition.component.quantity_in_stock // composition.quantity
+            number_of_composition_available.append(quantity)
+
+        if number_of_composition_available:
+            return min(number_of_composition_available)
+        return 0
+
+    @property
+    def get_status(self):
+        if self.get_available_quantity_of_products > 0:
+            return self.STATUS_AVAILABLE
+        else:
+            return self.STATUS_ONLY_ORDER
 
 
 @receiver(pre_save, sender=Product)
@@ -141,15 +166,17 @@ class ProductComposition(models.Model):
         return f'{self.component} composition for {self.product}'
 
     @property
-    def recalculate_composition_price(self):
+    def get_composition_price(self):
         return self.quantity * self.component.price
 
 
 @receiver(post_save, sender=ProductComposition)
-def recalculate_price_and_new_price_product_after_save(sender, instance, **kwargs):
+def save_product(sender, instance, **kwargs):
     product = instance.product
-    product.price = product.get_price()
+    product.price = product.get_price
+    product.status = product.get_status
     product.save()
+
 
 # def save_slug(pk, slug, title):
 #     """

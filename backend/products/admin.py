@@ -38,8 +38,8 @@ class ProductComponent(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
 
     fields = ('title', 'slug', 'price', 'total_count')
-    list_display = ['title', 'price', 'new_arrival', 'total_count', 'quantity_in_product',
-                    'quantity_for_sale', 'quantity_of_sold', 'available']
+    list_display = ['title', 'price', 'new_arrival', 'quantity_in_stock',
+                    'quantity_of_sold', 'available']
     list_editable = ['price', 'new_arrival', 'available']
 
     list_per_page = 40
@@ -56,8 +56,8 @@ class Product(admin.ModelAdmin):
     inlines = [ProductGalleryInline, ProductCompositionInline]
 
     fields = ('category', 'title', 'slug', 'preview', 'discount', 'status')
-    list_display = ['title', 'category', 'discount', 'new_price', 'quantity', 'status']
-    list_editable = ['category', 'discount', 'quantity', 'status']
+    list_display = ['title', 'category', 'discount', 'new_price', 'status']
+    list_editable = ['category', 'discount', 'status']
 
     list_per_page = 40
 

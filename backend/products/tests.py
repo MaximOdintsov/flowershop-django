@@ -22,7 +22,11 @@ class TestDataBase(TestCase):
         self.composition_1 = ProductComposition.objects.get(id=3)
         self.composition_2 = ProductComposition.objects.get(id=2)
         self.product = Product.objects.get(slug='bouquet-of-roses-and-daisies')
-        self.product_empty = Product.objects.get(slug='empty-bouquet')
+        self.product_empty = Product.objects.create(category=self.category,
+                                                    title='empty',
+                                                    slug='empty',
+                                                    preview='/backend/products/img/1.jpg',
+                                                    status=Product.STATUS_AVAILABLE)
 
     def test_data(self):
         components = ProductComponent.objects.all().count()
@@ -37,19 +41,18 @@ class TestDataBase(TestCase):
 
     def test_calculate_productcomposition_price(self):
         """
-        Checking if ProductComposition.recalculate_composition_price
-        is calculated correctly:
+        Checking if ProductComposition.get_composition_price is calculated correctly:
         1. When saving ProductComposition
         2. When changing ProductComponent.price
+
         ============================================
-        Add: @property ProductComposition.recalculate_composition_price
+        Add: @property ProductComposition.get_composition_price
         """
 
         # 1. When saving ProductComposition
-        composition = ProductComposition.objects.create(product=self.product,
-                                                        component=self.component_1,
-                                                        quantity=1)
-        self.assertEqual(composition.recalculate_composition_price, self.component_1.price)
+        composition = ProductComposition.objects.create(product=self.product_empty, quantity=1,
+                                                          component=self.component_1)
+        self.assertEqual(composition.get_composition_price, self.component_1.price)
 
         # 2. When changing ProductComponent.price
         self.assertEqual(self.component_1.price, Decimal(100))
@@ -60,13 +63,13 @@ class TestDataBase(TestCase):
         self.component_1.save()
         self.component_2.save()
 
-        self.composition_1 = ProductComposition.objects.get(id=3)
-        self.composition_2 = ProductComposition.objects.get(id=2)
-        price_1 = 2 * self.composition_1.quantity
-        price_2 = 6 * self.composition_2.quantity
+        composition_1 = ProductComposition.objects.get(id=3)
+        composition_2 = ProductComposition.objects.get(id=2)
+        price_1 = 2 * composition_1.quantity
+        price_2 = 6 * composition_2.quantity
 
-        self.assertEqual(self.composition_1.recalculate_composition_price, price_1)
-        self.assertEqual(self.composition_2.recalculate_composition_price, price_2)
+        self.assertEqual(composition_1.get_composition_price, price_1)
+        self.assertEqual(composition_2.get_composition_price, price_2)
 
     def test_calculate_product_price(self):
         """
@@ -75,26 +78,25 @@ class TestDataBase(TestCase):
         2. When changing ProductComposition.quantity
         3. ------""----- ProductComponent.price
         4. ------""----- Product.discount
+        5. When ProductComposition removing
+
         =============================================
         Add: @property Product.get_price
-             @receiver(sender=ProductComposition) recalculate_price_and_new_price_product_after_save()
+             @receiver(sender=ProductComposition) save_product()
              @property Product.get_new_price
              @receiver(sender=Product) recalculate_new_price()
-
+             ProductComponent.save_related_productcompositions()
+             @receiver(sender=ProductComponent) save_productcomposition()
         """
 
         #  1. When ProductComposition adding to products
         self.assertEqual(self.product_empty.price, Decimal(0))
-        composition_1 = ProductComposition.objects.create(id=4,
-                                                          product=self.product_empty,
-                                                          component=self.component_1,
-                                                          quantity=1)
-        composition_2 = ProductComposition.objects.create(id=5,
-                                                          product=self.product_empty,
-                                                          component=self.component_2,
-                                                          quantity=1)
+        composition_1 = ProductComposition.objects.create(product=self.product_empty, quantity=1,
+                                                          component=self.component_1)
+        composition_2 = ProductComposition.objects.create(product=self.product_empty, quantity=1,
+                                                          component=self.component_2)
 
-        product_empty = Product.objects.get(slug='empty-bouquet')
+        product_empty = Product.objects.get(slug='empty')
         self.assertEqual(product_empty.price, Decimal(100*1 + 200*1))
 
         # 2. When changing ProductComposition.quantity
@@ -103,7 +105,7 @@ class TestDataBase(TestCase):
         composition_1.save()
         composition_2.save()
 
-        product_empty = Product.objects.get(slug='empty-bouquet')
+        product_empty = Product.objects.get(slug='empty')
         self.assertEqual(product_empty.price, Decimal(100 * 2 + 200 * 3))
 
         # 3. ------""----- ProductComponent.price
@@ -112,7 +114,7 @@ class TestDataBase(TestCase):
         self.component_1.save()
         self.component_2.save()
 
-        product_empty = Product.objects.get(slug='empty-bouquet')
+        product_empty = Product.objects.get(slug='empty')
         price = (4 * 2) + (5 * 3)
 
         self.assertEqual(product_empty.price, price)
@@ -121,23 +123,75 @@ class TestDataBase(TestCase):
         product_empty.discount = 10
         product_empty.save()
 
+        product_empty = Product.objects.get(slug='empty')
         self.assertEqual(product_empty.new_price, Decimal('20.70'))
 
-    def test_update_productcomponent_quantity_in_product_and_quantity_for_sale(self):
+        # 5. When ProductComposition removing
+        self.assertEqual(composition_1.get_composition_price, Decimal(8))
+
+        composition_1.delete()
+
+        price = Decimal('20.70') - composition_1.get_composition_price
+
+        product_empty = Product.objects.get(slug='empty')
+        self.assertEqual(product_empty.new_price, price)
+
+
+    def test_update_productcomponent_quantity(self):
         """
         Checking:
-        1. Updates quantity_in_product when Product.save()
-        2. ---------------““--------------- ProductComposition.save()
-        """
-        pass
+        1. Updates ProductComponent.quantity_in_stock when ProductComponent.new_arrival changes
+        2. Product.status change if ProductComponent.quantity_in_stock is not enough
+        3. Product.status change if ProductComponent.quantity_in_stock is enough
+        4. Product.status change if ProductComponent.quantity_in_stock has been changed
 
-    def test_update_productcomponent_total_count_and_new_arrival(self):
+        ====================================================================================================
+        Add: ProductComponent.add_new_arrival()
+             @receiver(sender=ProductComponent) recalculate_quantity_in_stock_before_save()
+             @property Product.get_available_quantity_of_products
+             Product.get_status()
+             @receiver(sender=ProductComposition) save_product()
         """
-        Checking:
-        1. Updates total_count when new_arrival is added
-        2. new_arrival is reset to zero after adding to total_count
-        3. quantity_in_product recalculated
-        """
-        pass
 
+        # 1. Updates ProductComponent.quantity_in_stock when ProductComponent.new_arrival changes
+        self.assertEqual(self.component_1.quantity_in_stock, 100)
 
+        self.component_1.new_arrival = 10
+        self.component_1.save()
+
+        self.assertEqual(self.component_1.new_arrival, 0)
+        self.assertEqual(self.component_1.quantity_in_stock, 110)
+
+        # 2. Product.status change if ProductComponent.quantity_in_stock is not enough
+        self.assertEqual(self.component_1.quantity_in_stock, 110)
+        self.assertEqual(self.component_2.quantity_in_stock, 100)
+        self.assertEqual(self.product_empty.status, Product.STATUS_AVAILABLE)
+
+        composition_1 = ProductComposition.objects.create(product=self.product_empty, quantity=500,
+                                                          component=self.component_1)
+        composition_2 = ProductComposition.objects.create(product=self.product_empty, quantity=20,
+                                                          component=self.component_2)
+
+        product_empty = Product.objects.get(slug='empty')
+        self.assertEqual(product_empty.get_available_quantity_of_products, 0)
+        self.assertEqual(product_empty.status, Product.STATUS_ONLY_ORDER)
+
+        # 3. Product.status change if ProductComponent.quantity_in_stock is enough
+        composition_1.quantity = 10
+        composition_2.quantity = 10
+        composition_1.save()
+        composition_2.save()
+
+        product_empty = Product.objects.get(slug='empty')
+        self.assertEqual(product_empty.get_available_quantity_of_products, 10)
+        self.assertEqual(product_empty.status, Product.STATUS_AVAILABLE)
+
+        # 4. Product.status change if ProductComponent.quantity_in_stock has been changed
+        self.component_1.quantity_in_stock = 21
+        self.component_2.quantity_in_stock = 2
+        self.component_1.save()
+        self.component_2.save()
+
+        product_empty = Product.objects.get(slug='empty')
+        self.assertEqual(product_empty.get_available_quantity_of_products, 0)
+        self.assertEqual(product_empty.status, Product.STATUS_ONLY_ORDER)
