@@ -83,6 +83,7 @@ class TestDataBase(TestCase):
         =============================================
         Add: @property Product.get_price
              @receiver(sender=ProductComposition) save_product()
+
              @property Product.get_new_price
              @receiver(sender=Product) recalculate_new_price()
              ProductComponent.save_related_productcompositions()
@@ -101,21 +102,21 @@ class TestDataBase(TestCase):
 
         # 2. When changing ProductComposition.quantity
         composition_1.quantity = 2
-        composition_2.quantity = 3
+        composition_2.quantity = 1
         composition_1.save()
         composition_2.save()
 
         product_empty = Product.objects.get(slug='empty')
-        self.assertEqual(product_empty.price, Decimal(100 * 2 + 200 * 3))
+        self.assertEqual(product_empty.price, Decimal(100 * 2 + 200 * 1))
 
         # 3. ------""----- ProductComponent.price
-        self.component_1.price = Decimal(4)
-        self.component_2.price = Decimal(5)
+        self.component_1.price = Decimal(10)
+        self.component_2.price = Decimal(20)
         self.component_1.save()
         self.component_2.save()
 
         product_empty = Product.objects.get(slug='empty')
-        price = (4 * 2) + (5 * 3)
+        price = (10 * 2) + (20 * 1)
 
         self.assertEqual(product_empty.price, price)
 
@@ -124,18 +125,17 @@ class TestDataBase(TestCase):
         product_empty.save()
 
         product_empty = Product.objects.get(slug='empty')
-        self.assertEqual(product_empty.new_price, Decimal('20.70'))
+        self.assertEqual(product_empty.new_price, Decimal(36))
 
-        # 5. When ProductComposition removing
-        self.assertEqual(composition_1.get_composition_price, Decimal(8))
-
+        # 5. Price recalculation when removing ProductComposition
+        self.assertEqual(composition_1.get_composition_price, Decimal(20))
+        self.assertEqual(product_empty.discount, 10)
         composition_1.delete()
-
-        price = Decimal('20.70') - composition_1.get_composition_price
+        price = Decimal(40) - Decimal(20)
 
         product_empty = Product.objects.get(slug='empty')
-        self.assertEqual(product_empty.new_price, price)
-
+        self.assertEqual(product_empty.discount, 0)
+        self.assertEqual(product_empty.price, price)
 
     def test_update_productcomponent_quantity(self):
         """

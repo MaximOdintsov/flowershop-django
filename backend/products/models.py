@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save, pre_save, post_delete
 from django.dispatch import receiver
 
 
@@ -112,8 +112,9 @@ class Product(models.Model):
         number_of_composition_available = []
 
         for composition in compositions:
-            quantity = composition.component.quantity_in_stock // composition.quantity
-            number_of_composition_available.append(quantity)
+            if composition.quantity > 0:
+                quantity = composition.component.quantity_in_stock // composition.quantity
+                number_of_composition_available.append(quantity)
 
         if number_of_composition_available:
             return min(number_of_composition_available)
@@ -177,6 +178,13 @@ def save_product(sender, instance, **kwargs):
     product.status = product.get_status
     product.save()
 
+
+@receiver(post_delete, sender=ProductComposition)
+def save_product(sender, instance, **kwargs):
+    product = instance.product
+    product.price = product.get_price
+    product.status = product.get_status
+    product.save()
 
 # def save_slug(pk, slug, title):
 #     """
