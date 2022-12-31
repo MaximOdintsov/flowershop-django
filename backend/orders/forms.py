@@ -42,18 +42,18 @@ class OrderCreateForm(forms.ModelForm):
             }
         ),
     )
-    email = forms.EmailField(
-        label='Электронная почта для отправки чека',
-        min_length=1,
-        error_messages=error_messages,
-        required=False,
-        widget=forms.EmailInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Электронная почта для отправки чека',
-            }
-        ),
-    )
+    # email = forms.EmailField(
+    #     label='Электронная почта для отправки чека',
+    #     min_length=1,
+    #     error_messages=error_messages,
+    #     required=False,
+    #     widget=forms.EmailInput(
+    #         attrs={
+    #             'class': 'form-control',
+    #             'placeholder': 'Электронная почта для отправки чека',
+    #         }
+    #     ),
+    # )
     address = forms.CharField(
         label='Адрес получателя',
         min_length=1,

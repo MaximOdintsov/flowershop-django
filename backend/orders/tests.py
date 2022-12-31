@@ -174,19 +174,29 @@ class TestDataBase(TestCase):
         cart.make_order()
         self.assertEqual(cart.order_status, Order.STATUS_WAITING_FOR_PAYMENT)
 
-    def test_product_status_changing_after_applying_make_order(self):
+    def test_quantity_productcomponent_after_applying_make_order(self):
         """
         Checking:
-        1. Updates ProductComponent.quantity_in_product when OrderItem.save()
-               if Order.order_status = STATUS_WAITING_FOR_PAYMENT or STATUS_PAID
+        1. If Product.status = STATUS_ONLY_ORDER, quantity_in_stock doesn't change
+        2. if Order.readiness_status = READINESS_RECEIVED,
+           ProductComponent.quantity_in_stock and quantity_of_sold must be recalculated
+
         """
         pass
 
-    def test_update_productcomponent_quantity_of_sold_and_total_count(self):
+    def test_changing_order_amount_when_price_product_changes(self):
         """
-        Checking:
-        1. Updates quantity_of_sold when Order.readiness_status = READINESS_PREPARING
-        2. Updates quantity_of_sold and total_count when Order.order_status = STATUS_CANCELED
+        1. Checking changing OrderItem.price when Product.price changes
+        2. Checking changing Order.amount when Product.price changes
+        """
+        pass
+
+    def test_availability_buying_product(self):
+        """
+        1. If OrderItem.product.status = STATUS_UNAVAILABLE,
+           Order.STATUS_WAITING_FOR_PAYMENT cannot be change
+        2. If OrderItem.product.status = STATUS_ONLY_ORDER,
+           Order.STATUS_WAITING_FOR_PAYMENT cannot be change
         """
         pass
 
