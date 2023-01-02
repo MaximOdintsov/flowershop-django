@@ -22,11 +22,11 @@ class TestDataBase(TestCase):
         self.composition_1 = ProductComposition.objects.get(id=3)
         self.composition_2 = ProductComposition.objects.get(id=2)
         self.product = Product.objects.get(slug='bouquet-of-roses-and-daisies')
-        self.product_empty = Product.objects.create(category=self.category,
+        self.product_empty = Product.objects.create(id=10,
+                                                    category=self.category,
                                                     title='empty',
                                                     slug='empty',
-                                                    preview='/backend/products/img/1.jpg',
-                                                    status=Product.STATUS_AVAILABLE)
+                                                    preview='/backend/products/img/1.jpg',)
 
     def test_data(self):
         components = ProductComponent.objects.all().count()
@@ -51,7 +51,7 @@ class TestDataBase(TestCase):
 
         # 1. When saving ProductComposition
         composition = ProductComposition.objects.create(product=self.product_empty, quantity=1,
-                                                          component=self.component_1)
+                                                        component=self.component_1)
         self.assertEqual(composition.get_composition_price, self.component_1.price)
 
         # 2. When changing ProductComponent.price
@@ -82,7 +82,8 @@ class TestDataBase(TestCase):
 
         =============================================
         Add: @property Product.get_price
-             @receiver(sender=ProductComposition) save_product()
+             @receiver(sender=ProductComposition) save_product_after_save()
+             @receiver(sender=ProductComposition) save_product_after_delete()
 
              @property Product.get_new_price
              @receiver(sender=Product) recalculate_new_price()
@@ -137,6 +138,30 @@ class TestDataBase(TestCase):
         self.assertEqual(product_empty.discount, 0)
         self.assertEqual(product_empty.price, price)
 
+    def test_available_product(self):
+        """
+        If ProductComponent.available is False, then all related Product.status = STATUS_UNAVAILABLE
+
+        ============================================================================================
+        Add: @property Product.get_productcomponent_status
+        """
+
+        ProductComposition.objects.create(product=self.product_empty, quantity=1,
+                                          component=self.component_1)
+        ProductComposition.objects.create(product=self.product_empty, quantity=1,
+                                          component=self.component_2)
+        product = Product.objects.get(slug='empty')
+
+        self.assertEqual(self.component_1.available, True)
+        self.assertEqual(self.component_2.available, True)
+        self.assertNotEqual(product.status, Product.STATUS_UNAVAILABLE)
+
+        self.component_1.available = False
+        self.component_1.save()
+        product = Product.objects.get(slug='empty')
+
+        self.assertEqual(product.status, Product.STATUS_UNAVAILABLE)
+
     def test_update_productcomponent_quantity(self):
         """
         Checking:
@@ -150,7 +175,6 @@ class TestDataBase(TestCase):
              @receiver(sender=ProductComponent) recalculate_quantity_in_stock_before_save()
              @property Product.get_available_quantity_of_products
              Product.get_status()
-             @receiver(sender=ProductComposition) save_product()
         """
 
         # 1. Updates ProductComponent.quantity_in_stock when ProductComponent.new_arrival changes
@@ -165,7 +189,7 @@ class TestDataBase(TestCase):
         # 2. Product.status change if ProductComponent.quantity_in_stock is not enough
         self.assertEqual(self.component_1.quantity_in_stock, 110)
         self.assertEqual(self.component_2.quantity_in_stock, 100)
-        self.assertEqual(self.product_empty.status, Product.STATUS_AVAILABLE)
+        self.assertEqual(self.product_empty.status, Product.STATUS_REVIEW)
 
         composition_1 = ProductComposition.objects.create(product=self.product_empty, quantity=500,
                                                           component=self.component_1)
@@ -195,3 +219,4 @@ class TestDataBase(TestCase):
         product_empty = Product.objects.get(slug='empty')
         self.assertEqual(product_empty.get_available_quantity_of_products, 0)
         self.assertEqual(product_empty.status, Product.STATUS_ONLY_ORDER)
+

@@ -29,6 +29,7 @@ class ProductComponent(models.Model):
     quantity_of_sold = models.PositiveSmallIntegerField('Количество проданных', default=0)
 
     available = models.BooleanField(verbose_name='Доступен', default=False)
+    show_in_filter = models.BooleanField(verbose_name='Показывать в фильтре', default=False)
 
     class Meta:
         verbose_name = 'Компонент'
@@ -127,23 +128,31 @@ class Product(models.Model):
         else:
             return self.STATUS_ONLY_ORDER
 
+    @property
+    def get_productcomponent_status(self):
+        compositions = self.productcomposition_set.all()
+        for composition in compositions:
+            return composition.component.available
+
+    def save_orderitem(self):
+        items = self.orderitem_set.all()
+        for item in items:
+            item.save()
+
 
 @receiver(pre_save, sender=Product)
 def recalculate_new_price(sender, instance, **kwargs):
     product = instance
+    if product.get_productcomponent_status is False:
+        product.status = Product.STATUS_UNAVAILABLE
+
     product.new_price = product.get_new_price
 
 
-#     def save_orderitem(self):
-#         items = self.orderitem_set.all()
-#         for item in items:
-#             item.save()
-#
-#
-# @receiver(post_save, sender=Product)
-# def resave_related_order_items_after_save(sender, instance, **kwargs):
-#     product = instance
-#     product.save_orderitem()
+@receiver(post_save, sender=Product)
+def save_orderitem_after_save(sender, instance, **kwargs):
+    product = instance
+    product.save_orderitem()
 
 
 class ProductGallery(models.Model):
@@ -172,7 +181,7 @@ class ProductComposition(models.Model):
 
 
 @receiver(post_save, sender=ProductComposition)
-def save_product(sender, instance, **kwargs):
+def save_product_after_save(sender, instance, **kwargs):
     product = instance.product
     product.price = product.get_price
     product.status = product.get_status
@@ -180,7 +189,7 @@ def save_product(sender, instance, **kwargs):
 
 
 @receiver(post_delete, sender=ProductComposition)
-def save_product(sender, instance, **kwargs):
+def save_product_after_delete(sender, instance, **kwargs):
     product = instance.product
     product.price = product.get_price
     product.status = product.get_status

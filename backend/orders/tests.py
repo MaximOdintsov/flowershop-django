@@ -5,7 +5,7 @@ from django.test import TestCase
 from .models import Order, OrderItem
 from products.models import (ProductComposition,
                              ProductComponent,
-                             Product, )
+                             Product)
 from django.utils import timezone
 
 
@@ -22,13 +22,14 @@ class TestDataBase(TestCase):
     def setUp(self):
         self.user = User.objects.get(username='maxim')
 
-        self.product_1 = Product.objects.get(title='Ромашка')
-        self.product_2 = Product.objects.get(title='Букет из ромашек')
-        self.product_3 = Product.objects.get(title='Букет из ромашек и роз')
+        self.component_1 = ProductComponent.objects.get(slug='red-roze')
+        self.component_2 = ProductComponent.objects.get(slug='chamomile')
+        self.product_1 = Product.objects.get(slug='bouquet-of-roses-and-daisies')
+        self.product_2 = Product.objects.get(slug='bouquet-of-chamomile')
 
     def test_get_data(self):
         self.assertGreater(ProductComponent.objects.all().count(), 0)
-        self.assertGreater(Product.objects.all().count(), 2)
+        self.assertGreater(Product.objects.all().count(), 1)
         self.assertGreater(ProductComposition.objects.all().count(), 0)
         self.assertGreater(User.objects.all().count(), 0)
 
@@ -89,28 +90,36 @@ class TestDataBase(TestCase):
         """
         Checking to set price to product for orderitem:
         1. When saving orderitem
-        2. When product price is changes
-
+        2. When ProductComponent.price is changes
+        3. When ProductComposition.quantity is changes
         ================================
         Add: @receiver orderitem_price_setting()
              Product.save_orderitem()
-             @receiver Product.resave_related_order_items_after_save()
+             @receiver Product.save_orderitem_after_save()
         """
 
         # 1. When saving orderitem
         cart = Order.get_cart(self.user)
-        item = OrderItem.objects.create(id=5000, order=cart, product=self.product_3, quantity=1)
-        self.assertEqual(item.price, self.product_3.discount_price)
+        item = OrderItem.objects.create(id=1000, order=cart, product=self.product_1, quantity=1)
+        self.assertEqual(item.price, self.product_1.new_price)
 
-        # 2. When product price is changes
-        component = ProductComponent.objects.get(title='Ромашка')
-        component.price = Decimal(1000)
-        component.save()
+        # 2. When ProductComponent.price is changes
+        self.component_1.price = Decimal(10)
+        self.component_1.save()
 
-        product = Product.objects.get(title='Букет из ромашек и роз')
-        item = OrderItem.objects.get(id=5000)
+        item = OrderItem.objects.get(id=1000)
+        self.assertEqual(item.price, Decimal(1100))
 
-        self.assertEqual(item.price, product.discount_price)
+        # 3. When ProductComposition.quantity is changes
+        product = Product.objects.get(slug='bouquet-of-roses-and-daisies')
+        composition = product.productcomposition_set.all()[0]
+        self.assertEqual(composition.quantity, 10)
+
+        composition.quantity = 20
+        composition.save()
+
+        item = OrderItem.objects.get(id=1000)
+        self.assertEqual(item.price, Decimal(2100))
 
     def test_order_amount_recalculation_after_changed_orderitem(self):
         """
@@ -134,22 +143,19 @@ class TestDataBase(TestCase):
         # 2. -----------""----------- after adding items
         i_1 = OrderItem.objects.create(order=cart, product=self.product_1, quantity=2)
         i_2 = OrderItem.objects.create(order=cart, product=self.product_2, quantity=5)
-        i_3 = OrderItem.objects.create(order=cart,  product=self.product_3, quantity=4)
-        amount = (self.product_1.discount_price * 2) + (self.product_2.discount_price * 5) +\
-                 (self.product_3.discount_price * 4)
+        amount = (self.product_1.new_price * 2) + (self.product_2.new_price * 5)
 
         cart = Order.get_cart(self.user)
         self.assertEqual(cart.amount, Decimal(amount))
 
         # 3. -----------""----------- after deleting 1 item
-        i_3.delete()
-        amount = (self.product_1.discount_price * 2) + (self.product_2.discount_price * 5)
+        i_1.delete()
+        amount = (self.product_2.new_price * 5)
 
         cart = Order.get_cart(self.user)
         self.assertEqual(cart.amount, Decimal(amount))
 
         # 4. -----------""----------- after deleting all items
-        i_1.delete()
         i_2.delete()
         cart = Order.get_cart(self.user)
         self.assertEqual(cart.amount, Decimal(0))
@@ -172,74 +178,173 @@ class TestDataBase(TestCase):
         # 2. ---------------""--------------- a non-empty cart
         OrderItem.objects.create(order=cart, product=self.product_1, quantity=2)
         cart.make_order()
-        self.assertEqual(cart.order_status, Order.STATUS_WAITING_FOR_PAYMENT)
+        self.assertEqual(cart.order_status, Order.STATUS_PENDING_CONFIRMATION)
 
-    def test_quantity_productcomponent_after_applying_make_order(self):
+    def test_recalculation_of_the_quantity_of_components_after_make_order(self):
         """
         Checking:
-        1. If Product.status = STATUS_ONLY_ORDER, quantity_in_stock doesn't change
-        2. if Order.readiness_status = READINESS_RECEIVED,
+        1. If Order.order_status == STATUS_PENDING_CONFIRMATION,
+           ProductComponent.quantity_in_stock and quantity_of_sold should not be recalculated
+        2. If Order.order_status == STATUS_CONFIRMED,
            ProductComponent.quantity_in_stock and quantity_of_sold must be recalculated
+        3. If Order.order_status == STATUS_CANCELED,
+           ProductComponent.quantity_in_stock and quantity_of_sold should return back
+        4. If Order.delete() when Order.order_status == STATUS_CANCELED,
+           ProductComponent.quantity_in_stock and quantity_of_sold don't change
+        5. If Order.delete() when Order.order_status == STATUS_CONFIRMED,
+           ProductComponent.quantity_in_stock and quantity_of_sold should return back
+
+        =======================================================================================
+        Add: Order.recalculate_components_quantity()
+             Order.save_for_models()
+             @receiver(sender=Order) recalculate_component_quantity_before_save()
+             @receiver(sender=Order) recalculate_component_quantity_before_delete()
 
         """
-        pass
+
+        # 1. If Order.order_status == STATUS_PENDING_CONFIRMATION,
+        #    ProductComponent.quantity_in_stock and quantity_of_sold should not be recalculated
+        cart = Order.get_cart(self.user)
+        OrderItem.objects.create(order=cart, product=self.product_1, quantity=1)
+        OrderItem.objects.create(order=cart, product=self.product_2, quantity=2)
+        self.assertEqual(self.component_1.quantity_in_stock, 100)
+        self.assertEqual(self.component_1.quantity_of_sold, 0)
+        self.assertEqual(self.component_2.quantity_in_stock, 100)
+        self.assertEqual(self.component_2.quantity_of_sold, 0)
+        cart.make_order()
+
+        order = cart
+        order.readiness_status = Order.STATUS_PENDING_CONFIRMATION
+        order.save()
+
+        component_1 = ProductComponent.objects.get(slug='red-roze')
+        component_2 = ProductComponent.objects.get(slug='chamomile')
+        self.assertEqual(component_1.quantity_in_stock, 100)
+        self.assertEqual(component_1.quantity_of_sold, 0)
+        self.assertEqual(component_2.quantity_in_stock, 100)
+        self.assertEqual(component_2.quantity_of_sold, 0)
+
+        # 2. If Order.order_status == STATUS_CONFIRMED,
+        #    ProductComponent.quantity_in_stock and quantity_of_sold must be recalculated
+        order.order_status = Order.STATUS_CONFIRMED
+        order.save()
+        self.assertEqual(order.update_component_flag, True)
+
+        component_1 = ProductComponent.objects.get(slug='red-roze')
+        component_2 = ProductComponent.objects.get(slug='chamomile')
+        self.assertEqual(component_1.quantity_in_stock, 90)
+        self.assertEqual(component_1.quantity_of_sold, 10)
+        self.assertEqual(component_2.quantity_in_stock, 70)
+        self.assertEqual(component_2.quantity_of_sold, 30)
+
+        # 3. If Order.order_status == STATUS_CANCELED,
+        #    ProductComponent.quantity_in_stock and quantity_of_sold should return back
+        order.order_status = Order.STATUS_CANCELED
+        order.save()
+        self.assertEqual(order.update_component_flag, False)
+
+        component_1 = ProductComponent.objects.get(slug='red-roze')
+        component_2 = ProductComponent.objects.get(slug='chamomile')
+        self.assertEqual(component_1.quantity_in_stock, 100)
+        self.assertEqual(component_1.quantity_of_sold, 0)
+        self.assertEqual(component_2.quantity_in_stock, 100)
+        self.assertEqual(component_2.quantity_of_sold, 0)
+
+        # 4. If Order.delete() when Order.order_status == STATUS_CANCELED,
+        #    ProductComponent.quantity_in_stock and quantity_of_sold don't change
+
+        order.delete()
+        component_1 = ProductComponent.objects.get(slug='red-roze')
+        component_2 = ProductComponent.objects.get(slug='chamomile')
+        self.assertEqual(component_1.quantity_in_stock, 100)
+        self.assertEqual(component_1.quantity_of_sold, 0)
+        self.assertEqual(component_2.quantity_in_stock, 100)
+        self.assertEqual(component_2.quantity_of_sold, 0)
+
+        # 5. If Order.delete() when Order.order_status == STATUS_CONFIRMED,
+        #    ProductComponent.quantity_in_stock and quantity_of_sold should return back
+        cart = Order.get_cart(self.user)
+        OrderItem.objects.create(order=cart, product=self.product_1, quantity=1)
+        OrderItem.objects.create(order=cart, product=self.product_2, quantity=2)
+        self.assertEqual(self.component_1.quantity_in_stock, 100)
+        self.assertEqual(self.component_1.quantity_of_sold, 0)
+        self.assertEqual(self.component_2.quantity_in_stock, 100)
+        self.assertEqual(self.component_2.quantity_of_sold, 0)
+        cart.make_order()
+
+        order = cart
+        order.order_status = Order.STATUS_CONFIRMED
+        order.save()
+        self.assertEqual(order.update_component_flag, True)
+
+        order.delete()
+        component_1 = ProductComponent.objects.get(slug='red-roze')
+        component_2 = ProductComponent.objects.get(slug='chamomile')
+        self.assertEqual(component_1.quantity_in_stock, 100)
+        self.assertEqual(component_1.quantity_of_sold, 0)
+        self.assertEqual(component_2.quantity_in_stock, 100)
+        self.assertEqual(component_2.quantity_of_sold, 0)
 
     def test_changing_order_amount_when_price_product_changes(self):
         """
         1. Checking changing OrderItem.price when Product.price changes
         2. Checking changing Order.amount when Product.price changes
+        3. Checking changing Order.amount when OrderItem deletes
         """
-        pass
+
+        # 1. Checking changing OrderItem.price when Product.price changes
+        cart = Order.get_cart(self.user)
+        item = OrderItem.objects.create(id=1000, order=cart, product=self.product_2, quantity=1)
+        self.assertEqual(item.price, Decimal(900))
+
+        self.component_2.price = 10
+        self.component_2.save()
+
+        item = OrderItem.objects.get(id=1000)
+        self.assertEqual(item.price, Decimal(90))
+        item.delete()
+
+        # 2. Checking changing Order.amount when Product.price changes
+        cart = Order.get_cart(self.user)
+        item_1 = OrderItem.objects.create(order=cart, product=self.product_1, quantity=1)
+        item_2 = OrderItem.objects.create(order=cart, product=self.product_2, quantity=1)
+
+        self.assertEqual(cart.amount, Decimal(3900))
+        self.component_1.price = 1
+        self.component_2.price = 1
+        self.component_1.save()
+        self.component_2.save()
+
+        cart = Order.get_cart(self.user)
+        self.assertEqual(cart.amount, Decimal(29))
+
+        # 3. Checking changing Order.amount when OrderItem deletes
+        item_1.delete()
+        item_2.delete()
+
+        cart = Order.get_cart(self.user)
+        self.assertEqual(cart.amount, Decimal(0))
 
     def test_availability_buying_product(self):
         """
-        1. If OrderItem.product.status = STATUS_UNAVAILABLE,
-           Order.STATUS_WAITING_FOR_PAYMENT cannot be change
-        2. If OrderItem.product.status = STATUS_ONLY_ORDER,
-           Order.STATUS_WAITING_FOR_PAYMENT cannot be change
+        1. If OrderItem.product.status = STATUS_UNAVAILABLE, OrderItem must been delete
         """
+
+        # 1. If OrderItem.product.status = STATUS_UNAVAILABLE, OrderItem must been delete
+        cart = Order.get_cart(self.user)
+        OrderItem.objects.create(id=1000, order=cart, product=self.product_2, quantity=1)
+        self.component_2.available = True
+        self.component_2.save()
+
+        item = OrderItem.objects.get(id=1000)
+        self.assertEqual(item.product.status, Product.STATUS_UNAVAILABLE)
+
+        self.component_2.available = False
+        self.component_2.save()
+
+        item = OrderItem.objects.get(id=1000)
+        self.assertEqual(item.product.status, Product.STATUS_UNAVAILABLE)
+
+
         pass
 
-    def test_method_get_amount_of_unpaid_orders(self):
-        """
-        Checking @staticmethod get_amount_of_unpaid_orders() for several cases:
-        1. Before creating cart
-        2. After creating cart
-        3. After cart.make_order()
-        4. After order is paid
-        5. After delete all orders
-
-        ==========================
-        Add: Order.get_amount_of_unpaid_orders(user: User)
-        """
-
-        # 1. Before creating cart
-        amount = Order.get_amount_of_unpaid_orders(self.user)
-        self.assertEqual(amount, Decimal(1535))
-
-        # 2. After creating cart
-        cart = Order.get_cart(self.user)
-        OrderItem.objects.create(order=cart, product=self.product_1, quantity=2)
-
-        amount = Order.get_amount_of_unpaid_orders(self.user)
-        self.assertEqual(amount, Decimal(1535))
-
-        # 3. After cart.make_order()
-        cart.make_order()
-        order = cart
-        amount_all_unpaid_orders = (self.product_1.discount_price * 2) + Decimal(1535)
-
-        amount = Order.get_amount_of_unpaid_orders(self.user)
-        self.assertEqual(amount, Decimal(amount_all_unpaid_orders))
-
-        # 4. After order is paid
-        order.order_status = Order.STATUS_PAID
-        order.save()
-
-        amount = Order.get_amount_of_unpaid_orders(self.user)
-        self.assertEqual(amount, Decimal(1535))
-
-        # 5. After delete all orders
-        Order.objects.all().delete()
-        amount = Order.get_amount_of_unpaid_orders(self.user)
-        self.assertEqual(amount, Decimal(0))

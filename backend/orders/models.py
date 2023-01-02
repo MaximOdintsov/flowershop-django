@@ -2,7 +2,7 @@ import datetime
 from decimal import Decimal
 
 from django.db.models import Sum
-from django.db.models.signals import post_save, post_delete, pre_save
+from django.db.models.signals import post_save, post_delete, pre_save, pre_delete
 from django.dispatch import receiver
 from django.utils import timezone
 
@@ -17,14 +17,13 @@ User = get_user_model()
 
 
 class Order(models.Model):
-
-    STATUS_WAITING_FOR_PAYMENT = 1
-    STATUS_PAID = 2
+    STATUS_PENDING_CONFIRMATION = 1
+    STATUS_CONFIRMED = 2
     STATUS_CART = 3
     STATUS_CANCELED = 4
     STATUS_CHOICES = [
-        (STATUS_WAITING_FOR_PAYMENT, 'Ожидает оплату'),
-        (STATUS_PAID, 'Оплачен'),
+        (STATUS_PENDING_CONFIRMATION, 'Ожидает подтверждения'),
+        (STATUS_CONFIRMED, 'Подтвержден'),
         (STATUS_CART, 'Корзина'),
         (STATUS_CANCELED, 'Заказ отменен')
     ]
@@ -60,7 +59,10 @@ class Order(models.Model):
     payment_method = models.PositiveSmallIntegerField('Способ оплаты', choices=PAYMENT_CHOICES, null=True, blank=True)
     order_status = models.PositiveSmallIntegerField('Статус заказа', choices=STATUS_CHOICES, default=STATUS_CART)
     readiness_status = models.PositiveSmallIntegerField('Статус готовности', choices=READINESS_CHOICES, null=True, blank=True)
+    payment_state = models.BooleanField('Статус платежа', default=False)
     creation_time = models.DateTimeField('Время создания заказа', default=timezone.now)
+
+    update_component_flag = models.BooleanField('Флаг обновления компонента', default=False)
 
     first_name = models.CharField('Имя', max_length=150, blank=True, null=True)
     phone = PhoneNumberField('Номер телефона', region='RU', blank=True, null=True)
@@ -70,7 +72,7 @@ class Order(models.Model):
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
-        ordering = ['readiness_status', 'creation_time']
+        ordering = ['order_status', 'readiness_status', 'creation_time']
 
     def __str__(self):
         return f'Заказ №{self.id}'
@@ -101,15 +103,57 @@ class Order(models.Model):
     def make_order(self):
         items = self.orderitem_set.all()
         if items and self.order_status == self.STATUS_CART:
-            self.order_status = self.STATUS_WAITING_FOR_PAYMENT
+            self.order_status = self.STATUS_PENDING_CONFIRMATION
             self.save()
 
-    @staticmethod
-    def get_amount_of_unpaid_orders(user: User):
-        amount = Order.objects.filter(user=user,
-                                      order_status=Order.STATUS_WAITING_FOR_PAYMENT,
-                                      ).aggregate(Sum('amount'))['amount__sum']
-        return amount or Decimal(0)
+    def recalculate_components_quantity(self):
+
+        if self.order_status == self.STATUS_PENDING_CONFIRMATION:
+            self.update_component_flag = False
+
+        elif self.order_status == self.STATUS_CONFIRMED:
+            if self.update_component_flag is False:
+                items = self.orderitem_set.all()
+                for item in items:
+                    compositions = item.product.productcomposition_set.all()
+                    for composition in compositions:
+                        component = composition.component
+
+                        quantity = item.quantity * composition.quantity
+                        component.quantity_in_stock -= quantity
+                        component.quantity_of_sold += quantity
+                        component.save()
+                        self.update_component_flag = True
+
+        elif self.order_status == self.STATUS_CANCELED:
+            if self.update_component_flag is True:
+                items = self.orderitem_set.all()
+                for item in items:
+                    compositions = item.product.productcomposition_set.all()
+                    for composition in compositions:
+                        component = composition.component
+
+                        quantity = item.quantity * composition.quantity
+                        component.quantity_in_stock += quantity
+                        component.quantity_of_sold -= quantity
+                        component.save()
+                        self.update_component_flag = False
+
+    def save_for_models(self):
+        super(Order, self).save()
+
+
+@receiver(pre_save, sender=Order)
+def recalculate_component_quantity_before_save(sender, instance, **kwargs):
+    order = instance
+    order.recalculate_components_quantity()
+
+
+@receiver(pre_delete, sender=Order)
+def recalculate_component_quantity_before_delete(sender, instance, **kwargs):
+    order = instance
+    order.order_status = order.STATUS_CANCELED
+    order.recalculate_components_quantity()
 
 
 class OrderItem(models.Model):
@@ -126,6 +170,10 @@ class OrderItem(models.Model):
         return f'Товар заказа №{self.order.id} - "{self.product.title}" '
 
     @property
+    def get_status_product(self):
+        return self.product.status
+
+    @property
     def amount(self):
         return self.quantity * self.price
 
@@ -139,14 +187,14 @@ def orderitem_price_setting(sender, instance, **kwargs):
 def recalculate_order_amount_after_save(sender, instance, **kwargs):
     order = instance.order
     order.amount = order.get_amount()
-    order.save()
+    order.save_for_models()
 
 
 @receiver(post_delete, sender=OrderItem)
 def recalculate_order_amount_after_delete(sender, instance, **kwargs):
     order = instance.order
     order.amount = order.get_amount()
-    order.save()
+    order.save_for_models()
 
 
 

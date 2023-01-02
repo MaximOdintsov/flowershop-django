@@ -37,10 +37,10 @@ class ProductComponent(admin.ModelAdmin):
     }
     prepopulated_fields = {"slug": ("title",)}
 
-    fields = ('title', 'slug', 'price', 'total_count')
+    fields = ('title', 'slug', 'price', 'quantity_in_stock', 'show_in_filter')
     list_display = ['title', 'price', 'new_arrival', 'quantity_in_stock',
-                    'quantity_of_sold', 'available']
-    list_editable = ['price', 'new_arrival', 'available']
+                    'quantity_of_sold', 'available', 'show_in_filter']
+    list_editable = ['price', 'new_arrival', 'available', 'show_in_filter']
 
     list_per_page = 40
     ordering = ['quantity_of_sold', 'price']
