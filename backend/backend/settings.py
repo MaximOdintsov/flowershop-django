@@ -54,8 +54,8 @@ INSTALLED_APPS = [
 
     'products',
     'users',
-    'cart',
     'orders',
+    'cart',
 
     # должен быть последним / нужен для удаления медиа файлов
     'django_cleanup.apps.CleanupConfig',

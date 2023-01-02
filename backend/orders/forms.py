@@ -1,6 +1,31 @@
 from django import forms
-from .models import Order
+from .models import Order, OrderItem
 from phonenumber_field.formfields import PhoneNumberField
+
+from django import forms
+
+
+# class AddQuantityForm(forms.Form):
+#     # PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 21)]
+#     PRODUCT_QUANTITY_CHOICES = [i for i in range(1, 21)]
+#
+#     quantity = forms.IntegerField(
+#         min_value=1,
+#         initial=1,
+#         widget=forms.NumberInput(
+#             attrs={
+#                 'class': 'form-control',
+#                 'style': 'background-color: rgb(243, 243, 243);',
+#                 'placeholder': 'Количество',
+#             }
+#         )
+#     )
+
+class AddQuantityForm(forms.ModelForm):
+    # PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 21)]
+    class Meta:
+        model = OrderItem
+        fields = ['quantity']
 
 
 class OrderCreateForm(forms.ModelForm):
