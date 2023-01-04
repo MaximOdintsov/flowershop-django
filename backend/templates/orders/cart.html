@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block static %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
+{% endblock %}
+
+
+{% block title %} Цветы Киров {% endblock %}
+
+
+{% block content %}
+
+    {% include 'includes/header.html' %}
+
+        
+        <div class="container">
+            <div class="row">
+                
+                {% if items|length > 0 %}
+                    <h1 class="text-center">Корзина</h1>
+                    <div class="col-12 col-md-6 col-xl-8">
+                    
+                        {% for item in items %}
+                            {% if item.quantity >= 1  %}
+                                <div class="card mb-3 cart-card rounded-3">
+                                    <div class="row g-0">
+
+                                        <div class="col-md-3">
+                                            {% if item.product.preview %}
+                                                <img src="{{ item.product.preview.url }}"
+                                                alt="item.product.title" class="img-fluid rounded-start">
+                                            {% else %}
+                                                <img src="{% static 'products/icons/image_not_found.jpeg' %}"  
+                                                alt="item.product.title" class="img-fluid rounded-start">
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="col-md-9">
+                                            <div class="card-body border-bottom">
+                                                <h5 class="card-title">{{ item.product.title }}</h5>
+                                                <div class="d-flex flex-row-reverse align-items-end">
+
+                                                    
+                                                    <div class="p-2">
+                                                        <ul class="list-group list-group-horizontal rounded-3">
+                                                            <li class="list-group-item py-0">
+                                                                <form action="{% url 'remove_one_item_to_cart' item.product.id %}" method="post">
+                                                                    {% csrf_token %}
+                                                                    <button type="submit" class="btn px-3 py-2">
+                                                                        <img src="{% static 'products/icons/minus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
+                                                                    </button>
+                                                                </form>
+                                                            </li>
+                                                            <li class="list-group-item align-items-center d-grid py-0">
+                                                                <span class="px-3 py-1">{{ item.quantity }}</span>
+                                                            </li>
+                                                            <li class="list-group-item py-0">
+                                                                <form action="{% url 'add_one_item_to_cart' item.product.id %}" method="post">
+                                                                    {% csrf_token %}
+                                                                    <button type="submit" class="btn px-3 py-2">
+                                                                        <img src="{% static 'products/icons/plus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
+                                                                    </button>
+                                                                </form>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    
+                                                    <div class="p-2 text-end d-grid">
+                                                        {% if item.amount == item.old_amount %}
+                                                            <span class="fs-19">{{ item.amount }} &#8381</span>
+                                                        {% else %}
+                                                            <span>
+                                                                <del class="old-price fs-13">{{ item.old_amount }} &#8381</del>
+                                                            </span>
+
+                                                            <span class="c-new-price fs-19">{{ item.amount }} &#8381</span>
+                                                        {% endif %}
+                                                    </div>
+
+                                                    
+                                                </div>
+                                            </div>
+                                            <form action="{% url 'remove_item_to_cart' item.product.id %}" method="post" class="py-1 px-1">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn">Удалить</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-12 col-sm-12 col-md-5 col-xl-3 ">
+
+                        <div class="card text-bg-light mb-3 rounded-3" style="max-width: 18rem;">
+                            <div class="card-header">Условия заказа</div>
+                            <div class="card-body">
+                                <h5 class="card-title">Итого:</h5>
+
+                                <div class="justify-content-between d-flex align-items-end">
+                                    <div>
+                                        <span>Товаров: {{ cart.length_cart }} шт.</span>
+                                    </div>
+
+                                    <div class="text-end d-grid">
+                                        {% if cart.get_amount == cart.get_old_amount %}                                           
+                                            <span class="fs-19">{{ cart.amount }} &#8381</span>
+                                        {% else %}    
+                                            <span class="">
+                                                <del class="old-price fs-13">{{ cart.get_old_amount }} &#8381</del>
+                                            </span>
+
+                                            <span class="c-new-price fs-19">{{ cart.amount }} &#8381</span>                        
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="mt-3 pt-3 border-top">
+                                        <form action="{% url 'order_create' %}" target="_self" method="get">
+                                            <button class="btn btn-warning">Перейти к оформлению</button>
+                                        </form>
+
+                                    <form action="{% url 'product_list' %}" class="border-top mt-2 pt-2" target="_self" method="get">
+                                        <button class="btn btn-primary">Перейти в каталог</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                {% else %}
+                    <div class="text-center">
+                        <h1>Корзина пуста</h1>
+                        <br>
+                        <form action="{% url 'product_list' %}" target="_self" method="get">
+                            <button class="btn btn-light">В каталог</button>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+{% endblock %}

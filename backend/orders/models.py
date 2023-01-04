@@ -25,7 +25,7 @@ class Order(models.Model):
         (STATUS_PENDING_CONFIRMATION, 'Ожидает подтверждения'),
         (STATUS_CONFIRMED, 'Подтвержден'),
         (STATUS_CART, 'Корзина'),
-        (STATUS_CANCELED, 'Заказ отменен')
+        (STATUS_CANCELED, 'Отменен')
     ]
     RECEIPT_PICKUP = 1
     RECEIPT_DELIVERY = 2
@@ -41,12 +41,10 @@ class Order(models.Model):
         (PAYMENT_CARD, 'Безналичные'),
         (PAYMENT_ONLINE, 'Онлайн оплата')
     ]
-    READINESS_ACCEPTED = 1
-    READINESS_PREPARING = 2
-    READINESS_READY = 3
-    READINESS_RECEIVED = 4
+    READINESS_PREPARING = 1
+    READINESS_READY = 2
+    READINESS_RECEIVED = 3
     READINESS_CHOICES = [
-        (READINESS_ACCEPTED, 'Принят'),
         (READINESS_PREPARING, 'Готовится'),
         (READINESS_READY, 'Готов'),
         (READINESS_RECEIVED, 'Получен')
@@ -54,12 +52,12 @@ class Order(models.Model):
 
     user = models.ForeignKey(User, verbose_name='Клиент', on_delete=models.CASCADE, null=True, blank=True)
 
-    amount = models.DecimalField('Цена заказа', max_digits=10, decimal_places=2, default=0, null=True, blank=True)
+    amount = models.DecimalField('Сумма', max_digits=10, decimal_places=2, default=0, null=True, blank=True)
     receipt_method = models.PositiveSmallIntegerField('Способ получения', choices=RECEIPT_CHOICES, null=True, blank=True)
     payment_method = models.PositiveSmallIntegerField('Способ оплаты', choices=PAYMENT_CHOICES, null=True, blank=True)
     order_status = models.PositiveSmallIntegerField('Статус заказа', choices=STATUS_CHOICES, default=STATUS_CART)
     readiness_status = models.PositiveSmallIntegerField('Статус готовности', choices=READINESS_CHOICES, null=True, blank=True)
-    payment_state = models.BooleanField('Статус платежа', default=False)
+    payment_state = models.BooleanField('Оплачен', default=False)
     creation_time = models.DateTimeField('Время создания заказа', default=timezone.now)
 
     update_component_flag = models.BooleanField('Флаг обновления компонента', default=False)
@@ -75,6 +73,8 @@ class Order(models.Model):
         ordering = ['order_status', 'readiness_status', 'creation_time']
 
     def __str__(self):
+        if self.order_status == self.STATUS_CART:
+            return f'Корзина  №{self.id}'
         return f'Заказ №{self.id}'
 
     @staticmethod
@@ -99,6 +99,12 @@ class Order(models.Model):
         for item in self.orderitem_set.all():
             amount += item.amount
         return amount
+
+    def get_old_amount(self):
+        old_amount = Decimal(0)
+        for item in self.orderitem_set.all():
+            old_amount += item.old_amount
+        return old_amount
 
     def make_order(self):
         items = self.orderitem_set.all()
@@ -139,6 +145,13 @@ class Order(models.Model):
                         component.save()
                         self.update_component_flag = False
 
+    @property
+    def length_cart(self):
+        length = 0
+        for item in self.orderitem_set.all():
+            length += item.quantity
+        return length
+
     def save_for_models(self):
         super(Order, self).save()
 
@@ -167,7 +180,7 @@ class OrderItem(models.Model):
         verbose_name_plural = 'Товары'
 
     def __str__(self):
-        return f'Товар заказа №{self.order.id} - "{self.product.title}" '
+        return f'"{self.product.title}" '
 
     @property
     def get_status_product(self):
@@ -176,6 +189,10 @@ class OrderItem(models.Model):
     @property
     def amount(self):
         return self.quantity * self.price
+
+    @property
+    def old_amount(self):
+        return self.quantity * self.product.price
 
 
 @receiver(pre_save, sender=OrderItem)

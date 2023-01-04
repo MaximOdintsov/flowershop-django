@@ -70,7 +70,7 @@
                                         {% if product.discount == 0 %}
 
                                             <span class="fs-19">
-                                                {{ product.discount_price|floatformat:0 }} &#8381;
+                                                {{ product.new_price|floatformat:0 }} &#8381;
                                             </span>
 
                                         {% else %}
@@ -83,7 +83,7 @@
                                                 <br style="display: block; margin-bottom: -10px;">
 
                                                 <span class="c-new-price fs-19">
-                                                    {{ product.discount_price|floatformat:0 }} &#8381;
+                                                    {{ product.new_price|floatformat:0 }} &#8381;
                                                 </span>
                                             </div>
 
@@ -92,7 +92,7 @@
                                     </div>
 
                                     <div class="product-cart-icon">
-                                        <form action="{% url 'cart:cart_add_one' product.id %}" class="col-8 d-flex justify-content-center" method="post">
+                                        <form action="{% url 'add_one_item_to_cart' product.id %}" class="col-8 d-flex justify-content-center" method="post">
                                             {% csrf_token %}
                                             
                                             <button class="btn">
@@ -130,7 +130,7 @@
                                                                 <img class="d-block w-100" src="{{ product.preview.url }}" alt="product {{ product.title }}">
                                                             </div>
 
-                                                            {% for product_image in product.product_gallery.all %}
+                                                            {% for product_image in product.productgallery_set.all %}
                                                                 <div class="carousel-item" data-bs-interval="10000">
                                                                     <img class="d-block w-100" src="{{ product_image.image.url }}" alt="product {{ product.title }}">
                                                                 </div>
@@ -160,9 +160,9 @@
                                                     <div class="">
                                                         <p>Состоит из:</p>
                                                         <ul>
-                                                            {% for product_component in product.get_composition %}
+                                                            {% for product_component in product.productcomposition_set.all %}
                                                                 <li>
-                                                                    {{ product_component.component_composition.title }} -
+                                                                    {{ product_component.component.title }} -
                                                                     {{ product_component.quantity }} штук
                                                                 </li>
                                                             {% endfor %}
@@ -181,7 +181,7 @@
                                             {% if product.discount == 0 %}
 
                                                 <span class="fs-19" style="font-size: 22px;">
-                                                    {{ product.discount_price|floatformat:0 }} &#8381;
+                                                    {{ product.new_price|floatformat:0 }} &#8381;
                                                 </span>
 
                                             {% else %}
@@ -194,14 +194,14 @@
                                                     <br style="display: block; margin-bottom: -10px;">
 
                                                     <span class="c-new-price fs-19" style="font-size: 22px;">
-                                                        {{ product.discount_price|floatformat:0 }} &#8381;
+                                                        {{ product.new_price|floatformat:0 }} &#8381;
                                                     </span>
                                                 </div>
 
                                             {% endif %}
                                         </div>
 
-                                        <form action="{% url 'cart:cart_add_all' product.id %}" class="col-8 d-flex justify-content-center" method="post">
+                                        <form action="{% url 'add_item_to_cart' product.id %}" class="col-8 d-flex justify-content-center" method="post">
                                             {% csrf_token %}
                                             <div class="col-8 col-sm-5 col-md-5 col-lg-4 col-xl-3 counter-products border me-2">
 
@@ -209,7 +209,7 @@
                                                     <img src="{% static 'products/icons/minus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
                                                 </button>
                                                 
-                                                    {{ cart_product_form.quantity }}
+                                                    {{ cart_add_quantity_form.quantity }}
 
                                                 <button class="btn" type="button" onclick="this.previousElementSibling.stepUp(); this.previousElementSibling.onchange();">
                                                     <img src="{% static 'products/icons/plus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">

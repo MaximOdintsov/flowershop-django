@@ -77,12 +77,12 @@
 
                     <li class="nav-item dropdown col-12 col-lg-auto">
                         <a class="nav-link dropdown-toggle py-2 px-0 px-lg-2 d-none d-lg-block" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Мы на карте
+                            Наш адрес
                         </a>
 
                         <a class="nav-link dropdown-toggle py-2 px-0 px-lg-2 d-lg-none" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img class="d-lg-none" src="{% static 'products/icons/location-pin.png' %}" alt="Каталог" width="29" height="29">
-                            <small class="d-lg-none ms-2">Мы на карте</small>
+                            <small class="d-lg-none ms-2">Наш адрес</small>
                         </a>
 
                         <ul class="dropdown-menu c-bg-body">
@@ -104,10 +104,10 @@
 
                 </ul>
                 
-                <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
+                <ul class="navbar-nav flex-row flex-wrap ms-md-auto ">
 
                     <li class="nav-item dropdown col-12 col-lg-auto me-3">
-                        {% with total_items=cart|length %}
+                        {% with total_items=cart.length_cart %}
                             <button class="btn c-bg-button nav-link dropdown-toggle col" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="{% static 'products/icons/shopping-bag-icon.png' %}" alt="shopping-bag-icon" width="29px">
                                 <small class="d-lg-none ms-2">Корзина</small>
@@ -118,53 +118,57 @@
                                 {% endif %}
                             </button>
 
-                            <ul class="dropdown-menu c-bg-body" style="max-width: 400px;">
+                            <ul class="dropdown-menu c-bg-body pb-0" style="max-width: 400px;">
                                 
-                                <li>
-                                    {% if total_items > 0 %}
-                                        {% for item in cart %}
-                                            {% with product=item.product %}
-                                            
-                                            <li>
-                                                <div class="dropdown-item d-flex justify-content-between align-items-end">
-                                                    <span class="pe-2">{{ product.title }}({{ item.quantity }} шт.)</span>
+                                
+                                    {% if user.is_authenticated %}
+                                        {% if total_items > 0 %}
+                                            {% for item in items %}
+                                                {% with product=item.product %}
                                                     
-                                                    <div class="">
-                                                        {% if item.total_price == item.total_old_price %}
-                                                            <span>{{ item.total_price|floatformat:0 }} &#8381;</span>
-                                                        {% else %}
-                                                            <span>
-                                                                <del class="old-price fs-13">{{ item.total_old_price|floatformat:0 }} &#8381;</del>
-                                                            </span>
-                
-                                                            <br style="display: block; margin-bottom: -10px;">
-                
-                                                            <span class="c-new-price">{{ item.total_price|floatformat:0 }} &#8381;</span>
-                                                        {% endif %}
-                                                    </div>
-                                                </div>
+                                                    <li>
+                                                        <div class="dropdown-item d-flex justify-content-between align-items-end border-bottom">
+                                                            <span class="pe-2">{{ product.title }}({{ item.quantity }} шт.)</span>
+                                                            
+                                                            <div class="col-3 d-grid text-end">
+                                                                {% if item.amount == item.old_amount %}
+                                                                    <span class="fs-16">{{ item.amount|floatformat:0 }} &#8381;</span>
+                                                                {% else %}
+                                                                    <span>
+                                                                        <del class="old-price fs-11">{{ item.old_amount|floatformat:0 }} &#8381;</del>
+                                                                    </span>
+                        
+                        
+                                                                    <span class="c-new-price fs-16">{{ item.amount|floatformat:0 }} &#8381;</span>
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    
+                                                {% endwith %}
+                                            {% endfor %}
+                                            <li class="mt-3 pt-3 border-top">
+                                                <h5 class="dropdown-item">Всего:</h5>
+                                                <a href="{% url 'cart' %}" class="dropdown-item d-flex justify-content-between">
+                                                    <span>Товаров: {{ cart.length_cart }} шт:</span> 
+                                                    <span>{{ cart.amount }} &#8381;</span>                                 
+                                                </a>
+                                            </li>
+                                            <li class="pt-2">
+                                                <a href="{% url 'cart' %}" class="dropdown-item btn c-btn-primary">
+                                                    Перейти в корзину
+                                                </a>
                                             </li>
                                             
-                                            {% endwith %}
-            
-                                        {% endfor %}
-                                        <li class="mt-3 pt-3 border-top">
-                                            <h5 class="dropdown-item">Всего:</h5>
-                                            <a href="{% url 'cart:cart_detail' %}" class="dropdown-item d-flex justify-content-between">
-                                                <span>Товаров: {{ total_items }} шт:</span> 
-                                                <span>{{ cart.get_total_price }} &#8381;</span>                                 
-                                            </a>
-                                        </li>
-                                        <li class="pt-2">
-                                            <a href="{% url 'cart:cart_detail' %}" class="dropdown-item btn c-btn-primary">
-                                                Перейти в корзину
-                                            </a>
-                                        </li>
-                                        
+                                        {% else %}
+                                            <p class="dropdown-item">Корзина пуста</p>
+                                        {% endif %}
                                     {% else %}
-                                        <p class="dropdown-item">Корзина пуста</p>
+                                        <p class="dropdown-item">Чтобы добавить товары в корзину - зарегистрируйтесь</p>
+                                        <a href="{% url 'login' %}" class="dropdown-item btn">
+                                            Зарегистрироваться
+                                        </a>
                                     {% endif %}
-                                </li>
 
                             </ul>
                         {% endwith %}

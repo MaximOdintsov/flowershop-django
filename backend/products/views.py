@@ -11,24 +11,30 @@ from .forms import ProductSearchForm, ProductFilterForm
 # from cart.cart import Cart
 
 from orders.models import Order, OrderItem
-from orders.forms import CartAddProductForm
+
+from orders.forms import AddQuantityForm
 
 
 class ProductFilterView(generic.ListView):
     """Фильтрация товаров"""
-
     model = Product
     context_object_name = 'products'
 
-    cart_product_form = CartAddProductForm()
-    search_form = ProductSearchForm()
-    filter_form = ProductFilterForm()
+    def get_context_data(self, **kwargs):
+        cart_add_quantity_form = AddQuantityForm()
+        search_form = ProductSearchForm()
+        filter_form = ProductFilterForm()
 
-    extra_context = {
-        'cart_product_form': cart_product_form,
-        'search_form': search_form,
-        'filter_form': filter_form,
-    }
+        cart = Order.get_cart(self.request.user)
+        items = cart.orderitem_set.all()
+
+        context = super().get_context_data(**kwargs)
+        context['cart_add_quantity_form'] = cart_add_quantity_form
+        context['search_form'] = search_form
+        context['filter_form'] = filter_form
+        context['cart'] = cart
+        context['items'] = items
+        return context
 
     def get_queryset(self):
 
@@ -60,20 +66,9 @@ class ProductFilterView(generic.ListView):
 
 class ProductSearchView(generic.ListView):
     """Поиск товаров"""
-
     paginate_by = 35
     model = Product
     context_object_name = 'products'
-
-    cart_product_form = CartAddProductForm()
-    search_form = ProductSearchForm()
-    filter_form = ProductFilterForm()
-
-    extra_context = {
-        'cart_product_form': cart_product_form,
-        'search_form': search_form,
-        'filter_form': filter_form,
-    }
 
     def get_queryset(self):
         query = (Q(status=2) | Q(status=3))
@@ -86,29 +81,46 @@ class ProductSearchView(generic.ListView):
         return products
 
     def get_context_data(self, *args, **kwargs):
+        cart_add_quantity_form = AddQuantityForm()
+        search_form = ProductSearchForm()
+        filter_form = ProductFilterForm()
+
+        cart = Order.get_cart(self.request.user)
+        items = cart.orderitem_set.all()
+
         context = super().get_context_data(*args, **kwargs)
         context['search_text'] = f'search_text={self.request.GET.get("search_text")}&'
+
+        context['cart_add_quantity_form'] = cart_add_quantity_form
+        context['search_form'] = search_form
+        context['filter_form'] = filter_form
+        context['cart'] = cart
+        context['items'] = items
         return context
 
 
 class ProductList(generic.ListView):
-
     model = Product
     context_object_name = 'products'
     queryset = Product.objects.filter(Q(status=2) | Q(status=3))
     paginate_by = 35
-
-    cart_product_form = CartAddProductForm()
-    search_form = ProductSearchForm()
-    filter_form = ProductFilterForm()
-
-    extra_context = {
-        'cart_product_form': cart_product_form,
-        'search_form': search_form,
-        'filter_form': filter_form,
-    }
     template_name = 'products/product_list.html'
 
+    def get_context_data(self, **kwargs):
+        cart_add_quantity_form = AddQuantityForm()
+        search_form = ProductSearchForm()
+        filter_form = ProductFilterForm()
+
+        cart = Order.get_cart(self.request.user)
+        items = cart.orderitem_set.all()
+
+        context = super().get_context_data(**kwargs)
+        context['cart_add_quantity_form'] = cart_add_quantity_form
+        context['search_form'] = search_form
+        context['filter_form'] = filter_form
+        context['cart'] = cart
+        context['items'] = items
+        return context
 
 # def product_detail(request, slug):
 #     product_id = Product.objects.get(slug=slug).id

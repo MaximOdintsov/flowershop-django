@@ -5,27 +5,27 @@ from phonenumber_field.formfields import PhoneNumberField
 from django import forms
 
 
-# class AddQuantityForm(forms.Form):
-#     # PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 21)]
-#     PRODUCT_QUANTITY_CHOICES = [i for i in range(1, 21)]
-#
-#     quantity = forms.IntegerField(
-#         min_value=1,
-#         initial=1,
-#         widget=forms.NumberInput(
-#             attrs={
-#                 'class': 'form-control',
-#                 'style': 'background-color: rgb(243, 243, 243);',
-#                 'placeholder': 'Количество',
-#             }
-#         )
-#     )
-
-class AddQuantityForm(forms.ModelForm):
+class AddQuantityForm(forms.Form):
     # PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 21)]
-    class Meta:
-        model = OrderItem
-        fields = ['quantity']
+    # PRODUCT_QUANTITY_CHOICES = [i for i in range(1, 21)]
+
+    quantity = forms.IntegerField(
+        min_value=1,
+        initial=1,
+        widget=forms.NumberInput(
+            attrs={
+                'class': 'form-control',
+                'style': 'background-color: rgb(243, 243, 243);',
+                'placeholder': 'Количество',
+            }
+        )
+    )
+#
+# class AddQuantityForm(forms.ModelForm):
+#     # PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 21)]
+#     class Meta:
+#         model = OrderItem
+#         fields = ['quantity']
 
 
 class OrderCreateForm(forms.ModelForm):
@@ -90,7 +90,7 @@ class OrderCreateForm(forms.ModelForm):
             }
         ),
     )
-    receipt = forms.TypedChoiceField(
+    receipt_method = forms.TypedChoiceField(
         error_messages=error_messages,
         choices=RECEIPT_CHOICES,
         widget=forms.RadioSelect(
@@ -115,21 +115,3 @@ class OrderCreateForm(forms.ModelForm):
 
         fields = ['first_name',
                   'phone', 'email', 'address']
-
-    def save(self, user, commit=True):
-        data = self.cleaned_data
-
-        order = Order(
-            user_id=user,
-            first_name=data['first_name'],
-            phone=data['phone'],
-            email=data['email'],
-            address=data['address'],
-            receipt=data['receipt'],
-            payment_method=data['payment_method'],
-        )
-        if commit:
-            order.save()
-        return order
-
-

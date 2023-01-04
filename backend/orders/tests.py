@@ -214,7 +214,7 @@ class TestDataBase(TestCase):
         cart.make_order()
 
         order = cart
-        order.readiness_status = Order.STATUS_PENDING_CONFIRMATION
+        order.order_status = Order.STATUS_PENDING_CONFIRMATION
         order.save()
 
         component_1 = ProductComponent.objects.get(slug='red-roze')

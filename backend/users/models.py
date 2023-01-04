@@ -35,5 +35,7 @@ class User(AbstractUser):
         unique_together = ('username', 'email')
 
     def __str__(self):
-        return self.first_name
-
+        if self.first_name:
+            return self.first_name
+        else:
+            return self.username

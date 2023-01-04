@@ -10,7 +10,7 @@
 
 
 {% block content %}
-
+    
     <main>
         <div class="container justify-content-center">
             <h1 class="text-center mt-3">Оформление заказа</h1>
@@ -20,36 +20,33 @@
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle col show" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Оформляем {{ cart|length }} товар(а) за {{ cart.get_total_price|floatformat:0 }} &#8381;
+                        Оформляем товаров: {{ cart.length_cart }} шт. на сумму {{ cart.get_amount|floatformat:0 }}&#8381;
                     </a>
 
                     <ul class="dropdown-menu p-2" style="--bs-dropdown-min-width: 26rem;">
 
-                        {% for item in cart %}
+                        {% for item in items %}
                             {% with product=item.product %}
                             
                             <li>
                                 <div class="row align-items-end pb-2 border-bottom">
-                                    <span class="col-9">{{ product.title }}({{ item.quantity }} шт.)</span>
+                                    <span class="col-9">{{ product.title }} ({{ item.quantity }} шт.)</span>
                                     
-                                    <div class="col-3">
-                                        {% if item.total_price == item.total_old_price %}
-                                            <span>{{ item.total_price|floatformat:0 }} &#8381;</span>
+                                    <div class="col-3 text-end d-grid">
+                                        {% if item.amount == item.old_amount %}
+                                            <span class="fs-16">{{ item.amount|floatformat:0 }} &#8381;</span>
                                         {% else %}
                                             <span>
-                                                <del class="old-price fs-13">{{ item.total_old_price|floatformat:0 }} &#8381;</del>
+                                                <del class="old-price fs-11">{{ item.old_amount|floatformat:0 }} &#8381;</del>
                                             </span>
 
-                                            <br style="display: block; margin-bottom: -10px;">
-
-                                            <span class="c-new-price">{{ item.total_price|floatformat:0 }} &#8381;</span>
+                                            <span class="c-new-price fs-16">{{ item.amount|floatformat:0 }} &#8381;</span>
                                         {% endif %}
                                     </div>
                                 </div>
                             </li>
-                            
-                            {% endwith %}
 
+                            {% endwith %}
                         {% endfor %}
 
                     </ul>
@@ -64,7 +61,6 @@
                     <div class="container-fluid border p-3 shadow rounded-3 c-bg-form">
                         <form method="post" action="{% url 'order_create' %}" class="row g-3 needs-validation ">
                             {% csrf_token %}
-
                             <div class="form-floating mb-2 col-md-12 position-relative">
                                 {% if form.first_name.errors %}
                                     {{ form.first_name }}
@@ -94,20 +90,6 @@
                             </div>
 
                             <div class="form-floating mb-2 col-md-12 position-relative">
-                                {% if form.email.errors %}
-                                    {{ form.email }}
-                                    <label for="{{ form.email.id_for_label }}" class="form-label">Электронная почта для отправки чека</label>
-                                    
-                                    <div class="text-danger">
-                                        <small>{{ form.email.errors }}</small>
-                                    </div>
-                                {% else %}
-                                    {{ form.email }}
-                                    <label for="{{ form.email.id_for_label }}" class="form-label">Электронная почта для отправки чека</label>
-                                {% endif %}
-                            </div>
-
-                            <div class="form-floating mb-2 col-md-12 position-relative">
                                 {% if form.address.errors %}
                                     {{ form.address }}
                                     <label for="{{ form.address.id_for_label }}" class="form-label">Адрес получателя</label>
@@ -121,12 +103,11 @@
                                 {% endif %}
                             </div>
 
-
                             <fieldset class="row mb-2">
                                 <legend class="col-form-label col-sm-3 pt-0">Способ получения</legend>
 
                                 <div class="col-sm-9">
-                                    {% for radio in form.receipt %}
+                                    {% for radio in form.receipt_method %}
                                         {% if radio.errors %}
                                             <div class="">
                                                 {{ radio.tag }}
@@ -157,9 +138,9 @@
 
                                     {% if form.payment_method.errors %}
                                         <div class="accordion" id="accordionExample">
-                                            <div class="accordion-item c-bg-body">
+                                            <div class="accordion-item c-form">
                                                 <h2 class="accordion-header" id="headingOne">
-                                                    <button class="accordion-button c-bg-body" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" 
+                                                    <button class="accordion-button c-form" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" 
                                                     aria-expanded="true" aria-controls="collapseOne">
                                                         Оплата при получении
                                                     </button>
@@ -188,9 +169,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="accordion-item c-bg-body">
+                                            <div class="accordion-item c-form">
                                                 <h2 class="accordion-header" id="headingTwo" tabindex="0" data-bs-toggle="tooltip" id="headingTwo" data-bs-title="Онлайн оплата сейчас недоступна.">
-                                                    <button class="accordion-button collapsed c-bg-body" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" 
+                                                    <button class="accordion-button collapsed c-form" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" 
                                                     aria-expanded="false" aria-controls="collapseTwo" disabled>
                                                         Оплата онлайн
                                                     </button>
@@ -218,9 +199,9 @@
 
                                     {% else %}
                                         <div class="accordion" id="accordionExample">
-                                            <div class="accordion-item c-bg-body">
+                                            <div class="accordion-item c-form">
                                                 <h2 class="accordion-header" id="headingOne">
-                                                    <button class="accordion-button c-bg-body" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                    <button class="accordion-button c-form" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                                         Оплата при получении
                                                     </button>
                                                 </h2>
@@ -242,10 +223,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="accordion-item c-bg-body">
+                                            <div class="accordion-item c-form">
                                                     
                                                 <h2 class="accordion-header" id="headingTwo" tabindex="0" data-bs-toggle="tooltip" id="headingTwo" data-bs-title="Онлайн оплата сейчас недоступна.">
-                                                    <button class="accordion-button collapsed c-bg-body" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" 
+                                                    <button class="accordion-button collapsed c-form" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" 
                                                     aria-expanded="false" aria-controls="collapseTwo" disabled>
                                                         Оплата онлайн
                                                     </button>
