@@ -2,7 +2,7 @@
 
 {% block static %}
     {% load static %}
-    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 {% endblock %}
 
 
@@ -31,7 +31,7 @@
                                                 <img src="{{ item.product.preview.url }}"
                                                 alt="item.product.title" class="img-fluid rounded-start">
                                             {% else %}
-                                                <img src="{% static 'products/icons/image_not_found.jpeg' %}"  
+                                                <img src="{% static 'icons/image_not_found.jpeg' %}"
                                                 alt="item.product.title" class="img-fluid rounded-start">
                                             {% endif %}
                                         </div>
@@ -48,7 +48,7 @@
                                                                 <form action="{% url 'remove_one_item_to_cart' item.product.id %}" method="post">
                                                                     {% csrf_token %}
                                                                     <button type="submit" class="btn px-3 py-2">
-                                                                        <img src="{% static 'products/icons/minus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
+                                                                        <img src="{% static 'icons/minus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
                                                                     </button>
                                                                 </form>
                                                             </li>
@@ -59,7 +59,7 @@
                                                                 <form action="{% url 'add_one_item_to_cart' item.product.id %}" method="post">
                                                                     {% csrf_token %}
                                                                     <button type="submit" class="btn px-3 py-2">
-                                                                        <img src="{% static 'products/icons/plus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
+                                                                        <img src="{% static 'icons/plus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
                                                                     </button>
                                                                 </form>
                                                             </li>

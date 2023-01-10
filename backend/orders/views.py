@@ -5,15 +5,19 @@ from django.urls import reverse_lazy
 from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect, get_object_or_404
 
-from cart.cart import Cart
 from django.views.generic import View, FormView, TemplateView
 
-from .models import Order, OrderItem
+from .models import Order
 from .forms import OrderCreateForm, AddQuantityForm
 from products.models import Product
 
+from products.forms import ProductSearchForm, ProductFilterForm
 
-class AddItemToCart(FormView):
+
+class AddItemToCart(LoginRequiredMixin, FormView):
+    login_url = '/login'
+    redirect_field_name = 'redirect_to'
+
     form_class = AddQuantityForm
     template_name = 'products/product_list.html'
     success_url = reverse_lazy('product_list')
@@ -92,10 +96,19 @@ class RemoveOneItemToCart(LoginRequiredMixin, View):
 def cart_view(request):
     cart = Order.get_cart(request.user)
     items = cart.orderitem_set.all()
+
+    cart_add_quantity_form = AddQuantityForm()
+    search_form = ProductSearchForm()
+    filter_form = ProductFilterForm()
+
     context = {
         'cart': cart,
         'items': items,
+        'cart_add_quantity_form': cart_add_quantity_form,
+        'search_form': search_form,
+        'filter_form': filter_form,
     }
+
     return render(request, 'orders/cart.html', context)
 
 

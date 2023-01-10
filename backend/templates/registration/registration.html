@@ -2,7 +2,7 @@
 
 {% block static %}
     {% load static %}
-    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 {% endblock %}
 
 {% block title %}Регистрация{% endblock title %}
@@ -83,37 +83,37 @@
                             {% endif %}
                         </div>
 
-                        <div class="form-check mb-2 d-block col-12 col-md-4">
-                            {% if form.date_of_birth.errors %}
-                                <label class="form-check-label text-light" for="{{ form.date_of_birth.id_for_label }}">Дата рождения</label>
-                                <div class="d-flex">
-                                    {{ form.date_of_birth }}
-                                </div>
-                                
-                                <div class="text-danger">
-                                    <small>{{ form.date_of_birth.errors }}</small>
-                                </div>
-                            {% else %}
-                                <label class="form-check-label text-light" for="{{ form.date_of_birth.id_for_label }}">Дата рождения</label>
-                                <div class="d-flex">
-                                    {{ form.date_of_birth }}
-                                </div>
-                            {% endif %}
-                        </div>
+<!--                        <div class="form-check mb-2 d-block col-12 col-md-4">-->
+<!--                            {% if form.date_of_birth.errors %}-->
+<!--                                <label class="form-check-label text-light" for="{{ form.date_of_birth.id_for_label }}">Дата рождения</label>-->
+<!--                                <div class="d-flex">-->
+<!--                                    {{ form.date_of_birth }}-->
+<!--                                </div>-->
+<!--                                -->
+<!--                                <div class="text-danger">-->
+<!--                                    <small>{{ form.date_of_birth.errors }}</small>-->
+<!--                                </div>-->
+<!--                            {% else %}-->
+<!--                                <label class="form-check-label text-light" for="{{ form.date_of_birth.id_for_label }}">Дата рождения</label>-->
+<!--                                <div class="d-flex">-->
+<!--                                    {{ form.date_of_birth }}-->
+<!--                                </div>-->
+<!--                            {% endif %}-->
+<!--                        </div>-->
 
-                        <div class="form-check mb-2 position-relative dropdown">
-                            {% if form.sex.errors %}
-                                <label class="form-check-label text-light" for="{{form.sex.id_for_label}}">Выберите пол</label>
-                                {{ form.sex }}
+<!--                        <div class="form-check mb-2 position-relative dropdown">-->
+<!--                            {% if form.sex.errors %}-->
+<!--                                <label class="form-check-label text-light" for="{{form.sex.id_for_label}}">Выберите пол</label>-->
+<!--                                {{ form.sex }}-->
 
-                                <div class="text-danger">
-                                    <small>{{ form.sex.errors }}</small>
-                                </div>
-                            {% else %}
-                                <label class="form-check-label text-light" for="{{form.sex.id_for_label}}">Выберите пол</label>
-                                {{ form.sex }}
-                            {% endif %}
-                        </div>
+<!--                                <div class="text-danger">-->
+<!--                                    <small>{{ form.sex.errors }}</small>-->
+<!--                                </div>-->
+<!--                            {% else %}-->
+<!--                                <label class="form-check-label text-light" for="{{form.sex.id_for_label}}">Выберите пол</label>-->
+<!--                                {{ form.sex }}-->
+<!--                            {% endif %}-->
+<!--                        </div>-->
 
                         <div class="form-floating mb-2 col-md-6 position-relative">
                             {% if form.password1.errors %}

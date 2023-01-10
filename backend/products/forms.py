@@ -18,27 +18,31 @@ class ProductSearchForm(forms.Form):
 
 
 class ProductFilterForm(forms.Form):
-    categories = ProductCategory.objects.all()
-    CATEGORY_CHOICES = [
-        (category.id, category.title) for category in categories
-    ]
+    try:
+        categories = ProductCategory.objects.all()
+        if categories:
+            CATEGORY_CHOICES = [
+                (category.id, category.title) for category in categories
+            ]
+
+            category = forms.MultipleChoiceField(
+                label='Категории продуктов',
+                choices=CATEGORY_CHOICES,
+                required=False,
+                widget=forms.CheckboxSelectMultiple(
+                    attrs={
+                        'class': 'form-check-input',
+                        'placeholder': 'Выберите категорию',
+                    }
+                ),
+            )
+    except:
+        print('Error')
 
     PRICE_CHOICE = [
         ('A', 'Сначала дешевле'),
         ('D', 'Сначала дороже')
     ]
-
-    category = forms.MultipleChoiceField(
-        label='Категории продуктов',
-        choices=CATEGORY_CHOICES,
-        required=False,
-        widget=forms.CheckboxSelectMultiple(
-            attrs={
-                'class': 'form-check-input',
-                'placeholder': 'Выберите категорию',
-            }
-        ),
-    )
 
     price = forms.TypedChoiceField(
         label='Цена',

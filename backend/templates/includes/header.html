@@ -1,5 +1,5 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'products/css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
 
 
 <header class="navbar navbar-expand-lg navbar-dark bd-navbar sticky-top c-bg-light">
@@ -17,14 +17,14 @@
                         {{ search_form.search_text }}
                         <!-- <button type="submit" class="btn btn-outline-success">Поиск</button> -->
                         <button type="submit" class="btn c-bg-button" aria-label="Search">  
-                            <img src="{% static 'products/icons/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="29" height="29">
+                            <img src="{% static 'icons/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="29" height="29">
                         </button>
                     </div>
 
                     <!-- Button for modal in product_list -->
                     <button type="button" class="btn c-bg-button d-lg-none border" data-bs-toggle="modal" data-bs-target="#modalSearch">
                         <span class="c-navbar-item">Найти товар</span>
-                        <img src="{% static 'products/icons/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="29" height="29">    
+                        <img src="{% static 'icons/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="29" height="29">
                     </button>
                     
 
@@ -54,7 +54,7 @@
                             Каталог
                         </a>
                         <a class="nav-link py-2 px-0 px-lg-2 active d-lg-none" aria-current="true" href="{% url 'product_list' %}">
-                            <img class="d-lg-none" src="{% static 'products/icons/catalog-icon.png' %}" alt="Каталог" width="29" height="29">
+                            <img class="d-lg-none" src="{% static 'icons/catalog-icon.png' %}" alt="Каталог" width="29" height="29">
                             <small class="d-lg-none ms-2">Каталог</small>
                         </a>
                     </li>
@@ -65,7 +65,7 @@
                         </a>
 
                         <a class="nav-link dropdown-toggle py-2 px-0 px-lg-2 d-lg-none" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img class="d-lg-none" src="{% static 'products/icons/contact-mail-icon.png' %}" alt="Каталог" width="29" height="29">
+                            <img class="d-lg-none" src="{% static 'icons/contact-mail-icon.png' %}" alt="Каталог" width="29" height="29">
                             <small class="d-lg-none ms-2">Контакты</small>
                         </a>
 
@@ -81,7 +81,7 @@
                         </a>
 
                         <a class="nav-link dropdown-toggle py-2 px-0 px-lg-2 d-lg-none" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img class="d-lg-none" src="{% static 'products/icons/location-pin.png' %}" alt="Каталог" width="29" height="29">
+                            <img class="d-lg-none" src="{% static 'icons/location-pin-icon.png' %}" alt="Каталог" width="29" height="29">
                             <small class="d-lg-none ms-2">Наш адрес</small>
                         </a>
 
@@ -109,7 +109,7 @@
                     <li class="nav-item dropdown col-12 col-lg-auto me-3">
                         {% with total_items=cart.length_cart %}
                             <button class="btn c-bg-button nav-link dropdown-toggle col" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="{% static 'products/icons/shopping-bag-icon.png' %}" alt="shopping-bag-icon" width="29px">
+                                <img src="{% static 'icons/shopping-bag-icon.png' %}" alt="shopping-bag-icon" width="29px">
                                 <small class="d-lg-none ms-2">Корзина</small>
                                 {% if total_items > 0 %}
                                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -176,7 +176,7 @@
 
                     <li class="nav-item dropdown col-12 col-lg-auto">
                         <button class="btn c-bg-button nav-link dropdown-toggle col" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{% static 'products/icons/free-icon-user-3405423.png' %}" alt="user-icon" width="29px">
+                            <img src="{% static 'icons/user-icon.png' %}" alt="user-icon" width="29px">
                             <small class="d-lg-none ms-2">Профиль</small>
                         </button>
 
@@ -199,7 +199,7 @@
 
                     <li class="nav-item col-12 col-lg-auto">
                         <a class="nav-link py-2 px-0 px-lg-2 c-bg-button rounded-2" href="https://vk.com/id141455317" target="_blank">
-                            <img src="{% static 'products/icons/vk.png' %}" alt="vk.com" width="35px">
+                            <img src="{% static 'icons/vk-header-icon.png' %}" alt="vk.com" width="35px">
                             <small class="d-lg-none ms-2">Наш vk</small>
                         </a>
                     </li>

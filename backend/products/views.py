@@ -1,10 +1,8 @@
 from django.db.models import Q
-from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
-from django import views
-from django.contrib.postgres.search import TrigramDistance, SearchVector
 
-from .models import Product, ProductCategory
+
+from .models import Product
 from .forms import ProductSearchForm, ProductFilterForm
 
 # from cart.forms import CartAddProductForm
@@ -25,23 +23,25 @@ class ProductFilterView(generic.ListView):
         search_form = ProductSearchForm()
         filter_form = ProductFilterForm()
 
-        cart = Order.get_cart(self.request.user)
-        items = cart.orderitem_set.all()
-
         context = super().get_context_data(**kwargs)
-        context['cart_add_quantity_form'] = cart_add_quantity_form
-        context['search_form'] = search_form
-        context['filter_form'] = filter_form
-        context['cart'] = cart
-        context['items'] = items
-        return context
+        try:
+            cart = Order.get_cart(self.request.user)
+            items = cart.orderitem_set.all()
+            context['cart'] = cart
+            context['items'] = items
+        finally:
+            context['cart_add_quantity_form'] = cart_add_quantity_form
+            context['search_form'] = search_form
+            context['filter_form'] = filter_form
+
+            return context
 
     def get_queryset(self):
 
         if self.request.GET.get('price') == 'A':
-            price = 'discount_price'
+            price = 'new_price'
         elif self.request.GET.get('price') == 'D':
-            price = '-discount_price'
+            price = '-new_price'
 
         query = (Q(status=2) | Q(status=3))
 
@@ -85,18 +85,18 @@ class ProductSearchView(generic.ListView):
         search_form = ProductSearchForm()
         filter_form = ProductFilterForm()
 
-        cart = Order.get_cart(self.request.user)
-        items = cart.orderitem_set.all()
+        context = super().get_context_data(**kwargs)
+        try:
+            cart = Order.get_cart(self.request.user)
+            items = cart.orderitem_set.all()
+            context['cart'] = cart
+            context['items'] = items
+        finally:
+            context['cart_add_quantity_form'] = cart_add_quantity_form
+            context['search_form'] = search_form
+            context['filter_form'] = filter_form
 
-        context = super().get_context_data(*args, **kwargs)
-        context['search_text'] = f'search_text={self.request.GET.get("search_text")}&'
-
-        context['cart_add_quantity_form'] = cart_add_quantity_form
-        context['search_form'] = search_form
-        context['filter_form'] = filter_form
-        context['cart'] = cart
-        context['items'] = items
-        return context
+            return context
 
 
 class ProductList(generic.ListView):
@@ -111,16 +111,18 @@ class ProductList(generic.ListView):
         search_form = ProductSearchForm()
         filter_form = ProductFilterForm()
 
-        cart = Order.get_cart(self.request.user)
-        items = cart.orderitem_set.all()
-
         context = super().get_context_data(**kwargs)
-        context['cart_add_quantity_form'] = cart_add_quantity_form
-        context['search_form'] = search_form
-        context['filter_form'] = filter_form
-        context['cart'] = cart
-        context['items'] = items
-        return context
+        try:
+            cart = Order.get_cart(self.request.user)
+            items = cart.orderitem_set.all()
+            context['cart'] = cart
+            context['items'] = items
+        finally:
+            context['cart_add_quantity_form'] = cart_add_quantity_form
+            context['search_form'] = search_form
+            context['filter_form'] = filter_form
+
+            return context
 
 # def product_detail(request, slug):
 #     product_id = Product.objects.get(slug=slug).id

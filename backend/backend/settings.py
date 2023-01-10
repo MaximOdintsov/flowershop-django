@@ -30,9 +30,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(int(os.getenv('DEBUG')))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(' ')
 
 
 # Application definition
@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'products',
     'users',
     'orders',
-    'cart',
 
     # должен быть последним / нужен для удаления медиа файлов
     'django_cleanup.apps.CleanupConfig',
@@ -77,7 +76,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "templates")],  # for add images
+        'DIRS': [os.path.join(BASE_DIR, "templates")],  # for templates search at the project level
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,8 +84,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                
-                'cart.context_processors.cart',
             ],
         },
     },
@@ -95,17 +92,36 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-# replace to postgresql
+# DATABASES = {
+#     'default': {
+#         'ENGINE': os.getenv('SQL_ENGINE'),
+#         'NAME': os.getenv('SQL_DATABASE'),
+#         'USER': os.getenv('SQL_USER'),
+#         'PASSWORD': os.getenv('SQL_PASSWORD'),
+#         'HOST': os.getenv('SQL_HOST', 127.0.0.1),
+#         'PORT': os.getenv('SQL_PORT'),
+#     },
+# }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_NAME'),
-        'USER': os.getenv('POSTGRES_USER'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': os.getenv('HOST'),
-        'PORT': os.getenv('PORT'),
-    },
+    "default": {
+        "ENGINE": os.getenv("SQL_ENGINE"),
+        "NAME": os.getenv("SQL_DATABASE"),
+        "USER": os.getenv("SQL_USER"),
+        "PASSWORD": os.getenv("SQL_PASSWORD"),
+        "HOST": os.getenv("SQL_HOST"),
+        "PORT": os.getenv("SQL_PORT"),
+    }
 }
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -137,20 +153,17 @@ AUTHENTICATION_BACKENDS = [
     'users.backends.AuthBackend'
 ]
 
-# cart
-CART_SESSION_ID = 'cart'
 
 # sessions
-SESSION_COOKIE_AGE = 604800
 SESSION_COOKIE_SECURE = True
 
 # EMAIL
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
 
 EMAIL_HOST = os.getenv('EMAIL_HOST')
-EMAIL_USE_SSL = True
-EMAIL_PORT = 465
+EMAIL_USE_SSL = bool(int(os.getenv('EMAIL_USE_SSL')))
+EMAIL_PORT = int(os.getenv('EMAIL_PORT'))
 EMAIL_HOST_USER = os.getenv('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL_USER')
@@ -174,14 +187,24 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-STATIC_URL = 'static/'
+
+# for prod
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+# # for dev
+# STATIC_URL = '/static/'
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static",
+# ]
+# MEDIA_ROOT = BASE_DIR / "media"
+# MEDIA_URL = "/image/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-MEDIA_ROOT = BASE_DIR / "media"
-MEDIA_URL = "/image/"
 
 LOGIN_URL = '/admin/login/'
 
@@ -191,6 +214,8 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
-    
     ],
 }
+
+# for nginx
+CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://localhost:1337", "http://172.30.0.1", "http://172.30.0.1:1337", "http://127.0.0.1:1337"]

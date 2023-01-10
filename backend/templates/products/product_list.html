@@ -2,7 +2,7 @@
 
 {% block static %}
     {% load static %}
-    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 {% endblock %}
 
 
@@ -29,7 +29,7 @@
                         {{ search_form.search_text }}
                         
                         <button type="submit" class="btn c-bg-button" aria-label="modalSearchLabel">  
-                            <img src="{% static 'products/icons/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="29" height="29">
+                            <img src="{% static 'icons/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="29" height="29">
                         </button>
                     </div>
                 </form>
@@ -96,7 +96,7 @@
                                             {% csrf_token %}
                                             
                                             <button class="btn">
-                                                <img src="{% static 'products/icons/add-to-cart-icon.png' %}" alt="shopping-bag-icon" width="35rem">
+                                                <img src="{% static 'icons/add-to-cart-icon.png' %}" alt="shopping-bag-icon" width="35rem">
                                             </button>
                                         </form>
                                     </div>
@@ -206,13 +206,13 @@
                                             <div class="col-8 col-sm-5 col-md-5 col-lg-4 col-xl-3 counter-products border me-2">
 
                                                 <button class="btn" type="button" onclick="this.nextElementSibling.stepDown(); this.nextElementSibling.onchange();">
-                                                    <img src="{% static 'products/icons/minus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
+                                                    <img src="{% static 'icons/minus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
                                                 </button>
                                                 
                                                     {{ cart_add_quantity_form.quantity }}
 
                                                 <button class="btn" type="button" onclick="this.previousElementSibling.stepUp(); this.previousElementSibling.onchange();">
-                                                    <img src="{% static 'products/icons/plus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
+                                                    <img src="{% static 'icons/plus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
                                                 </button>
                                                 
                                             </div>
