@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
 
-<header class="navbar navbar-expand-lg navbar-dark bd-navbar sticky-top c-bg-light">
+<header class="navbar navbar-expand-lg navbar-dark bd-navbar sticky-top c-bg-main">
     <nav class="container-xxl bd-gutter flex-wrap flex-lg-nowrap px-sm-4" aria-label="Main navigation">
         <div class="bd-navbar-toggle">
             <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,7 +23,7 @@
 
                     <!-- Button for modal in product_list -->
                     <button type="button" class="btn c-bg-button d-lg-none border" data-bs-toggle="modal" data-bs-target="#modalSearch">
-                        <span class="c-navbar-item">Найти товар</span>
+                        <span class="c-navbar-item c-link-light-active">Найти товар</span>
                         <img src="{% static 'icons/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="29" height="29">
                     </button>
                     
@@ -36,10 +36,10 @@
             <span>ЦветОК</span>
         </a>
         
-        <div class="offcanvas-lg offcanvas-start flex-grow-1 c-bg-light" id="navbarHeader">
+        <div class="offcanvas-lg offcanvas-start flex-grow-1 c-bg-main" id="navbarHeader">
 
             <div class="offcanvas-header border-bottom">
-                <h5 class="offcanvas-title" id="bdSidebarOffcanvasLabel">
+                <h5 class="offcanvas-title c-link-light-active" id="bdSidebarOffcanvasLabel">
                     Разделы сайта
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Закрывать" data-bs-target="#navbarHeader"></button>
@@ -50,21 +50,21 @@
                     
                     <li class="nav-item col-12 pt-3 pt-lg-0 col-lg-auto d-flex">
                         
-                        <a class="nav-link py-2 px-0 px-lg-2 active d-none d-lg-block" aria-current="true" href="{% url 'product_list' %}">
+                        <a class="nav-link py-2 px-0 px-lg-2 d-none d-lg-block c-link-light-active" aria-current="true" href="{% url 'product_list' %}">
                             Каталог
                         </a>
-                        <a class="nav-link py-2 px-0 px-lg-2 active d-lg-none" aria-current="true" href="{% url 'product_list' %}">
+                        <a class="nav-link py-2 px-0 px-lg-2 d-lg-none c-link-light-active" aria-current="true" href="{% url 'product_list' %}">
                             <img class="d-lg-none" src="{% static 'icons/catalog-icon.png' %}" alt="Каталог" width="29" height="29">
                             <small class="d-lg-none ms-2">Каталог</small>
                         </a>
                     </li>
 
                     <li class="nav-item dropdown col-12 col-lg-auto">
-                        <a class="nav-link dropdown-toggle py-2 px-0 px-lg-2 d-none d-lg-block" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle py-2 px-0 px-lg-2 d-none d-lg-block c-link-light" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Контакты
                         </a>
 
-                        <a class="nav-link dropdown-toggle py-2 px-0 px-lg-2 d-lg-none" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle py-2 px-0 px-lg-2 d-lg-none c-link-light" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img class="d-lg-none" src="{% static 'icons/contact-mail-icon.png' %}" alt="Каталог" width="29" height="29">
                             <small class="d-lg-none ms-2">Контакты</small>
                         </a>
@@ -76,11 +76,11 @@
                     </li>
 
                     <li class="nav-item dropdown col-12 col-lg-auto">
-                        <a class="nav-link dropdown-toggle py-2 px-0 px-lg-2 d-none d-lg-block" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle py-2 px-0 px-lg-2 d-none d-lg-block c-link-light" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Наш адрес
                         </a>
 
-                        <a class="nav-link dropdown-toggle py-2 px-0 px-lg-2 d-lg-none" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle py-2 px-0 px-lg-2 d-lg-none c-link-light" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img class="d-lg-none" src="{% static 'icons/location-pin-icon.png' %}" alt="Каталог" width="29" height="29">
                             <small class="d-lg-none ms-2">Наш адрес</small>
                         </a>
@@ -110,7 +110,7 @@
                         {% with total_items=cart.length_cart %}
                             <button class="btn c-bg-button nav-link dropdown-toggle col" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="{% static 'icons/shopping-bag-icon.png' %}" alt="shopping-bag-icon" width="29px">
-                                <small class="d-lg-none ms-2">Корзина</small>
+                                <small class="d-lg-none ms-2 c-link-light">Корзина</small>
                                 {% if total_items > 0 %}
                                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                         {{ total_items }}
@@ -177,7 +177,7 @@
                     <li class="nav-item dropdown col-12 col-lg-auto">
                         <button class="btn c-bg-button nav-link dropdown-toggle col" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="{% static 'icons/user-icon.png' %}" alt="user-icon" width="29px">
-                            <small class="d-lg-none ms-2">Профиль</small>
+                            <small class="d-lg-none ms-2 c-link-light">Профиль</small>
                         </button>
 
                         <ul class="dropdown-menu c-bg-body">
@@ -200,7 +200,7 @@
                     <li class="nav-item col-12 col-lg-auto">
                         <a class="nav-link py-2 px-0 px-lg-2 c-bg-button rounded-2" href="https://vk.com/id141455317" target="_blank">
                             <img src="{% static 'icons/vk-header-icon.png' %}" alt="vk.com" width="35px">
-                            <small class="d-lg-none ms-2">Наш vk</small>
+                            <small class="d-lg-none ms-2 c-link-light">Наш vk</small>
                         </a>
                     </li>
         

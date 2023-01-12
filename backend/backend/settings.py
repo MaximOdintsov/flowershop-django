@@ -218,4 +218,4 @@ REST_FRAMEWORK = {
 }
 
 # for nginx
-CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://localhost:1337", "http://172.30.0.1", "http://172.30.0.1:1337", "http://127.0.0.1:1337"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://localhost:1337", "http://127.0.0.1:1337"]

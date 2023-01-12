@@ -23,6 +23,18 @@ body {
     color: rgb(158, 176, 190);
 }
 
+.c-link-light {
+    color: rgba(231, 238, 231, 0.836) !important;
+}
+
+.c-link-light:hover {
+    color: rgb(234, 241, 234) !important;
+}
+
+.c-link-light-active {
+    color: rgb(255, 255, 255) !important;
+}
+
 /* Link colors */
 
 
@@ -45,15 +57,15 @@ body {
     background-color: rgb(241, 232, 233) !important;
 }
 .c-bg-card {
-    background-color: rgb(250, 218, 221);
+    background-color: rgb(253, 247, 247);
 }
 
 .c-bg-form {
     background-color:rgb(243, 232, 243) !important;
 }
 
-.c-bg-light {
-    background-color: rgb(90, 192, 64);
+.c-bg-main {
+    background-color: rgb(48, 165, 25) !important;
 }
 
 .c-form {
@@ -170,13 +182,13 @@ nav .pagination {
 /* header */
 
 .c-bg-input {
-    background-color: rgb(90, 192, 64) !important;
+    background-color: rgb(52, 164, 29) !important;
 } 
 .c-bg-input:focus {
-    background-color: rgb(84, 201, 55) !important;
+    background-color: rgb(53, 168, 30) !important;
 } 
 .c-bg-input:hover {
-    background-color: rgb(84, 201, 55) !important;
+    background-color: rgb(53, 168, 30) !important;
 }
 
 .c-navbar-item {
