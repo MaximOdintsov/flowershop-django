@@ -12,7 +12,7 @@ def send_email_for_verify(request, user):
     current_site = get_current_site(request)
     email_template_name = 'registration/verify_email.html'
     use_https = False
-    shop_name = 'Цветы Киров'
+    shop_name = 'Цветок Киров'
     email_for_questions = 'flowershop.kirov@gmail.com'
 
     context = {
