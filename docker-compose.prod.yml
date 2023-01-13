@@ -31,8 +31,8 @@ services:
   nginx:
     build: ./nginx
     ports:
-      - "80:80"
-      - "443:443"
+      - "1337:80"
+#      - "443:443"
     volumes:
       - static_volume:/home/app/web/backend/static
       - media_volume:/home/app/web/backend/media
