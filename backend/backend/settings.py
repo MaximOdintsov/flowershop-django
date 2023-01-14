@@ -167,19 +167,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-# for prod
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+if int(os.getenv('PRODUCTION_VERSION')):
+    # for prod
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
+else:
+    # for dev
+    STATIC_URL = '/static/'
+    STATICFILES_DIRS = [
+        BASE_DIR / 'static',
+    ]
+    MEDIA_ROOT = BASE_DIR / 'media'
+    MEDIA_URL = '/image/'
 
-# # for dev
-# STATIC_URL = '/static/'
-# STATICFILES_DIRS = [
-#     BASE_DIR / 'static',
-# ]
-# MEDIA_ROOT = BASE_DIR / 'media'
-# MEDIA_URL = '/image/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -200,7 +202,7 @@ REST_FRAMEWORK = {
 CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://localhost:1337", "http://127.0.0.1:1337", "http://kirovcvetok.ru/", "http://.kirovcvetok.ru/"]
 
 # ssl
-if int(os.getenv('SSL')) == 1:
+if int(os.getenv('SSL')):
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
