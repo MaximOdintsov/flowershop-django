@@ -110,12 +110,13 @@
                         {% with total_items=cart.length_cart %}
                             <button class="btn c-bg-button nav-link dropdown-toggle col" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="{% static 'icons/shopping-bag-icon.png' %}" alt="shopping-bag-icon" width="29px">
-                                <small class="d-lg-none ms-2 c-link-light">Корзина</small>
                                 {% if total_items > 0 %}
                                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                         {{ total_items }}
                                     </span>
                                 {% endif %}
+                                <small class="d-lg-none ms-2 c-link-light">Корзина</small>
+
                             </button>
 
                             <ul class="dropdown-menu c-bg-body pb-0" style="max-width: 400px;">

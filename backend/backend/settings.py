@@ -200,7 +200,8 @@ REST_FRAMEWORK = {
 CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://localhost:1337", "http://127.0.0.1:1337", "http://kirovcvetok.ru/", "http://.kirovcvetok.ru/"]
 
 # ssl
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+if int(os.getenv('SSL')) == 1:
+    SECURE_PROXY_SSL_HEADER = os.getenv('SECURE_PROXY_SSL_HEADER').split(' ')
+    SECURE_SSL_REDIRECT = bool(int(os.getenv('SECURE_SSL_REDIRECT')))
+    SESSION_COOKIE_SECURE = bool(int(os.getenv('SESSION_COOKIE_SECURE')))
+    CSRF_COOKIE_SECURE = bool(int(os.getenv('CSRF_COOKIE_SECURE')))
