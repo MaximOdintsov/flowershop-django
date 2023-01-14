@@ -94,17 +94,6 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 # DATABASES = {
 #     'default': {
-#         'ENGINE': os.getenv('SQL_ENGINE'),
-#         'NAME': os.getenv('SQL_DATABASE'),
-#         'USER': os.getenv('SQL_USER'),
-#         'PASSWORD': os.getenv('SQL_PASSWORD'),
-#         'HOST': os.getenv('SQL_HOST', 127.0.0.1),
-#         'PORT': os.getenv('SQL_PORT'),
-#     },
-# }
-
-# DATABASES = {
-#     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
 #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
 #     }
@@ -120,8 +109,6 @@ DATABASES = {
         "PORT": os.getenv("SQL_PORT"),
     }
 }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -153,14 +140,9 @@ AUTHENTICATION_BACKENDS = [
     'users.backends.AuthBackend'
 ]
 
-
-# True for https
-SESSION_COOKIE_SECURE = False
-
 # email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
-
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_USE_SSL = bool(int(os.getenv('EMAIL_USE_SSL')))
 EMAIL_PORT = int(os.getenv('EMAIL_PORT'))
@@ -177,11 +159,8 @@ LANGUAGES = (
     ('de', _('German')),
     ('fr', _('French')),
 )
-
 TIME_ZONE = 'Europe/Moscow'
-
 USE_I18N = True
-
 USE_TZ = True
 
 
@@ -219,3 +198,9 @@ REST_FRAMEWORK = {
 
 # for nginx
 CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://localhost:1337", "http://127.0.0.1:1337", "http://kirovcvetok.ru/", "http://.kirovcvetok.ru/"]
+
+# ssl
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
