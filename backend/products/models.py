@@ -38,7 +38,7 @@ class ProductComponent(models.Model):
         ordering = ['quantity_of_sold']
 
     def __str__(self):
-        return self.title
+        return f'{self.title} - штук: {self.quantity_in_stock}'
 
     def save_related_productcompositions(self):
         """Saves all related ProductComposition when ProductComponent.price changes"""
