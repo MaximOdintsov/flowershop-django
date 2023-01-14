@@ -169,17 +169,17 @@ USE_TZ = True
 
 # for prod
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # # for dev
 # STATIC_URL = '/static/'
 # STATICFILES_DIRS = [
-#     BASE_DIR / "static",
+#     BASE_DIR / 'static',
 # ]
-# MEDIA_ROOT = BASE_DIR / "media"
-# MEDIA_URL = "/image/"
+# MEDIA_ROOT = BASE_DIR / 'media'
+# MEDIA_URL = '/image/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -201,7 +201,7 @@ CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://localhost:1337", "http://127
 
 # ssl
 if int(os.getenv('SSL')) == 1:
-    SECURE_PROXY_SSL_HEADER = os.getenv('SECURE_PROXY_SSL_HEADER').split(' ')
-    SECURE_SSL_REDIRECT = bool(int(os.getenv('SECURE_SSL_REDIRECT')))
-    SESSION_COOKIE_SECURE = bool(int(os.getenv('SESSION_COOKIE_SECURE')))
-    CSRF_COOKIE_SECURE = bool(int(os.getenv('CSRF_COOKIE_SECURE')))
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
