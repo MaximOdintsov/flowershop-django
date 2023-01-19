@@ -1,11 +1,17 @@
 .span, h1, h2, h3, h4, h5, h6, p {
-    color: rgba(var(--bs-dark-rgb),var(--bs-bg-opacity));
+    color: rgb(33,37,41);
 }
 
 body {
-    background-color: rgb(241, 232, 233) !important;
+    background-color: #e1eeea !important;
 }
 
+.card {
+    box-shadow: 0 5px 10px -8px #101411;
+    --bs-card-border-radius: var(--bs-border-radius-lg) !important;
+    --bs-card-inner-border-radius: var(--bs-border-radius-lg) !important;
+    transition: all .2s;
+}
 
 /* Link colors */
 
@@ -16,19 +22,19 @@ body {
 }
 
 .c-link-main:hover {
-    color: rgb(219, 81, 81) !important;
+    color: rgb(0, 0, 0) !important;
 }
 
 .c-link-gray {
-    color: rgb(158, 176, 190);
+    color: rgb(255, 255, 255);
 }
 
 .c-link-light {
-    color: rgba(231, 238, 231, 0.836) !important;
+    color: rgb(255, 255, 255) !important;
 }
 
 .c-link-light:hover {
-    color: rgb(234, 241, 234) !important;
+    color: rgb(255, 255, 255) !important;
 }
 
 .c-link-light-active {
@@ -41,47 +47,70 @@ body {
 /* Button colors */
 
 .c-btn-primary {
-    background-color: rgb(55, 165, 255) !important;
+    background-color:#7FEBC1 !important;
 }
-
 .c-btn-primary:hover {
-    background-color: rgb(55, 140, 245) !important;
+    background-color: #78ddb7  !important;
 }
 
+.c-btn-white {
+    background-color: #fafffd;
+}
+.c-btn-white:hover {
+    background-color: #eef0ef;
+}
 /* Button colors */
 
 
 /* Colors */
 
+.c-bg-main {
+    background-color: #eb8ab3 !important;
+}
+.c-bg-second {
+    background-color: #9affbf !important;
+}
+.c-bg-third {
+    background-color: #DDFFA3 !important;
+}
+.c-main {
+    color: #FF82F7 !important;
+}
+.c-second {
+    color: #c5ffda !important;
+}
+.c-third {
+    color: #F5F564 !important;
+}
+
 .c-bg-body {
-    background-color: rgb(241, 232, 233) !important;
+    background-color: rgb(255, 255, 255) !important;
 }
 .c-bg-card {
-    background-color: rgb(253, 247, 247);
+    background-color: rgb(255, 255, 255);
 }
 
 .c-bg-form {
-    background-color:rgb(243, 232, 243) !important;
-}
-
-.c-bg-main {
-    background-color: rgb(48, 165, 25) !important;
+    background-color:rgb(255, 255, 255) !important;
 }
 
 .c-form {
-    background-color: rgb(250, 245, 250) !important;
+    background-color: rgb(255, 255, 255) !important;
 }
 
 .c-light {
-    color: rgb(211, 235, 255);
+    color: rgb(255, 255, 255);
 }
 
 .c-black {
-    color: black !important;
+    color: rgb(0, 0, 0) !important;
 }
 
 .c-new-price {
-    color: rgb(230, 32, 32) !important;
+    color: #FF4D51 !important;
+}
+.c-bg-new-price-badge {
+    background-color: #FFFC66 !important;
 }
 
 /* Colors */
@@ -93,22 +122,22 @@ body {
 .fs-11 {
     font-size: 11px;
 }
-
 .fs-13 {
     font-size: 13px;
 }
-
 .fs-16 {
     font-size: 16px;
 }
-
 .fs-19 {
     font-size: 19px;
 }
-
+.fs-21 {
+    font-size: 21px;
+}
 .fs-24 {
     font-size: 24px;
 }
+
 /* Forn-size */
 
 
@@ -120,35 +149,14 @@ body {
     margin-left: calc(2 * var(--bs-gutter-x));
 }
 
-.products .card {
-    box-shadow: 0 5px 10px -8px rgb(116, 111, 111);
-
-    --bs-card-border-radius: calc(1.5rem - 2px);
-    --bs-card-inner-border-radius: calc(1.5rem - 2px);
-    --bs-card-cap-bg: rgba(78, 78, 78, 0.03);
-    transition: all .2s;
-}
 .products .card:hover {
-    box-shadow: 0 12px 25px -16px rgb(116, 111, 111);
-}
+    box-shadow: 0 12px 25px -16px #101411;
+} 
 
-.products .card .btn {
-    --bs-btn-padding-x: 0;
-    --bs-btn-padding-y: 0;
-}
-
-.products .card-footer {
+/* .products .card-footer {
     height: 60px;
     padding-bottom: 10px;
-}
-
-.product-price {
-    padding-left: 12px;
-}
-
-.product-cart-icon {
-    padding-right: 12px;
-}
+} */
 
 .old-price {
 	position: relative;
@@ -158,7 +166,7 @@ body {
 .old-price::before {
     content: "";
     display: block;
-    border-bottom: 1px solid rgb(230, 32, 32) !important;
+    border-bottom: 1px solid #FF4D51 !important;
     height: 1px;
     position: absolute;
     top: 50%;
@@ -182,20 +190,20 @@ nav .pagination {
 /* header */
 
 .c-bg-input {
-    background-color: rgb(52, 164, 29) !important;
+    background-color: rgb(0, 0, 0) !important;
 } 
 .c-bg-input:focus {
-    background-color: rgb(53, 168, 30) !important;
+    background-color: rgb(255, 255, 255) !important;
 } 
 .c-bg-input:hover {
-    background-color: rgb(53, 168, 30) !important;
+    background-color: rgb(148, 148, 148) !important;
 }
 
 .c-navbar-item {
-    color: rgba(235, 235, 235, 0.8);
+    color: rgba(255, 255, 255, 0.8);
 }
 .c-navbar-item:hover {
-    color: rgba(235, 235, 235, 0.9);
+    color: rgba(255, 255, 255, 0.9);
 }
 
 
@@ -230,23 +238,23 @@ nav .pagination {
     margin-bottom: 15px;
 }
 footer h4 {
-    color: rgb(211, 235, 255);
+    color: rgb(255, 255, 255);
     text-transform: uppercase;
     font-size: 20px;
-    border-bottom: 1px solid #666;
+    border-bottom: 1px solid rgb(0, 0, 0);
     padding-bottom: 3px;
 }
 footer a {
-    color: rgb(188, 191, 196);
+    color: rgb(0, 0, 0);
     text-decoration: none;
     transition: all .35s;
 }
 footer a:hover {
-    color: rgb(219, 81, 81) !important;
+    color: rgb(0, 0, 0) !important;
     text-decoration: underline;
 }
 footer li {
-    color: rgb(138, 143, 150);
+    color: rgb(0, 0, 0);
 }
 footer li a {
     display: block;
@@ -279,21 +287,17 @@ footer li a {
 }
 .modal-header {
     padding: 0.75rem;
-    margin-right: 0.5rem;
 }
 
-.counter-products {
+/* .counter-products {
+    
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: rgb(243, 243, 243);
+    background-color: rgb(255, 255, 255);
     border-radius: 0.8rem;
-}
+} */
 
-.counter-products .btn {
-    --bs-btn-padding-x: 6px;
-    --bs-btn-padding-y: 3px;
-}
 
 .modal-footer .price-modal {
     display: flex;
@@ -333,7 +337,7 @@ footer li a {
 }
 
 .form-auth .nav-tabs li a {
-    color: rgb(182, 194, 194) !important;
+    color: rgb(255, 255, 255) !important;
     font-size: 23px;
     text-transform: uppercase;
     margin-right: 5px;
@@ -360,16 +364,11 @@ footer li a {
 }
 
 .form-auth .form-auth-active {
-    border-bottom: 2px solid rgb(47, 235, 103);
+    border-bottom: 2px solid rgb(255, 255, 255);
 }
 
 .form-auth ul {
     margin-bottom: 0;
-}
-
-.row > * {
-    padding-left: 0;
-
 }
 
 /* form auth */
@@ -378,7 +377,7 @@ footer li a {
 /* form */
 
 form .form-floating input {
-    background-color:rgb(250, 245, 250) !important;
+    background-color:rgb(255, 255, 255) !important;
 }
 
 /* form */

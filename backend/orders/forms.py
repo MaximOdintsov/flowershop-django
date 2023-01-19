@@ -14,7 +14,7 @@ class AddQuantityForm(forms.Form):
         initial=1,
         widget=forms.NumberInput(
             attrs={
-                'class': 'form-control',
+                'class': 'form-group rounded-0 border-0 text-center col-4 m-0',
                 'style': 'background-color: rgb(243, 243, 243);',
                 'placeholder': 'Количество',
             }

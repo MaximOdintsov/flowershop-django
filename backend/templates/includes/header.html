@@ -33,7 +33,8 @@
         </div>
 
         <a class="navbar-brand px-3 px-lg-2 me-0 me-lg-2" href="{% url 'product_list' %}">
-            <span>ЦветОК</span>
+            <img src="{% static 'icons/logo-icon.svg' %}" alt="Цветок" width="25px">
+            <span>Цветок</span>
         </a>
         
         <div class="offcanvas-lg offcanvas-start flex-grow-1 c-bg-main" id="navbarHeader">
@@ -71,13 +72,13 @@
 
                         <ul class="dropdown-menu c-bg-body">
                             <li><a class="dropdown-item" href="tel:+7-909-141-32-42">+7-909-141-32-42</a></li>
-                            <li><a class="dropdown-item" href="mailto:flowershop.kirov@gmail.com">flowershop.kirov@gmail.com</a></li>
+                            <li><a class="dropdown-item" href="mailto:kirov.cvetok@yandex.ru">kirov.cvetok@yandex.ru</a></li>
                         </ul>
                     </li>
 
                     <li class="nav-item dropdown col-12 col-lg-auto">
                         <a class="nav-link dropdown-toggle py-2 px-0 px-lg-2 d-none d-lg-block c-link-light" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Наш адрес
+                            Адрес
                         </a>
 
                         <a class="nav-link dropdown-toggle py-2 px-0 px-lg-2 d-lg-none c-link-light" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -88,16 +89,13 @@
                         <ul class="dropdown-menu c-bg-body">
                             <li>
                                 <span class="dropdown-item">
-                                    Октябрьский проспект, 2А, ТЦ Север, 1 этаж
+                                    ТЦ Север, Октябрьский проспект 2А, 1 этаж
                                 </span>
                             </li>
+                            <li><hr class="dropdown-divider"></li>
 
-                            <li>
-                                <a class="dropdown-item" 
-                                href="https://yandex.ru/maps/46/kirov/?ll=49.613600%2C58.638401&mode=poi&poi%5Bpoint%5D=49.613509%2C58.638403&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D1675676940&z=21">
-                                    Посмотреть на карте
-                                </a>
-                            </li>
+                            <li><iframe src="https://yandex.ru/map-widget/v1/?z=12&ol=biz&oid=1675676940" width="560" height="400" frameborder="0"></iframe></li>
+
                         </ul>
                         
                     </li>
@@ -138,8 +136,6 @@
                                                                     <span>
                                                                         <del class="old-price fs-11">{{ item.old_amount|floatformat:0 }} &#8381;</del>
                                                                     </span>
-                        
-                        
                                                                     <span class="c-new-price fs-16">{{ item.amount|floatformat:0 }} &#8381;</span>
                                                                 {% endif %}
                                                             </div>
