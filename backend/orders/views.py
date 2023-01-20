@@ -20,7 +20,7 @@ class AddItemToCart(LoginRequiredMixin, FormView):
 
     form_class = AddQuantityForm
     template_name = 'products/product_list.html'
-    success_url = reverse_lazy('product_list')
+    success_url = reverse_lazy('cart')
 
     def form_valid(self, form):
         quantity = form.cleaned_data['quantity']

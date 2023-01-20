@@ -13,28 +13,28 @@
         <div class="d-flex">
             <div class="product-search">
                 <form action="{% url 'product_search' %}" method="get" class="col text-center">
-                    <div class="d-flex place-holder-color d-none d-lg-flex">
+                    <div class="place-holder-color d-none d-lg-flex">
                         {{ search_form.search_text }}
-                        <!-- <button type="submit" class="btn btn-outline-success">Поиск</button> -->
                         <button type="submit" class="btn c-bg-button" aria-label="Search">  
                             <img src="{% static 'icons/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="29" height="29">
                         </button>
                     </div>
 
                     <!-- Button for modal in product_list -->
-                    <button type="button" class="btn c-bg-button d-lg-none border" data-bs-toggle="modal" data-bs-target="#modalSearch">
-                        <span class="c-navbar-item c-link-light-active">Найти товар</span>
-                        <img src="{% static 'icons/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="29" height="29">
-                    </button>
-                    
+                    <div class="d-flex place-holder-color d-lg-none">
+                        <button type="button" class="btn c-bg-button border" data-bs-toggle="modal" data-bs-target="#modalSearch">
+                            <span class="c-navbar-item c-link-light-active">Найти</span>
+                            <img src="{% static 'icons/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="29" height="29">
+                        </button>
+                    </div>
 
                 </form>
             </div>
         </div>
 
         <a class="navbar-brand px-3 px-lg-2 me-0 me-lg-2" href="{% url 'product_list' %}">
-            <img src="{% static 'icons/logo-icon.svg' %}" alt="Цветок" width="25px">
-            <span>Цветок</span>
+            <img src="{% static 'icons/logo-icon.svg' %}" alt="Цветок" width="38px">
+            <span class="d-none d-lg-inline-block">Цветок</span>
         </a>
         
         <div class="offcanvas-lg offcanvas-start flex-grow-1 c-bg-main" id="navbarHeader">
@@ -47,6 +47,7 @@
             </div>
 
             <div class="offcanvas-body p-4 pt-0 p-lg-0 align-items-center">
+                <!-- Mobile - ul = dropdown-menu dropdown-menu-end show -->
                 <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav">
                     
                     <li class="nav-item col-12 pt-3 pt-lg-0 col-lg-auto d-flex">
@@ -65,6 +66,7 @@
                             Контакты
                         </a>
 
+                        
                         <a class="nav-link dropdown-toggle py-2 px-0 px-lg-2 d-lg-none c-link-light" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img class="d-lg-none" src="{% static 'icons/contact-mail-icon.png' %}" alt="Каталог" width="29" height="29">
                             <small class="d-lg-none ms-2">Контакты</small>
@@ -202,6 +204,7 @@
                     </li>
         
                 </ul>
+                
             </div>
         </div>
 
