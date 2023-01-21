@@ -13,74 +13,47 @@ body {
     transition: all .2s;
 }
 
-/* Link colors */
-
-.c-link-main {
-    color: #1d1d1d !important;
-    text-decoration: none;
-    transition: all .2s;
-}
-
-.c-link-main:hover {
-    color: rgb(0, 0, 0) !important;
-}
-
-.c-link-gray {
-    color: rgb(255, 255, 255);
-}
-
-.c-link-light {
-    color: rgb(255, 255, 255) !important;
-}
-
-.c-link-light:hover {
-    color: rgb(255, 255, 255) !important;
-}
-
-.c-link-light-active {
-    color: rgb(255, 255, 255) !important;
-}
-
-/* Link colors */
-
-
-/* Button colors */
-
-.c-btn-primary {
-    background-color:#7FEBC1 !important;
-}
-.c-btn-primary:hover {
-    background-color: #78ddb7  !important;
-}
-
-.c-btn-white {
-    background-color: #fafffd;
-}
-.c-btn-white:hover {
-    background-color: #eef0ef;
-}
-/* Button colors */
-
 
 /* Colors */
+.c-main {
+    color: #eb8ab3 !important;
+}
+.c-second {
+    color: #9affbf !important;
+}
+.c-third {
+    color: #DDFFA3 !important;
+}
+.c-black {
+    color: rgb(33,37,41) !important;
+}
+.c-light {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+.c-light:hover {
+    color: rgb(255, 255, 255) !important;
+}
+.c-light:active {
+    color: rgb(221, 255, 163) !important;
+}
 
 .c-bg-main {
     background-color: #eb8ab3 !important;
 }
+.c-bg-main:active {
+    color: rgb(33,37,41) !important;
+}
 .c-bg-second {
     background-color: #9affbf !important;
+}
+.c-bg-second:active {
+    color: rgb(33,37,41) !important;
 }
 .c-bg-third {
     background-color: #DDFFA3 !important;
 }
-.c-main {
-    color: #FF82F7 !important;
-}
-.c-second {
-    color: #c5ffda !important;
-}
-.c-third {
-    color: #F5F564 !important;
+.c-bg-third:active {
+    color: rgb(33,37,41) !important;
 }
 
 .c-bg-body {
@@ -89,36 +62,86 @@ body {
 .c-bg-card {
     background-color: rgb(255, 255, 255);
 }
-
 .c-bg-form {
     background-color:rgb(255, 255, 255) !important;
+}
+
+.c-bg-light {
+    background-color: rgb(255, 255, 255) !important
+}
+.c-bg-light:hover {
+    background-color: rgba(235, 235, 235, 0.85) !important
+}
+.c-bg-light:active {
+    color: rgb(33,37,41) !important
 }
 
 .c-form {
     background-color: rgb(255, 255, 255) !important;
 }
-
-.c-light {
-    color: rgb(255, 255, 255);
-}
-
-.c-black {
-    color: rgb(0, 0, 0) !important;
-}
-
 .c-new-price {
     color: #FF4D51 !important;
 }
 .c-bg-new-price-badge {
     background-color: #FFFC66 !important;
 }
-
 /* Colors */
 
 
+/* Link colors */
+.c-link-main {
+    color: rgb(33,37,41) !important;
+    text-decoration: none;
+    transition: all .2s;
+}
+.c-link-main:hover {
+    color: rgb(33,37,41) !important;
+}
+.c-link-gray {
+    color: rgb(255, 255, 255);
+}
+/* Link colors */
+
+
+/* Buttons */
+.btn-border-c-third:hover {
+    border-color: rgb(221, 255, 163) !important;
+}
+.btn-border-c-third:active{
+    border: 1px;
+    border-color: rgb(221, 255, 163) !important;
+}
+
+
+.c-btn-primary {
+    background-color:#7FEBC1 !important;
+}
+.c-btn-primary:hover {
+    background-color: #78ddb7  !important;
+}
+.c-btn-accept {
+    background-color: #8ADAEB !important;
+}
+.c-btn-accept:hover {
+    background-color: #7cc3d3 !important;
+}
+.c-btn-danger {
+    background-color: #ff7a7c !important;
+}
+.c-btn-danger:hover {
+    background-color: #e96c6f !important;
+}
+
+.c-btn-white {
+    background-color: #fafffd;
+}
+.c-btn-white:hover {
+    background-color: #eef0ef;
+}
+/* Buttons */
+
 
 /* Font-size */
-
 .fs-11 {
     font-size: 11px;
 }
@@ -162,13 +185,8 @@ body {
 }
 
 .products .card:hover {
-    box-shadow: 0 12px 25px -16px #101411;
+    box-shadow: 0 12px 25px -16px rgb(33,37,41);
 } 
-
-/* .products .card-footer {
-    height: 60px;
-    padding-bottom: 10px;
-} */
 
 .old-price {
 	position: relative;
@@ -189,35 +207,16 @@ body {
 /* Product card */
 
 
-/* Page navigation */
-
-nav .pagination {
-    margin: 0;
-    padding-bottom: 1rem;
-}
-
-/* Page navigation */
-
-
 /* header */
-
 .c-bg-input {
-    background-color: rgb(0, 0, 0) !important;
+    background-color: #eb8ab3 !important;
 } 
 .c-bg-input:focus {
-    background-color: rgb(255, 255, 255) !important;
+    background-color: #d37ea1 !important;
 } 
 .c-bg-input:hover {
-    background-color: rgb(148, 148, 148) !important;
+    background-color: #d37ea1 !important;
 }
-
-.c-navbar-item {
-    color: rgba(255, 255, 255, 0.8);
-}
-.c-navbar-item:hover {
-    color: rgba(255, 255, 255, 0.9);
-}
-
 
 .place-holder-color ::placeholder {
     color: var(--bs-navbar-brand-color);   
@@ -230,20 +229,24 @@ nav .pagination {
     color: var(--bs-navbar-brand-color);
 }
 
-
-.product-search {
-    position: absolute;
-    bottom: 0.35rem;
-    left: 50%;
-    margin-left: -100px;
-    padding-bottom: 4px;
+@media (min-width: 992px) {
+    .product-search {
+        position: absolute;
+        bottom: 0.35rem;
+        left: 61%;
+        margin-left: -100px;
+        padding-bottom: 4px;
+    }
 }
-
+@media (min-width: 1200px) {
+    .product-search {
+        left: 50%;
+    }
+}
 /* header */
 
 
 /* footer */
-
 .footer-icons {
     display: inline-block;
     margin-right: 12px;
@@ -257,25 +260,24 @@ footer h4 {
     padding-bottom: 3px;
 }
 footer a {
-    color: rgb(0, 0, 0);
+    color: rgb(33,37,41);
     text-decoration: none;
     transition: all .35s;
 }
 footer a:hover {
-    color: rgb(0, 0, 0) !important;
+    color: rgb(33,37,41) !important;
     text-decoration: underline;
 }
 footer li {
-    color: rgb(0, 0, 0);
+    color: rgb(33,37,41);
 }
 footer li a {
     display: block;
 }
-
 /* footer */
 
-/* modal */
 
+/* modal */
 .modal {
     --bs-modal-border-radius: 1rem;
 }
@@ -301,26 +303,14 @@ footer li a {
     padding: 0.75rem;
 }
 
-/* .counter-products {
-    
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: rgb(255, 255, 255);
-    border-radius: 0.8rem;
-} */
-
-
 .modal-footer .price-modal {
     display: flex;
     align-self: center;
 }
-
 /* modal */
 
 
 /* form auth */
-
 .container-auth > .row > * {
     padding-right: 1rem;
     padding-left: 1rem;
@@ -382,21 +372,17 @@ footer li a {
 .form-auth ul {
     margin-bottom: 0;
 }
-
 /* form auth */
 
 
 /* form */
-
 form .form-floating input {
     background-color:rgb(255, 255, 255) !important;
 }
-
 /* form */
 
 
 /* remove number buttons */
-
 input[type="number"] {
 	-moz-appearance: textfield;
 	-webkit-appearance: textfield;
@@ -407,11 +393,10 @@ input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
 	display: none;
 }
-
 /* remove number buttons */
 
-/* cart */
 
+/* cart */
 .cart-card .row > * {
     margin-top: 0;
 }
