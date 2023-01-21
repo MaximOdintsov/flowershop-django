@@ -3,7 +3,7 @@
 
 <!-- PC -->
 <header class="d-none d-lg-flex navbar navbar-expand-lg navbar-dark bd-navbar sticky-top c-bg-main">
-    <nav class="container-xxl bd-gutter flex-wrap flex-lg-nowrap px-sm-4" aria-label="Main navigation">
+    <nav class="container-xxl bd-gutter flex-nowrap px-4" aria-label="MainNavigationPC">
         
         <div class="d-flex">
             <div class="product-search">
@@ -20,7 +20,7 @@
 
         <a class="navbar-brand px-3 px-lg-2 me-0 me-lg-2" href="{% url 'product_list' %}">
             <img src="{% static 'icons/logo-icon.svg' %}" alt="Цветок" width="37px">
-            <span class="d-lg-inline-block">Цветок</span>
+            <h1 class="d-lg-inline-block fs-21 c-light-active">Цветок</h1>
         </a>
         
         <div class="offcanvas-lg offcanvas-start flex-grow-1 c-bg-main" id="navbarHeaderPC">
@@ -51,27 +51,27 @@
                             Контакты
                         </a>
                         
-                        <ul class="dropdown-menu c-bg-body py-0">
+                        <ul class="dropdown-menu py-0">
 
                             <li class="text-center py-0">
-                                <span class="dropdown-item c-bg-light rounded-0 rounded-top p-2">
+                                <span class="dropdown-item c-btn-light rounded-0 rounded-top p-2">
                                     +7-909-141-32-42
                                 </span>
                             </li>
                             <li class="text-center py-0">
-                                <span class="dropdown-item c-bg-light roudned-0 p-2">
+                                <span class="dropdown-item c-btn-light roudned-0 p-2">
                                     kirov.cvetok@yandex.ru
                                 </span>
                             </li>
                             
                             <li class="row justify-content-between m-0 p-0">
                                 <div class="col-6 border-end m-0 p-0">
-                                    <a class="dropdown-item c-bg-second rounded-0 rounded-start p-2" href="tel:+7-909-141-32-42">
+                                    <a class="dropdown-item c-btn-primary rounded-0 rounded-start p-2" href="tel:+7-909-141-32-42">
                                         Позвонить
                                     </a>
                                 </div>
                                 <div class="col-6 m-0 p-0">
-                                    <a class="dropdown-item c-bg-second roudned-0 rounded-end p-2" href="mailto:kirov.cvetok@yandex.ru">
+                                    <a class="dropdown-item c-btn-primary roudned-0 rounded-end p-2" href="mailto:kirov.cvetok@yandex.ru">
                                         Написать
                                     </a>
                                 </div>
@@ -85,14 +85,14 @@
                             Адрес
                         </a>
 
-                        <ul class="dropdown-menu c-bg-body p-0">
+                        <ul class="dropdown-menu p-0">
                             <li class="text-center border-bottom py-0">
                                 <span class="dropdown-item c-bg-light rounded-0 rounded-top p-2">
                                     ТЦ Север, Октябрьский проспект, 2А, 1 этаж
                                 </span>
                             </li>
                             <li class="py-0">
-                                <iframe src="https://yandex.ru/map-widget/v1/?z=12&ol=biz&oid=1675676940" class="dropdown-item roudned-0 rounded-bottom p-0" width="560" height="400" frameborder="0"></iframe>
+                                <iframe src="https://yandex.ru/map-widget/v1/?z=12&ol=biz&oid=1675676940" class="dropdown-item roudned-0 rounded-bottom p-0" height="570px" frameborder="0"></iframe>
                             </li>
                         </ul>
                     </li>
@@ -106,14 +106,14 @@
                                 <img src="{% static 'icons/shopping-bag-icon.png' %}" alt="shopping-bag-icon" width="29px">
                             </button>
 
-                            <ul class="dropdown-menu dropdown-menu-end c-bg-body rounded-3 py-0 ">
+                            <ul class="dropdown-menu dropdown-menu-end rounded-3 py-0 ">
                                 {% if user.is_authenticated %}
                                     {% if total_items > 0 %}
                                         <li class="text-center py-0">
                                             <h5 class="dropdown-item c-bg-light rounded-top fs-19 p-2 m-0">Товары в корзине</h5>
                                         </li>
                                         <li class="border-top py-0">
-                                            <a href="{% url 'cart' %}" class="dropdown-item c-bg-light d-flex justify-content-between p-2">
+                                            <a href="{% url 'cart' %}" class="dropdown-item c-btn-light d-flex justify-content-between p-2">
                                                 <span>{{ cart.length_cart }} шт.</span> 
                                                 <span>{{ cart.amount }} &#8381;</span>                                 
                                             </a>
@@ -127,7 +127,7 @@
                                         <p class="dropdown-item">Корзина пуста</p>
                                     {% endif %}
                                 {% else %}
-                                    <p class="p-2 m-0">
+                                    <p class="p-2 m-0 c-bg-light rounded-0 rounded-top">
                                         Для добавления товаров в корзину нужно войти в аккаунт
                                     </p>
                                     
@@ -147,16 +147,16 @@
                             <img src="{% static 'icons/user-icon.png' %}" alt="user-icon" width="29px">
                         </button>
 
-                        <ul class="dropdown-menu dropdown-menu-end c-bg-body rounded-3 text-center py-0">
+                        <ul class="dropdown-menu dropdown-menu-end rounded-3 text-center py-0">
                             {% if user.is_authenticated %}
-                                <li><a class="dropdown-item c-bg-light roudned-0 rounded-top p-2" type="button">{{ user }}</a></li>
+                                <li><a class="dropdown-item btn c-btn-light roudned-0 rounded-top p-2" type="button">{{ user }}</a></li>
                                 <li class="py-0">
                                     <a class="dropdown-item c-btn-danger rounded-0 rounded-bottom p-2" href="{% url 'logout' %}">Выйти</a>
                                 </li>
                             {% else %}
-                                <li><a class="dropdown-item c-bg-light roudned-0 rounded-top p-2" href="{% url 'login' %}">Войти</a></li>
+                                <li><a class="dropdown-item c-btn-light roudned-0 rounded-top border-bottom p-2" href="{% url 'login' %}">Войти</a></li>
                                 <li class="pt-0">
-                                    <a class="dropdown-item c-bg-light rounded-0 rounded-bottom p-2" href="{% url 'registration' %}">Зарегистрироваться</a>
+                                    <a class="dropdown-item c-btn-light rounded-0 rounded-bottom p-2" href="{% url 'registration' %}">Зарегистрироваться</a>
                                 </li>
                             {% endif %}
                         </ul> 
@@ -168,7 +168,7 @@
                     </li>
                     
                     <li class="nav-item col-auto">
-                        <a class="nav-linkc-bg-button rounded-3 p-2" href="https://vk.com/id141455317" target="_blank">
+                        <a class="d-flex align-items-center nav-linkc-bg-button rounded-3 p-2" href="https://vk.com/id141455317" target="_blank">
                             <img src="{% static 'icons/vk-header-icon.png' %}" alt="vk.com" width="35px">
                         </a>
                     </li>
@@ -183,29 +183,31 @@
 
 
 <!-- Mobile  -->
-<header class="d-flex d-lg-none navbar navbar-expand-lg navbar-dark bd-navbar sticky-top c-bg-main">
-    <nav class="container-xxl bd-gutter flex-wrap flex-lg-nowrap px-sm-4" aria-label="Main navigation">
+<header class="sticky-top d-flex d-lg-none navbar navbar-expand-lg navbar-dark bd-navbar c-bg-main">
+
+    <!-- Header top -->
+    <nav class="container-fluid bd-gutter flex-wrap px-sm-4" aria-label="MainNavigationMobile">
         <div class="bd-navbar-toggle">
-            <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarHeaderMobile" aria-controls="navbarHeaderMobile" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler rounded-3 p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarHeaderMobile" aria-controls="navbarHeaderMobile" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon "></span>
             </button>
         </div>
-        
+        <a class="navbar-brand d-inline px-3 me-0" href="{% url 'product_list' %}">
+            
+            <h1 class="d-flex align-items-center fs-21 m-0">
+                <img src="{% static 'icons/logo-icon.svg' %}" alt="Цветок" width="38px">
+                Цветок
+            </h1>
+        </a>
         <div class="d-flex">
+            
             <div class="product-search">
                 <form action="{% url 'product_search' %}" method="get" class="col text-center">
-                    <div class="place-holder-color d-lg-flex">
-                        {{ search_form.search_text }}
-                        <button type="submit" class="btn c-bg-button" aria-label="Search">  
-                            <img src="{% static 'icons/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="29" height="29">
-                        </button>
-                    </div>
 
                     <!-- Button for modal in product_list -->
-                    <div class="d-flex place-holder-color d-lg-none">
-                        <button type="button" class="btn c-bg-button border" data-bs-toggle="modal" data-bs-target="#modalSearch">
-                            <span class="c-navbar-item c-light-active">Найти</span>
-                            <img src="{% static 'icons/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="29" height="29">
+                    <div class="d-flex place-holder-color">
+                        <button type="button" class="btn c-bg-button btn-border-c-third" data-bs-toggle="modal" data-bs-target="#modalSearch">
+                            <img src="{% static 'icons/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="34px">
                         </button>
                     </div>
 
@@ -213,183 +215,189 @@
             </div>
         </div>
 
-        <a class="navbar-brand px-3 px-lg-2 me-0 me-lg-2" href="{% url 'product_list' %}">
-            <img src="{% static 'icons/logo-icon.svg' %}" alt="Цветок" width="38px">
-            <span class="d-none d-lg-inline-block">Цветок</span>
-        </a>
+        
         
         <div class="offcanvas-lg offcanvas-start flex-grow-1 c-bg-main" id="navbarHeaderMobile">
 
-            <div class="offcanvas-header border-bottom">
-                <h5 class="offcanvas-title c-light-active" id="bdSidebarOffcanvasLabel">
-                    Разделы сайта
+            <div class="d-flex align-items-center offcanvas-header border-bottom pb-3 mb-3">
+                <h5 class="offcanvas-title c-light-active fs-21" id="bdSidebarOffcanvasLabel">
+                    <img src="{% static 'icons/logo-icon.svg' %}" alt="Цветок" width="38px">
+                    Цветок
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Закрывать" data-bs-target="#navbarHeaderMobile"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Закрыть" data-bs-target="#navbarHeaderMobile"></button>
             </div>
 
-            <div class="offcanvas-body p-4 pt-0 p-lg-0 align-items-center">
-                <!-- Mobile - ul = dropdown-menu dropdown-menu-end show -->
+            <div class="offcanvas-body p-0 ps-3 align-items-center">
+                
                 <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav">
-                    
-                    <li class="nav-item col-12 pt-3 pt-lg-0 col-lg-auto d-flex">
-                        
-                        <a class="nav-link py-2 px-0 px-lg-2 d-none d-lg-block c-light-active" aria-current="true" href="{% url 'product_list' %}">
-                            Каталог
+                    <li class="nav-item dropdown col-12">
+                        <a class="d-block d-sm-none nav-link dropdown-toggle c-light py-2 px-0" data-bs-auto-close="outside" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{% static 'icons/contact-mail-icon.png' %}" alt="Каталог" width="30px">
+                            <span class="ms-2 fs-15">Контакты</span>
                         </a>
-                        <a class="nav-link py-2 px-0 px-lg-2 d-lg-none c-light-active" aria-current="true" href="{% url 'product_list' %}">
-                            <img class="d-lg-none" src="{% static 'icons/catalog-icon.png' %}" alt="Каталог" width="29" height="29">
-                            <small class="d-lg-none ms-2">Каталог</small>
+                        <a class="d-none d-sm-block nav-link dropdown-toggle c-light py-2 px-0" data-bs-auto-close="outside" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{% static 'icons/contact-mail-icon.png' %}" alt="Каталог" width="32px">
+                            <span class="ms-2 fs-17">Контакты</span>
                         </a>
-                    </li>
+                        <ul class="dropdown-menu py-0">
 
-                    <li class="nav-item dropdown col-12 col-lg-auto">
-                        <a class="nav-link dropdown-toggle py-2 px-0 px-lg-2 d-none d-lg-block c-light" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Контакты
-                        </a>
-
-                        
-                        <a class="nav-link dropdown-toggle py-2 px-0 px-lg-2 d-lg-none c-light" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img class="d-lg-none" src="{% static 'icons/contact-mail-icon.png' %}" alt="Каталог" width="29" height="29">
-                            <small class="d-lg-none ms-2">Контакты</small>
-                        </a>
-
-                        <ul class="dropdown-menu c-bg-body">
-                            <li><a class="dropdown-item" href="tel:+7-909-141-32-42">+7-909-141-32-42</a></li>
-                            <li><a class="dropdown-item" href="mailto:kirov.cvetok@yandex.ru">kirov.cvetok@yandex.ru</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="nav-item dropdown col-12 col-lg-auto">
-                        <a class="nav-link dropdown-toggle py-2 px-0 px-lg-2 d-none d-lg-block c-light" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Адрес
-                        </a>
-
-                        <a class="nav-link dropdown-toggle py-2 px-0 px-lg-2 d-lg-none c-light" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img class="d-lg-none" src="{% static 'icons/location-pin-icon.png' %}" alt="Каталог" width="29" height="29">
-                            <small class="d-lg-none ms-2">Наш адрес</small>
-                        </a>
-
-                        <ul class="dropdown-menu c-bg-body">
-                            <li>
-                                <span class="dropdown-item">
-                                    ТЦ Север, Октябрьский проспект 2А, 1 этаж
+                            <li class="text-center py-0">
+                                <span class="dropdown-item c-btn-light rounded-0 rounded-top p-2">
+                                    +7-909-141-32-42
                                 </span>
                             </li>
-                            <li><hr class="dropdown-divider"></li>
-
-                            <li><iframe src="https://yandex.ru/map-widget/v1/?z=12&ol=biz&oid=1675676940" width="560" height="400" frameborder="0"></iframe></li>
-
+                            <li class="text-center py-0">
+                                <span class="dropdown-item c-btn-light roudned-0 p-2">
+                                    kirov.cvetok@yandex.ru
+                                </span>
+                            </li>
+                            
+                            <li class="row justify-content-between m-0 p-0">
+                                <div class="col-6 border-end m-0 p-0">
+                                    <a class="dropdown-item c-btn-primary rounded-0 rounded-start p-2" href="tel:+7-909-141-32-42">
+                                        Позвонить
+                                    </a>
+                                </div>
+                                <div class="col-6 m-0 p-0">
+                                    <a class="dropdown-item c-btn-primary roudned-0 rounded-end p-2" href="mailto:kirov.cvetok@yandex.ru">
+                                        Написать
+                                    </a>
+                                </div>
+                            </li>
                         </ul>
-                        
                     </li>
 
+                    <li class="nav-item dropdown col-12">
+                        <a class="d-block d-sm-none nav-link dropdown-toggle c-light pt-2 pb-0 px-0" data-bs-auto-close="outside" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{% static 'icons/location-pin-icon.png' %}" alt="Каталог" width="30px">
+                            <span class="ms-2 fs-15">Адрес</span>
+                        </a>
+                        <a class="d-none d-sm-block nav-link dropdown-toggle c-light pt-2 pb-0 px-0" data-bs-auto-close="outside" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{% static 'icons/location-pin-icon.png' %}" alt="Каталог" width="32px">
+                            <span class="ms-2 fs-17">Адрес</span>
+                        </a>
+                        <ul class="dropdown-menu p-0" style="max-width: 315px;">
+                            <li class="text-center border-bottom py-0">
+                                <p class="c-bg-light rounded-0 rounded-top p-2">
+                                    ТЦ Север, Октябрьский проспект, 2А, 1 этаж
+                                </p>
+                            </li>
+                            <li class="border rounder-3 py-0">
+                                <iframe src="https://yandex.ru/map-widget/v1/?z=12&ol=biz&oid=1675676940" class="dropdown-item roudned-0 rounded-bottom p-0 " height="400px" frameborder="0"></iframe>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
                 
-                <ul class="navbar-nav flex-row flex-wrap ms-md-auto ">
-
-                    <li class="nav-item dropdown col-12 col-lg-auto me-3">
-                        {% with total_items=cart.length_cart %}
-                            <button class="btn c-bg-button nav-link dropdown-toggle col" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="{% static 'icons/shopping-bag-icon.png' %}" alt="shopping-bag-icon" width="29px">
-                                {% if total_items > 0 %}
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        {{ total_items }}
-                                    </span>
-                                {% endif %}
-                                <small class="d-lg-none ms-2 c-light">Корзина</small>
-
-                            </button>
-
-                            <ul class="dropdown-menu c-bg-body pb-0" style="max-width: 400px;">
-                                
-                                
-                                    {% if user.is_authenticated %}
-                                        {% if total_items > 0 %}
-                                            {% for item in items %}
-                                                {% with product=item.product %}
-                                                    
-                                                    <li>
-                                                        <div class="dropdown-item d-flex justify-content-between align-items-end border-bottom">
-                                                            <span class="pe-2">{{ product.title }}({{ item.quantity }} шт.)</span>
-                                                            
-                                                            <div class="col-3 d-grid text-end">
-                                                                {% if item.amount == item.old_amount %}
-                                                                    <span class="fs-16">{{ item.amount|floatformat:0 }} &#8381;</span>
-                                                                {% else %}
-                                                                    <span>
-                                                                        <del class="old-price fs-11">{{ item.old_amount|floatformat:0 }} &#8381;</del>
-                                                                    </span>
-                                                                    <span class="c-new-price fs-16">{{ item.amount|floatformat:0 }} &#8381;</span>
-                                                                {% endif %}
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    
-                                                {% endwith %}
-                                            {% endfor %}
-                                            <li class="mt-3 pt-3 border-top">
-                                                <h5 class="dropdown-item">Всего:</h5>
-                                                <a href="{% url 'cart' %}" class="dropdown-item d-flex justify-content-between">
-                                                    <span>Товаров: {{ cart.length_cart }} шт:</span> 
-                                                    <span>{{ cart.amount }} &#8381;</span>                                 
-                                                </a>
-                                            </li>
-                                            <li class="pt-2">
-                                                <a href="{% url 'cart' %}" class="dropdown-item btn c-btn-primary">
-                                                    Перейти в корзину
-                                                </a>
-                                            </li>
-                                            
-                                        {% else %}
-                                            <p class="dropdown-item">Корзина пуста</p>
-                                        {% endif %}
-                                    {% else %}
-                                        <p class="dropdown-item">Чтобы добавить товары в корзину - зарегистрируйтесь</p>
-                                        <a href="{% url 'login' %}" class="dropdown-item btn">
-                                            Зарегистрироваться
-                                        </a>
-                                    {% endif %}
-
-                            </ul>
-                        {% endwith %}
+                <ul class="navbar-nav flex-row flex-wrap">
+                    <li class="col-12 nav-item p-0 m-0">
+                        <hr class="text-white">
                     </li>
 
-                    <li class="nav-item dropdown col-12 col-lg-auto">
-                        <button class="btn c-bg-button nav-link dropdown-toggle col" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{% static 'icons/user-icon.png' %}" alt="user-icon" width="29px">
-                            <small class="d-lg-none ms-2 c-light">Профиль</small>
-                        </button>
+                    <li class="nav-item col-12">
+                        <a class="d-block d-sm-none nav-link c-light p-0 px-0" href="https://vk.com/id141455317" target="_blank">
+                            <img src="{% static 'icons/vk-header-icon.png' %}" alt="vk.com" width="34px">
+                            <span class="ms-2 fs-15">Наш vk</span>
+                        </a>
 
-                        <ul class="dropdown-menu c-bg-body">
-                            {% if user.is_authenticated %}
-                                <li><a class="dropdown-item" type="button">{{ user }}</a></li>
-                                <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
-                            {% else %}
-                                <li><a class="dropdown-item" href="{% url 'login' %}">Войти</a></li>
-                                <li><a class="dropdown-item" href="{% url 'registration' %}">Зарегистрироваться</a></li>
-                            {% endif %}
-                        </ul> 
-                    </li>
-
-                    
-                    <li class="nav-item py-1 col-12 col-lg-auto">
-                        <div class="vr d-none d-lg-flex h-100 mx-lg-2 text-white"></div>
-                        <hr class="d-lg-none text-white-50">
-                    </li>
-
-                    <li class="nav-item col-12 col-lg-auto">
-                        <a class="nav-link py-2 px-0 px-lg-2 c-bg-button rounded-3" href="https://vk.com/id141455317" target="_blank">
-                            <img src="{% static 'icons/vk-header-icon.png' %}" alt="vk.com" width="35px">
-                            <small class="d-lg-none ms-2 c-light">Наш vk</small>
+                        <a class="d-none d-sm-block nav-link c-light p-0 px-0" href="https://vk.com/id141455317" target="_blank">
+                            <img src="{% static 'icons/vk-header-icon.png' %}" alt="vk.com" width="36px">
+                            <span class="ms-2 fs-17">Наш vk</span>
                         </a>
                     </li>
-        
                 </ul>
                 
             </div>
         </div>
 
     </nav>
+    <!-- Header top -->
+
+    <!-- Header bottom -->
+        <nav class="container-fluid bd-gutter flex-nowrap c-bg-second fixed-bottom m-0 p-0">
+            
+            <div class="row col-12 justify-content-between align-items-center m-0 p-2">
+                    <div class="col-4 text-center m-0">
+                        <a class="d-block d-sm-none c-link-main" href="{% url 'product_list' %}">
+                            <img src="{% static 'icons/catalog-icon-dark.png' %}" alt="Каталог" width="32px">
+                            <br>
+                            <span class="fs-16">Каталог</span>
+                        </a>
+                        <a class="d-none d-sm-block d-md-none c-link-main" href="{% url 'product_list' %}">
+                            <img src="{% static 'icons/catalog-icon-dark.png' %}" alt="Каталог" width="35px">
+                            <br>
+                            <span class="fs-17">Каталог</span>
+                        </a>
+                        <a class="d-none d-md-block c-link-main" href="{% url 'product_list' %}">
+                            <img src="{% static 'icons/catalog-icon-dark.png' %}" alt="Каталог" width="37px">
+                            <br>
+                            <span class="fs-19">Каталог</span>
+                        </a>
+                    </div>
+
+                    <div class="col-4 text-center m-0">
+                        <a class="d-block d-sm-none c-link-main" href="{% url 'cart' %}">
+                            <img src="{% static 'icons/shopping-bag-icon-dark.png' %}" alt="Корзина" width="32px">
+                            <br>
+                            <span class="fs-16">Корзина</span>
+                        </a>
+                        <a class="d-none d-sm-block d-md-none c-link-main" href="{% url 'cart' %}">
+                            <img src="{% static 'icons/shopping-bag-icon-dark.png' %}" alt="Корзина" width="35px">
+                            <br>
+                            <span class="fs-17">Корзина</span>
+                        </a>
+                        <a class="d-none d-md-block c-link-main" href="{% url 'cart' %}">
+                            <img src="{% static 'icons/shopping-bag-icon-dark.png' %}" alt="Корзина" width="37px">
+                            <br>
+                            <span class="fs-19">Корзина</span>
+                        </a>
+                    </div>
+
+                    <div class="col-4 text-center m-0">
+                        {% if user.is_authenticated %}
+                            <a class="d-block d-sm-none c-link-main" href="{% url 'logout' %}">
+                                <img src="{% static 'icons/user-icon-dark.png' %}" alt="Профиль" width="32px">
+                                <br>
+                                <span class="fs-16">Выйти</span>
+                            </a>
+                            <a class="d-none d-sm-block d-md-none c-link-main" href="{% url 'logout' %}">
+                                <img src="{% static 'icons/user-icon-dark.png' %}" alt="Профиль" width="35px">
+                                <br>
+                                <span class="fs-17">Выйти</span>
+                            </a>
+                            <a class="d-none d-md-block c-link-main" href="{% url 'logout' %}">
+                                <img src="{% static 'icons/user-icon-dark.png' %}" alt="Профиль" width="37px">
+                                <br>
+                                <span class="fs-19">Выйти</span>
+                            </a>
+                        {% else %}
+                            <a class="d-block d-sm-none c-link-main" href="{% url 'login' %}">
+                                <img src="{% static 'icons/user-icon-dark.png' %}" alt="Профиль" width="32px">
+                                <br>
+                                <span class="fs-16">Войти</span>
+                            </a>
+                            <a class="d-none d-sm-block d-md-none c-link-main" href="{% url 'login' %}">
+                                <img src="{% static 'icons/user-icon-dark.png' %}" alt="Профиль" width="35px">
+                                <br>
+                                <span class="fs-17">Войти</span>
+                            </a>
+                            <a class="d-none d-md-block c-link-main" href="{% url 'login' %}">
+                                <img src="{% static 'icons/user-icon-dark.png' %}" alt="Профиль" width="37px">
+                                <br>
+                                <span class="fs-19">Войти</span>
+                            </a>
+                        {% endif %}
+                    </div>
+                   
+                </div>
+            </div>
+
+                
+
+        </nav>
+
+    <!-- Header bottom -->
+
 </header>
 
 <!-- Mobile  -->

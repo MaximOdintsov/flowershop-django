@@ -1,4 +1,4 @@
-.span, h1, h2, h3, h4, h5, h6, p {
+.span, h2, h3, h4, h5, h6, p {
     color: rgb(33,37,41);
 }
 
@@ -36,6 +36,9 @@ body {
 .c-light:active {
     color: rgb(221, 255, 163) !important;
 }
+.c-light-active {
+    color: rgb(255, 255, 255) !important;
+}
 
 .c-bg-main {
     background-color: #eb8ab3 !important;
@@ -67,13 +70,7 @@ body {
 }
 
 .c-bg-light {
-    background-color: rgb(255, 255, 255) !important
-}
-.c-bg-light:hover {
-    background-color: rgba(235, 235, 235, 0.85) !important
-}
-.c-bg-light:active {
-    color: rgb(33,37,41) !important
+    background-color: rgb(252, 252, 252) !important
 }
 
 .c-form {
@@ -92,10 +89,12 @@ body {
 .c-link-main {
     color: rgb(33,37,41) !important;
     text-decoration: none;
-    transition: all .2s;
+    transition: all .3s;
+    
 }
 .c-link-main:hover {
-    color: rgb(33,37,41) !important;
+    color: #eb8ab3 !important;
+    text-decoration: underline;
 }
 .c-link-gray {
     color: rgb(255, 255, 255);
@@ -112,6 +111,15 @@ body {
     border-color: rgb(221, 255, 163) !important;
 }
 
+.c-btn-light {
+    background-color: rgb(252, 252, 252) !important;
+}
+.c-btn-light:hover {
+    background-color: rgba(238, 236, 236, 0.85) !important;
+}
+.c-btn-light:active {
+    color: rgb(33,37,41) !important;
+}
 
 .c-btn-primary {
     background-color:#7FEBC1 !important;
