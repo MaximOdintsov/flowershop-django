@@ -12,53 +12,17 @@
 {% block content %}
     
     <main>
-        <div class="container justify-content-center">
-            <h1 class="text-center mt-3">Оформление заказа</h1>
-
-
-            <!-- DropDown -->
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle col show" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Оформляем товаров: {{ cart.length_cart }} шт. на сумму {{ cart.get_amount|floatformat:0 }}&#8381;
-                    </a>
-
-                    <ul class="dropdown-menu p-2" style="--bs-dropdown-min-width: 26rem;">
-
-                        {% for item in items %}
-                            {% with product=item.product %}
-                            
-                            <li>
-                                <div class="row align-items-end pb-2 border-bottom">
-                                    <span class="col-9">{{ product.title }} ({{ item.quantity }} шт.)</span>
-                                    
-                                    <div class="col-3 text-end d-grid">
-                                        {% if item.amount == item.old_amount %}
-                                            <span class="fs-16">{{ item.amount|floatformat:0 }} &#8381;</span>
-                                        {% else %}
-                                            <span>
-                                                <del class="old-price fs-11">{{ item.old_amount|floatformat:0 }} &#8381;</del>
-                                            </span>
-
-                                            <span class="c-new-price fs-16">{{ item.amount|floatformat:0 }} &#8381;</span>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </li>
-
-                            {% endwith %}
-                        {% endfor %}
-
-                    </ul>
-                </li>
-            </ul>
-            <!-- DropDown -->
+        <div class="container justify-content-center p-0 p-lg-2">
 
             <!-- Form -->
-            <div class="row mt-4">
-                
-                <div class="col-12">
+            <div class="row justify-content-center mt-lg-2">
+                <div class="col-lg-9 col-xl-7 col-xxl-6 justify-content-center">
                     <div class="container-fluid border p-3 shadow rounded-3 c-bg-form">
+                        <h1 class="text-center fs-30 mt-1 mb-3 pt-2 pt-lg-0">Оформление заказа.</h1>
+                        <div class="text-center">
+                            <p class="m-0 p-0"> Товаров: {{ cart.length_cart }} шт.</p>
+                            <p>Сумма заказа: {{ cart.get_amount|floatformat:0 }}&#8381;</p>
+                        </div>
                         <form method="post" action="{% url 'order_create' %}" class="row g-3 needs-validation ">
                             {% csrf_token %}
                             <div class="form-floating mb-2 col-md-12 position-relative">
@@ -140,7 +104,7 @@
                                         <div class="accordion" id="accordionExample">
                                             <div class="accordion-item c-form">
                                                 <h2 class="accordion-header" id="headingOne">
-                                                    <button class="accordion-button c-form" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" 
+                                                    <button class="accordion-button c-btn-form-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" 
                                                     aria-expanded="true" aria-controls="collapseOne">
                                                         Оплата при получении
                                                     </button>
@@ -162,16 +126,17 @@
                                                         <div class="text-danger">
                                                             <small>{{ radio.errors }}</small>
                                                         </div>
-
-                                                        <button class='btn btn-danger' type="submit">
-                                                            Заказать
-                                                        </button> 
+                                                        <div class="d-grid gap-2">
+                                                            <button class="btn c-btn-accept" type="submit">
+                                                                Заказать
+                                                            </button> 
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="accordion-item c-form">
                                                 <h2 class="accordion-header" id="headingTwo" tabindex="0" data-bs-toggle="tooltip" id="headingTwo" data-bs-title="Онлайн оплата сейчас недоступна.">
-                                                    <button class="accordion-button collapsed c-form" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" 
+                                                    <button class="accordion-button collapsed c-btn-form-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" 
                                                     aria-expanded="false" aria-controls="collapseTwo" disabled>
                                                         Оплата онлайн
                                                     </button>
@@ -201,7 +166,7 @@
                                         <div class="accordion" id="accordionExample">
                                             <div class="accordion-item c-form">
                                                 <h2 class="accordion-header" id="headingOne">
-                                                    <button class="accordion-button c-form" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                    <button class="accordion-button c-form c-btn-form-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                                         Оплата при получении
                                                     </button>
                                                 </h2>
@@ -219,14 +184,17 @@
                                                             </label>
                                                         </div>
                                                         
-                                                        <button class='btn btn-danger' type="submit">Заказать</button> 
-                                                    </div>
+                                                        <div class="d-grid gap-2">
+                                                            <button class="btn c-btn-accept" type="submit">
+                                                                Заказать
+                                                            </button> 
+                                                        </div>                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="accordion-item c-form">
                                                     
                                                 <h2 class="accordion-header" id="headingTwo" tabindex="0" data-bs-toggle="tooltip" id="headingTwo" data-bs-title="Онлайн оплата сейчас недоступна.">
-                                                    <button class="accordion-button collapsed c-form" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" 
+                                                    <button class="accordion-button collapsed c-btn-form-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" 
                                                     aria-expanded="false" aria-controls="collapseTwo" disabled>
                                                         Оплата онлайн
                                                     </button>

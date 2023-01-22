@@ -63,7 +63,7 @@ body {
     background-color: rgb(250, 250, 250);
 }
 .c-bg-form {
-    background-color:rgb(255, 255, 255) !important;
+    background-color:#fdc5db !important;
 }
 
 .c-bg-light {
@@ -157,12 +157,32 @@ body {
 .c-btn-main:hover {
     background-color: rgb(206, 118, 154)  !important;
 }
+
 .c-btn-primary {
     background-color:#7FEBC1 !important;
+    color: rgb(33,37,41) !important;
 }
 .c-btn-primary:hover {
     background-color: #78ddb7  !important;
 }
+.c-btn-primary:active {
+    color:rgb(33,37,41) !important;
+}
+
+.c-btn-form-primary {
+    background-color: #ACFCDE !important;
+    color: rgb(33,37,41) !important;
+}
+.c-btn-form-primary:hover {
+    background-color: #a0ebcf !important;
+}
+.c-btn-primary:active {
+    color:rgb(33,37,41) !important;
+}
+.c-btn-light:not(.collapsed) {
+    color: rgb(33,37,41) !important;
+}
+
 .c-btn-accept {
     background-color: #8ADAEB !important;
 }
