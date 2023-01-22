@@ -11,10 +11,7 @@
 
 {% block content %}
 
-
     {% include 'includes/header-pc-cart.html' %}
-
-
     {% include 'includes/header-mobile-cart.html' %}      
 
     <!-- PC -->
@@ -71,9 +68,9 @@
                                         <div class="card-body border-bottom p-3">
                                             <h2 class="card-title text-center fs-21 pb-4 m-0">{{ item.product.title }}</h2>
 
-                                            <div class="d-flex justify-content-between align-items-end p-0">         
+                                            <div class="d-flex row justify-content-between align-items-end p-0 m-0">         
                                                 
-                                                <div class="text-end d-grid d-xl-none">
+                                                <div class="col-7 d-grid d-xl-none m-0 p-0">
                                                     {% if item.product.discount == 0 %}
                                                         <span class="fs-16">
                                                             {{ item.product.new_price }} &#8381;
@@ -89,7 +86,7 @@
                                                         </div>
                                                     {% endif %}
                                                 </div> 
-                                                <div class="text-end d-none d-xl-grid d-xxl-none">
+                                                <div class="col-7 d-none d-xl-grid d-xxl-none m-0 p-0">
                                                     {% if item.product.discount == 0 %}
                                                         <span class="fs-17">
                                                             {{ item.product.new_price }} &#8381;
@@ -105,7 +102,7 @@
                                                         </div>
                                                     {% endif %}
                                                 </div>
-                                                <div class="text-end d-none d-xxl-grid">
+                                                <div class="col-7 d-none d-xxl-grid m-0 p-0">
                                                     {% if item.product.discount == 0 %}
                                                         <span class="fs-19">
                                                             {{ item.product.new_price }} &#8381;
@@ -122,7 +119,7 @@
                                                     {% endif %}
                                                 </div>
 
-                                                <ul class="list-group list-group-horizontal rounded-3">
+                                                <ul class="col-5 list-group list-group-horizontal rounded-3 m-0">
                                                     <li class="list-group-item py-0">
                                                         <form action="{% url 'remove_one_item_to_cart' item.product.id %}" method="post">
                                                             {% csrf_token %}
@@ -216,6 +213,87 @@
                 </div>
                 <!-- Item card -->
 
+
+                <!-- Order conditions card -->
+                <div class="col-4">
+
+                    <div class="card text-bg-light mb-3 rounded-3">
+                        <div class="d-block d-xl-none card-header fs-16">Условия заказа</div>
+                        <div class="d-none d-xl-block d-xxl-none card-header fs-17">Условия заказа</div>
+                        <div class="d-none d-xxl-block card-header fs-19">Условия заказа</div>
+
+                        <div class="card-body c-bg-card rounded-3">
+                            <h5 class="d-flex d-xl-none card-title fs-19">Итого:</h5>
+                            <div class="d-flex d-xl-none justify-content-between align-items-end">
+                                <div class="fs-16">
+                                    <span>Товаров: {{ cart.length_cart }} шт.</span>
+                                </div>
+
+                                <div class="text-end d-grid">
+                                    {% if cart.get_amount == cart.get_old_amount %}                                           
+                                        <h4 class="fs-17">{{ cart.amount }} &#8381</h4>
+                                    {% else %}    
+                                        <span>
+                                            <del class="old-price fs-13">{{ cart.get_old_amount }} &#8381</del>
+                                        </span>
+
+                                        <h4 class="c-new-price fs-17">{{ cart.amount }} &#8381</h4>                        
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <h5 class="d-none d-xl-flex d-xxl-none card-title fs-21">Итого:</h5>
+                            <div class="d-none d-xl-flex d-xxl-none justify-content-between align-items-end">
+                                <div class="fs-17">
+                                    <span>Товаров: {{ cart.length_cart }} шт.</span>
+                                </div>
+
+                                <div class="text-end d-grid">
+                                    {% if cart.get_amount == cart.get_old_amount %}                                           
+                                        <h4 class="fs-19">{{ cart.amount }} &#8381</h4>
+                                    {% else %}    
+                                        <span>
+                                            <del class="old-price fs-14">{{ cart.get_old_amount }} &#8381</del>
+                                        </span>
+
+                                        <h4 class="c-new-price fs-19">{{ cart.amount }} &#8381</span>                        
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <h5 class="d-none d-xxl-flex card-title fs-24">Итого:</h5>
+                            <div class="d-none d-xxl-flex justify-content-between align-items-end">
+                                <div class="fs-19">
+                                    <span >Товаров: {{ cart.length_cart }} шт.</span>
+                                </div>
+
+                                <div class="text-end d-grid">
+                                    {% if cart.get_amount == cart.get_old_amount %}                                           
+                                        <h4 class="fs-21">{{ cart.amount }} &#8381</h4>
+                                    {% else %}    
+                                        <span>
+                                            <del class="old-price fs-16">{{ cart.get_old_amount }} &#8381</del>
+                                        </span>
+
+                                        <h4 class="c-new-price fs-21">{{ cart.amount }} &#8381</h4>                        
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="row border-top m-0 p-0 mt-3 pt-3">
+                                <form class="col-12 ext-cetnter m-0 p-0 mb-1" action="{% url 'order_create' %}" target="_self" method="get">
+                                    <button class="col-12 btn c-btn-accept rounded-3">Перейти к оформлению</button>
+                                </form>
+
+                                <form class="col-12 text-cetnter m-0 p-0 mt-1" action="{% url 'product_list' %}" class="mt-2 pt-2" target="_self" method="get">
+                                    <button class="col-12 btn text-light c-btn-main rounded-3">Перейти в каталог</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Order conditions card -->
+
             {% else %}
                 <div class="text-center">
                     <h1>Корзина пуста</h1>
@@ -231,97 +309,210 @@
 
 
     <!-- Mobile -->
-    <div class="container d-flex d-lg-none">
-        <div class="row">
-            
-            {% if items|length > 0 %}
+    <div class="container d-flex justify-content-center d-lg-none" style="margin-bottom: 10rem;">
+        {% if items|length > 0 %}
+            <div class="row mx-0">
                 <h1 class="text-center">Корзина</h1>
-                <div class="col-12 col-md-6 col-xl-8">
+
+                <!-- Item card  -->
+                <div class="col-12">
                 
                     {% for item in items %}
                         {% if item.quantity >= 1  %}
                             <div class="card mb-3 cart-card rounded-3 c-bg-card">
                                 <div class="row g-0">
 
-                                    <div class="col-md-3">
+                                    <!-- Carousel -->
+                                    <div class="carousel carousel-dark slide col-12 col-sm-5 px-2"  id="carouselCart-mobile-{{ item.product.id }}" data-bs-ride="carousel" data-bs-touch="true">
                                         {% if item.product.preview %}
-                                            <img src="{{ item.product.preview.url }}"
-                                            alt="item.product.title" class="img-fluid rounded-start">
+                                            <div class="carousel-inner py-2">
+                                                <div class="carousel-item active" data-bs-interval="50000">
+                                                    <div class="d-flex d-sm-none justify-content-center">
+                                                        <img class="d-block w-50" src="{{ item.product.preview.url }}" alt="product {{ product.title }}">
+                                                    </div>
+                                                    <div class="d-none d-sm-flex justify-content-center">
+                                                        <img class="d-block w-75" src="{{ item.product.preview.url }}" alt="product {{ product.title }}">
+                                                    </div>
+                                                </div>
+
+                                                {% for product_image in item.product.productgallery_set.all %}
+                                                    <div class="carousel-item" data-bs-interval="50000">
+                                                        <div class="d-flex d-sm-none justify-content-center">
+                                                            <img class="d-block w-50" src="{{ product_image.image.url }}" alt="product {{ product.title }}">
+                                                        </div>
+                                                        <div class="d-none d-sm-flex justify-content-center">
+                                                            <img class="d-block w-75" src="{{ product_image.image.url }}" alt="product {{ product.title }}">
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselCart-mobile-{{ item.product.id }}" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Назад</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselCart-mobile-{{ item.product.id }}" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Дальше</span>
+                                            </button>
                                         {% else %}
                                             <img src="{% static 'icons/image_not_found.jpeg' %}"
                                             alt="item.product.title" class="img-fluid rounded-start">
                                         {% endif %}
                                     </div>
+                                    <!-- Carousel -->
 
-                                    <div class="col-md-9">
-                                        <div class="card-body border-bottom">
-                                            <h5 class="card-title">{{ item.product.title }}</h5>
-                                            <div class="d-flex flex-row-reverse align-items-end">
+                                    <!-- Text  -->
+                                    <div class="col-12 col-sm-7">
 
-                                                
-                                                <div class="p-2">
-                                                    <ul class="list-group list-group-horizontal rounded-3">
-                                                        <li class="list-group-item py-0">
-                                                            <form action="{% url 'remove_one_item_to_cart' item.product.id %}" method="post">
-                                                                {% csrf_token %}
-                                                                <button type="submit" class="btn px-3 py-2">
-                                                                    <img src="{% static 'icons/minus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
-                                                                </button>
-                                                            </form>
-                                                        </li>
-                                                        <li class="list-group-item align-items-center d-grid py-0">
-                                                            <span class="px-3 py-1">{{ item.quantity }}</span>
-                                                        </li>
-                                                        <li class="list-group-item py-0">
-                                                            <form action="{% url 'add_one_item_to_cart' item.product.id %}" method="post">
-                                                                {% csrf_token %}
-                                                                <button type="submit" class="btn px-3 py-2">
-                                                                    <img src="{% static 'icons/plus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
-                                                                </button>
-                                                            </form>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                
-                                                <div class="p-2 text-end d-grid">
-                                                    {% if item.amount == item.old_amount %}
-                                                        <span class="fs-19">{{ item.amount }} &#8381</span>
-                                                    {% else %}
-                                                        <span>
-                                                            <del class="old-price fs-13">{{ item.old_amount }} &#8381</del>
+                                        <!-- Top  -->
+                                        <div class="card-body border-bottom p-3">
+                                            <h2 class="d-block d-sm-none card-title text-center fs-17 pb-4 m-0">{{ item.product.title }}</h2>
+                                            <h2 class="d-none d-sm-block d-md-none card-title text-center fs-17 pb-4 m-0">{{ item.product.title }}</h2>
+                                            <h2 class="d-none d-md-block card-title text-center fs-17 pb-4 m-0">{{ item.product.title }}</h2>
+
+
+                                            <div class="d-flex row justify-content-between align-items-end p-0 m-0">         
+                                                <div class="d-grid d-sm-none col-6 p-0 ps-2">
+                                                    {% if item.product.discount == 0 %}
+                                                        <span class="fs-16">
+                                                            {{ item.product.new_price }} &#8381;
                                                         </span>
-
-                                                        <span class="c-new-price fs-19">{{ item.amount }} &#8381</span>
+                                                    {% else %}
+                                                        <div class="d-grid">
+                                                            <span>
+                                                                <del class="old-price fs-11">{{ item.product.price }} &#8381;</del>
+                                                            </span>
+                                                            <span>
+                                                                <span class="c-new-price fs-16">{{ item.product.new_price }} &#8381;</span>
+                                                            </span>
+                                                        </div>
                                                     {% endif %}
                                                 </div>
+                                                <div class="d-none d-sm-grid d-md-none col-6">
+                                                    {% if item.product.discount == 0 %}
+                                                        <span class="fs-17">
+                                                            {{ item.product.new_price }} &#8381;
+                                                        </span>
+                                                    {% else %}
+                                                        <div class="d-grid">
+                                                            <span>
+                                                                <del class="old-price fs-13">{{ item.product.price }} &#8381;</del>
+                                                            </span>
+                                                            <span>
+                                                                <span class="c-new-price fs-17">{{ item.product.new_price }} &#8381;</span>
+                                                            </span>
+                                                        </div>
+                                                    {% endif %}
+                                                </div> 
+                                                <div class="d-none d-md-grid col-7 ps-3">
+                                                    {% if item.product.discount == 0 %}
+                                                        <span class="fs-16">
+                                                            {{ item.product.new_price }} &#8381;
+                                                        </span>
+                                                    {% else %}
+                                                        <div class="d-grid">
+                                                            <span>
+                                                                <del class="old-price fs-11">{{ item.product.price }} &#8381;</del>
+                                                            </span>
+                                                            <span>
+                                                                <span class="c-new-price fs-16">{{ item.product.new_price }} &#8381;</span>
+                                                            </span>
+                                                        </div>
+                                                    {% endif %}
+                                                </div> 
 
-                                                
+                                                <ul class="col list-group list-group-horizontal rounded-3 m-0 p-0">
+                                                    <li class="list-group-item py-0">
+                                                        <form action="{% url 'remove_one_item_to_cart' item.product.id %}" method="post">
+                                                            {% csrf_token %}
+                                                            <button type="submit" class="btn px-2 py-1">
+                                                                <img src="{% static 'icons/minus-icon.svg' %}" alt="minus-item" width="15rem">
+                                                            </button>
+                                                        </form>
+                                                    </li>
+
+                                                    <li class="list-group-item align-items-center d-grid py-0">
+                                                        <span class="px-3 py-1">{{ item.quantity }}</span>
+                                                    </li>
+
+                                                    <li class="list-group-item py-0">
+                                                        <form action="{% url 'add_one_item_to_cart' item.product.id %}" method="post">
+                                                            {% csrf_token %}
+                                                            <button type="submit" class="btn px-2 py-1">
+                                                                <img src="{% static 'icons/plus-icon.svg' %}" alt="plus-item" width="15rem">
+                                                            </button>
+                                                        </form>
+                                                    </li>     
+                                                </ul>
                                             </div>
                                         </div>
-                                        <form action="{% url 'remove_item_to_cart' item.product.id %}" method="post" class="py-1 px-1">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn">Удалить</button>
-                                        </form>
+                                        <!-- Top  -->
+
+                                        <!-- Bottom  -->
+                                        <div class="row d-xl-none m-0 p-0 p-3">
+                                            <form class="d-flex d-sm-none col-6 align-items-start m-0 p-0 ps-2" action="{% url 'remove_item_to_cart' item.product.id %}" method="post">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn text-start c-link-danger border-0 fs-14 p-0 pe-2">Удалить из корзины</button>
+                                            </form>
+                                            <form class="d-none d-sm-flex d-md-none col-6 align-items-start m-0 p-0 px-2" action="{% url 'remove_item_to_cart' item.product.id %}" method="post">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn text-start c-link-danger border-0 fs-13 p-0">Удалить из корзины</button>
+                                            </form>
+                                            <form class="d-none d-md-flex col-7 align-items-start m-0 p-0 px-3" action="{% url 'remove_item_to_cart' item.product.id %}" method="post">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn text-start c-link-danger border-0 fs-15 p-0">Удалить из корзины</button>
+                                            </form>
+
+
+                                            <div class="d-grid d-sm-none d-md-grid col m-0 p-0">
+                                                <h4 class="text-start fs-19">Всего:</h4>
+                                                {% if item.amount == item.old_amount %}
+                                                    <h4 class="fs-19">{{ item.amount }} &#8381</h4>
+                                                {% else %}
+                                                    <span>
+                                                        <del class="old-price fs-13">{{ item.old_amount }} &#8381</del>
+                                                    </span>
+
+                                                    <h4 class="c-new-price fs-19">{{ item.amount }} &#8381</h4>
+                                                {% endif %}
+                                            </div>
+                                            <div class="d-none d-sm-grid d-md-none col m-0 p-0">
+                                                <h4 class="text-start fs-17">Всего:</h4>
+                                                {% if item.amount == item.old_amount %}
+                                                    <h4 class="fs-17">{{ item.amount }} &#8381</h4>
+                                                {% else %}
+                                                    <span>
+                                                        <del class="old-price fs-13">{{ item.old_amount }} &#8381</del>
+                                                    </span>
+                                                    <h4 class="c-new-price fs-17">{{ item.amount }} &#8381</h4>
+                                                {% endif %}
+                                            </div>
+
+                                        </div>
+                                        <!-- Bottom  -->
+
                                     </div>
+                                    <!-- Text  -->
                                 </div>
                             </div>
                         {% endif %}
                     {% endfor %}
                 </div>
-                
-            {% else %}
-                <div class="text-center">
-                    <h1>Корзина пуста</h1>
-                    <br>
-                    <form action="{% url 'product_list' %}" target="_self" method="get">
-                        <button class="btn btn-light">В каталог</button>
-                    </form>
-                </div>
-            {% endif %}
-        </div>
-
+                <!-- Item card  -->
+            </div>
+        {% else %}
+            <div class="justify-content-center text-center align-items-center">
+                <h2 class="pt-3">Корзина пуста</h2>
+                <br>
+                <form action="{% url 'product_list' %}" target="_self" method="get">
+                    <button class="btn btn-light">В каталог</button>
+                </form>
+            </div>
+        {% endif %}
     </div>
 
+    
     <!-- Mobile -->
 
 {% endblock %}

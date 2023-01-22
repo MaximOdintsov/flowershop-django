@@ -208,11 +208,12 @@
     <!-- Header bottom -->
 
     <!-- Order conditions nav -->
+    {% if items|length > 0 %}
     <nav class="container-fluid d-flex bd-gutter c-bg-card fixed-bottom order-conditions-mobile p-0">
         <div class="row d-flex flex-wrap col-12 justify-content-between align-items-stretch m-0 p-2">
             <div class="col-6 col-sm-7 col-md-8 text-center m-0 p-0">
-                <div class="d-flex d-sm-none align-items-center justify-content-center c-bg-gray border rounded-3 h-100 py-2">
-                    <h4 class="fs-17 pe-1">Итого:</h4>
+                <div class="d-flex d-sm-none align-items-end justify-content-center c-bg-gray border rounded-3 h-100 py-2">
+                    <h4 class="fs-17 pe-3">Итого:</h4>
                     <div class="text-end d-grid">
                         {% if cart.get_amount == cart.get_old_amount %}                                           
                             <h4 class="fs-17">{{ cart.amount|floatformat:0 }} &#8381</h4>
@@ -225,8 +226,8 @@
                         {% endif %}
                     </div>
                 </div>
-                <div class="d-none d-sm-flex d-md-none align-items-center justify-content-center c-bg-gray border rounded-3 h-100 py-2">
-                    <h4 class="fs-19 pe-1">Итого:</h4>
+                <div class="d-none d-sm-flex d-md-none align-items-end justify-content-center c-bg-gray border rounded-3 h-100 py-2">
+                    <h4 class="fs-19 pe-3">Итого:</h4>
                     <div class="text-end d-grid">
                         {% if cart.get_amount == cart.get_old_amount %}                                           
                             <h4 class="fs-19">{{ cart.amount|floatformat:0 }} &#8381</h4>
@@ -239,8 +240,8 @@
                         {% endif %}
                     </div>
                 </div>
-                <div class="d-none d-md-flex align-items-center justify-content-center c-bg-gray border rounded-3 h-100 py-2">
-                    <h4 class="fs-21 pe-1">Итого:</h4>
+                <div class="d-none d-md-flex align-items-end justify-content-center c-bg-gray border rounded-3 h-100 py-2">
+                    <h4 class="fs-21 pe-3">Итого:</h4>
                     <div class="text-end d-grid">
                         {% if cart.get_amount == cart.get_old_amount %}                                           
                             <h4 class="fs-21">{{ cart.amount|floatformat:0 }} &#8381</h4>
@@ -256,19 +257,20 @@
             </div>
 
             <div class="col-6 col-sm-5 col-md-4 text-center m-0 p-0">
-                <div class="d-block d-sm-none h-100 w-100">
+                <form class="d-block d-sm-none h-100 w-100" action="{% url 'order_create' %}" target="_self" method="get">
                     <button class="fs-17 btn c-btn-accept rounded-3 h-100 w-100">Перейти к оформлению</button>
-                </div>
-                <div class="d-none d-sm-block d-md-none h-100 w-100">
+                </form>
+                <form class="d-none d-sm-block d-md-none h-100 w-100" action="{% url 'order_create' %}" target="_self" method="get">
                     <button class="fs-19 btn c-btn-accept rounded-3 h-100 w-100">Перейти к оформлению</button>
-                </div>
-                <div class="d-none d-md-block h-100 w-100">
+                </form>
+                <form class="d-none d-md-block h-100 w-100" action="{% url 'order_create' %}" target="_self" method="get">
                     <button class="fs-21 btn c-btn-accept rounded-3 h-100 w-100">Перейти к оформлению</button>
-                </div>
+                </form>
             </div>
             
         </div>  
 
     </nav>
+    {% endif %}
     <!-- Order conditions nav -->
 </header>
