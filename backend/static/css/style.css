@@ -30,14 +30,11 @@ body {
 .c-light {
     color: rgba(255, 255, 255, 0.85) !important;
 }
-.c-light:hover {
-    color: rgb(255, 255, 255) !important;
-}
-.c-light:active {
-    color: rgb(221, 255, 163) !important;
-}
 .c-light-active {
     color: rgb(255, 255, 255) !important;
+}
+.c-gray {
+    color: rgba(235, 235, 235, 0.85);
 }
 
 .c-bg-main {
@@ -63,14 +60,23 @@ body {
     background-color: rgb(255, 255, 255) !important;
 }
 .c-bg-card {
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(250, 250, 250);
 }
 .c-bg-form {
     background-color:rgb(255, 255, 255) !important;
 }
 
 .c-bg-light {
-    background-color: rgb(252, 252, 252) !important
+    background-color: rgb(252, 252, 252) !important;
+}
+.c-bg-light:active {
+    color: rgb(33,37,41) !important;
+}
+.c-bg-gray {
+    background-color:rgb(235, 235, 235) !important;
+}
+.c-bg-dark {
+    background-color: rgb(33,37,41) !important;
 }
 
 .c-form {
@@ -96,8 +102,32 @@ body {
     color: #eb8ab3 !important;
     text-decoration: underline;
 }
+
+.c-link-light {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+.c-link-light:hover {
+    color: rgb(255, 255, 255) !important;
+}
+.c-link-light:active {
+    color: rgb(221, 255, 163) !important;
+}
+
 .c-link-gray {
-    color: rgb(255, 255, 255);
+    color: rgb(235, 235, 235) !important;
+    text-decoration: none;
+    transition: all .3s;
+}
+.c-link-gray:hover {
+    color: rgb(255, 255, 255) !important;
+    text-decoration: underline;
+}
+.c-link-danger {
+    color: rgb(33,37,41) !important;
+    transition: all 0.3s;
+}
+.c-link-danger:hover {
+    color: #e96d6f !important;
 }
 /* Link colors */
 
@@ -121,6 +151,12 @@ body {
     color: rgb(33,37,41) !important;
 }
 
+.c-btn-main {
+    background-color:#eb8ab3 !important;
+}
+.c-btn-main:hover {
+    background-color: rgb(206, 118, 154)  !important;
+}
 .c-btn-primary {
     background-color:#7FEBC1 !important;
 }
@@ -211,6 +247,22 @@ body {
     left: 0;
     transform: rotate(-5deg);
     width: 100%;
+}
+
+@media (max-width: 576px) {
+    .order-conditions-mobile {
+        margin-bottom: 4.5rem;
+    }
+}
+@media (min-width: 576px) {
+    .order-conditions-mobile {
+        margin-bottom: 4.75rem;
+    }
+}
+@media (min-width: 768px) {
+    .order-conditions-mobile {
+        margin-bottom: 5.rem;
+    }
 }
 /* Product card */
 
@@ -304,9 +356,7 @@ footer li a {
     padding-right: 0;
     padding-left: 0;
 }
-.carousel-control-next, .carousel-control-prev {
-    width: 9%;
-}
+
 .modal-header {
     padding: 0.75rem;
 }

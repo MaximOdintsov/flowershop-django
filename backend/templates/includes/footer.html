@@ -1,29 +1,32 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
-<footer class="bg-dark">
 
-    <div class="container">
+<footer class="c-bg-dark">
 
-        <div class="row row-cols-xs-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+    <!-- PC -->
+    <div class="d-none d-lg-block container">
+
+        <div class="row row-cols-lg-4">
 
             <div class="col">
 
-                <h4>Наши контакты</h4>
+                <h4 class="c-light">Наши контакты</h4>
                 <ul class="list-unstyled">
-                    <li><a href="tel:+7-909-141-32-42">+7-909-141-32-42</a></li>
-                    <li><a href="mailto:kirov.cvetok@yandex.ru">kirov.cvetok@yandex.ru</a></li>
+                    <li><a class="c-link-gray" href="tel:+7-909-141-32-42">+7-909-141-32-42</a></li>
+                    <li><a class="c-link-gray" href="mailto:kirov.cvetok@yandex.ru">kirov.cvetok@yandex.ru</a></li>
                 </ul>
 
             </div>
 
             <div class="col">
 
-                <h4>Адрес</h4>
+                <h4 class="c-light">Адрес</h4>
 
                 <ul class="list-unstyled">
-                    <li>ТЦ Север, Октябрьский проспект 2А, 1 этаж</li>
-                    <li><a href="https://yandex.ru/maps/46/kirov/?ll=49.613600%2C58.638401&mode=poi&poi%5Bpoint%5D=49.613509%2C58.638403&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D1675676940&z=21">
+                    <li class="c-gray">ТЦ Север, Октябрьский проспект 2А, 1 этаж</li>
+                    <li>
+                        <a class="c-link-gray" href="https://yandex.ru/maps/46/kirov/?ll=49.613600%2C58.638401&mode=poi&poi%5Bpoint%5D=49.613509%2C58.638403&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D1675676940&z=21">
                         Посмотреть на карте</a>
                     </li>
                 </ul>
@@ -32,12 +35,12 @@
 
             <div class="col">
 
-                <h4>Время работы</h4>
+                <h4 class="c-light">Время работы</h4>
                 <ul class="list-unstyled">
 
-                    <li>Пн-Пт: 8:00-19:00</li>
-                    <li>Сб: 9:30-18:00</li>
-                    <li>Вс: 9:30-17:00</li>
+                    <li class="c-gray">Пн-Пт: 8:00-19:00</li>
+                    <li class="c-gray">Сб: 9:30-18:00</li>
+                    <li class="c-gray">Вс: 9:30-17:00</li>
 
                 </ul>
 
@@ -45,10 +48,10 @@
 
             <div class="col">
 
-                <h4>Мы в сети</h4>
+                <h4 class="c-light">Мы в сети</h4>
 
                 <div>
-                    <a href="https://vk.com/id141455317" class="footer-icons" target="_blank">
+                    <a class="footer-icons" href="https://vk.com/id141455317" target="_blank">
                         <img src="{% static 'icons/vk-footer-icon.png' %}" alt="vk.com" width="25px">
                     </a>
                 </div>
@@ -59,7 +62,68 @@
         </div>
 
     </div>
+    <!-- PC -->
 
+
+    <!-- Mobile  -->
+    <div class="d-flex align-items-center d-lg-none px-3 pb-5 mb-5">
+
+        <div class="row m-0">
+
+            <div class="col-6 col-md-3">
+
+                <h4 class="c-light fs-19">Наши контакты</h4>
+                <ul class="list-unstyled">
+                    <li><a class="c-link-gray fs-16" href="tel:+7-909-141-32-42">+7-909-141-32-42</a></li>
+                    <li><a class="c-link-gray fs-16" href="mailto:kirov.cvetok@yandex.ru">kirov.cvetok@yandex.ru</a></li>
+                </ul>
+
+            </div>
+
+            <div class="col-6 col-md-3">
+
+                <h4 class="c-light fs-19">Адрес</h4>
+
+                <ul class="list-unstyled">
+                    <li class="c-gray fs-16">ТЦ Север, Октябрьский проспект 2А, 1 этаж</li>
+                    <li>
+                        <a class="c-link-gray fs-16" href="https://yandex.ru/maps/46/kirov/?ll=49.613600%2C58.638401&mode=poi&poi%5Bpoint%5D=49.613509%2C58.638403&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D1675676940&z=21">
+                        Посмотреть на карте</a>
+                    </li>
+                </ul>
+
+            </div>
+
+            <div class="col-6 col-md-3">
+
+                <h4 class="c-light fs-19">Время работы</h4>
+                <ul class="list-unstyled">
+
+                    <li class="c-gray fs-16">Пн-Пт: 8:00-19:00</li>
+                    <li class="c-gray fs-16">Сб: 9:30-18:00</li>
+                    <li class="c-gray fs-16">Вс: 9:30-17:00</li>
+
+                </ul>
+
+            </div>
+
+            <div class="col-6 col-md-3">
+
+                <h4 class="c-light fs-19">Мы в сети</h4>
+
+                <div>
+                    <a class="footer-icons" href="https://vk.com/id141455317" target="_blank">
+                        <img src="{% static 'icons/vk-footer-icon.png' %}" alt="vk.com" width="22px">
+                    </a>
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- Mobile  -->
 
 </footer>
 

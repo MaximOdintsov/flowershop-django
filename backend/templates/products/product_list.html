@@ -6,7 +6,7 @@
 {% endblock %}
 
 
-{% block title %} Цветы {% endblock %}
+{% block title %} Цветок {% endblock %}
 
 
 {% block content %}
@@ -109,12 +109,17 @@
 
                                                 <div class="carousel-inner">
                                                     <div class="carousel-item active" data-bs-interval="50000">
-                                                        <img class="d-block w-100" src="{{ product.preview.url }}" alt="product {{ product.title }}">
+                                                        <div class="d-flex justify-content-center">
+                                                            <img class="d-block w-75" src="{{ product.preview.url }}" alt="product {{ product.title }}">
+                                                        </div>
+                                                    
                                                     </div>
 
                                                     {% for product_image in product.productgallery_set.all %}
                                                     <div class="carousel-item" data-bs-interval="50000">
-                                                        <img class="d-block w-100" src="{{ product_image.image.url }}" alt="product {{ product.title }}">
+                                                        <div class="d-flex justify-content-center">
+                                                            <img class="d-block w-75" src="{{ product_image.image.url }}" alt="product {{ product.title }}">
+                                                        </div>
                                                     </div>
                                                     {% endfor %}
                                                 </div>

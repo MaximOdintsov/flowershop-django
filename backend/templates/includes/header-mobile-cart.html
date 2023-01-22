@@ -1,186 +1,12 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
-<!-- PC -->
-<header class="d-none d-lg-flex navbar navbar-expand-lg navbar-dark bd-navbar sticky-top c-bg-main">
-    <nav class="container-xxl bd-gutter flex-nowrap px-4" aria-label="MainNavigationPC">
-        
-        <div class="d-flex">
-            <div class="product-search">
-                <form action="{% url 'product_search' %}" method="get" class="col-10 col-xl-12 text-center">
-                    <div class="d-flex place-holder-color">
-                        {{ search_form.search_text }}
-                        <button type="submit" class="btn c-bg-button px-1 btn-border-c-third" aria-label="Search">  
-                            <img src="{% static 'icons/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="29" height="29">
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <a class="navbar-brand px-3 px-lg-2 me-0 me-lg-2" href="{% url 'product_list' %}">
-            <img src="{% static 'icons/logo-icon.svg' %}" alt="Цветок" width="37px">
-            <h1 class="d-lg-inline-block fs-21 c-light-active">Цветок</h1>
-        </a>
-        
-        <div class="offcanvas flex-grow-1 c-bg-main" id="navbarHeaderPC">
-
-            <div class="offcanvas-body p-4 pt-0 p-lg-0 align-items-center">
-                <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav">
-                    
-                    <li class="nav-item col-auto d-flex">
-                        <a class="nav-link c-link-light p-2" aria-current="true" href="{% url 'product_list' %}">
-                            Каталог
-                        </a>
-                    </li>
-                    <li class="nav-item col-auto d-flex">     
-                        <a class="nav-link c-link-light p-2" aria-current="true" href="{% url 'product_list' %}">
-                            Доставка
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown col-auto" >
-                        <a class="nav-link dropdown-toggle c-link-light p-2" data-bs-auto-close="outside" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Контакты
-                        </a>
-                        
-                        <ul class="dropdown-menu py-0">
-
-                            <li class="text-center py-0">
-                                <span class="dropdown-item c-btn-light rounded-0 rounded-top p-2">
-                                    +7-909-141-32-42
-                                </span>
-                            </li>
-                            <li class="text-center py-0">
-                                <span class="dropdown-item c-btn-light roudned-0 p-2">
-                                    kirov.cvetok@yandex.ru
-                                </span>
-                            </li>
-                            
-                            <li class="row justify-content-between m-0 p-0">
-                                <div class="col-6 border-end m-0 p-0">
-                                    <a class="dropdown-item c-btn-primary text-center rounded-0 rounded-start p-2" href="tel:+7-909-141-32-42">
-                                        Позвонить
-                                    </a>
-                                </div>
-                                <div class="col-6 m-0 p-0">
-                                    <a class="dropdown-item c-btn-primary text-center roudned-0 rounded-end p-2" href="mailto:kirov.cvetok@yandex.ru">
-                                        Написать
-                                    </a>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                    
-                    <li class="nav-item dropdown col-auto">
-                        
-                        <a class="nav-link dropdown-toggle c-link-light p-2" data-bs-auto-close="outside" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Адрес
-                        </a>
-
-                        <ul class="dropdown-menu p-0">
-                            <li class="text-center border-bottom py-0">
-                                <span class="dropdown-item c-bg-light rounded-0 rounded-top p-2">
-                                    ТЦ Север, Октябрьский проспект, 2А, 1 этаж
-                                </span>
-                            </li>
-                            <li class="py-0">
-                                <iframe src="https://yandex.ru/map-widget/v1/?z=12&ol=biz&oid=1675676940" class="dropdown-item roudned-0 rounded-bottom p-0" height="570px" frameborder="0"></iframe>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-                
-                <ul class="navbar-nav flex-row flex-wrap ms-md-auto ">
-
-                    <li class="nav-item dropdown col-auto">
-                        {% with total_items=cart.length_cart %}
-                            <button class="btn c-bg-button nav-link dropdown-toggle btn-border-c-third" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="{% static 'icons/shopping-bag-icon.png' %}" alt="shopping-bag-icon" width="29px">
-                            </button>
-
-                            <ul class="dropdown-menu dropdown-menu-end rounded-3 py-0 ">
-                                {% if user.is_authenticated %}
-                                    {% if total_items > 0 %}
-                                        <li class="text-center py-0">
-                                            <h5 class="dropdown-item c-bg-light rounded-top fs-19 p-2 m-0">Товары в корзине</h5>
-                                        </li>
-                                        <li class="border-top py-0">
-                                            <a href="{% url 'cart' %}" class="dropdown-item c-btn-light d-flex justify-content-between p-2">
-                                                <span>{{ cart.length_cart }} шт.</span> 
-                                                <span>{{ cart.amount }} &#8381;</span>                                 
-                                            </a>
-                                        </li>
-                                        <li class="text-center py-0">
-                                            <a href="{% url 'cart' %}" class="dropdown-item btn c-btn-primary rounded-0 rounded-bottom p-2">
-                                                Перейти в корзину
-                                            </a>
-                                        </li>
-                                    {% else %}
-                                        <p class="dropdown-item">Корзина пуста</p>
-                                    {% endif %}
-                                {% else %}
-                                    <p class="p-2 m-0 c-bg-light rounded-0 rounded-top">
-                                        Для добавления товаров в корзину нужно войти в аккаунт
-                                    </p>
-                                    
-                                    <li class="text-center py-0">
-                                        <a href="{% url 'login' %}" class="dropdown-item btn c-btn-primary rounded-0 rounded-bottom p-2">
-                                            Войти
-                                        </a>
-                                    </li>
-
-                                {% endif %}
-                            </ul>
-                        {% endwith %}
-                    </li>
-
-                    <li class="nav-item dropdown col-auto">
-                        <button class="btn c-bg-button nav-link dropdown-toggle btn-border-c-third" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{% static 'icons/user-icon.png' %}" alt="user-icon" width="29px">
-                        </button>
-
-                        <ul class="dropdown-menu dropdown-menu-end rounded-3 text-center py-0">
-                            {% if user.is_authenticated %}
-                                <li><a class="dropdown-item btn c-btn-light roudned-0 rounded-top p-2" type="button">{{ user }}</a></li>
-                                <li class="py-0">
-                                    <a class="dropdown-item c-btn-danger rounded-0 rounded-bottom p-2" href="{% url 'logout' %}">Выйти</a>
-                                </li>
-                            {% else %}
-                                <li><a class="dropdown-item c-btn-light roudned-0 rounded-top border-bottom p-2" href="{% url 'login' %}">Войти</a></li>
-                                <li class="pt-0">
-                                    <a class="dropdown-item c-btn-light rounded-0 rounded-bottom p-2" href="{% url 'registration' %}">Зарегистрироваться</a>
-                                </li>
-                            {% endif %}
-                        </ul> 
-                    </li>
-
-                    <li class="nav-item py-1 col-auto">
-                        <div class="vr d-lg-flex h-100 mx-lg-2 text-white"></div>
-                        <hr class="d-lg-none text-white-50">
-                    </li>
-                    
-                    <li class="nav-item col-auto">
-                        <a class="d-flex align-items-center p-2" href="https://vk.com/id141455317" target="_blank">
-                            <img src="{% static 'icons/vk-header-icon.png' %}" alt="vk.com" width="35px">
-                        </a>
-                    </li>
-                </ul>
-                
-            </div>
-        </div>
-
-    </nav>
-</header>
-<!-- PC -->
-
-
-<!-- Mobile  -->
 <header class="sticky-top d-flex d-lg-none navbar navbar-expand-lg navbar-dark bd-navbar c-bg-main">
 
     <!-- Header top -->
-    <nav class="container-fluid bd-gutter flex-wrap px-sm-4" aria-label="MainNavigationMobile">
+    <nav class="container-fluid bd-gutter flex-wrap px-sm-4" aria-label="MainNavigationMobileCart">
         <div class="bd-navbar-toggle">
-            <button class="navbar-toggler rounded-3 p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarHeaderMobile" aria-controls="navbarHeaderMobile" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler rounded-3 p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarHeaderMobileCart" aria-controls="navbarHeaderMobileCart" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon "></span>
             </button>
         </div>
@@ -196,7 +22,7 @@
             <div class="product-search">
                 <form action="{% url 'product_search' %}" method="get" class="col text-center">
                     <div class="d-flex place-holder-color">
-                        <button type="button" class="btn c-bg-button btn-border-c-third" data-bs-toggle="modal" data-bs-target="#modalSearch">
+                        <button type="button" class="btn c-bg-button btn-border-c-third" data-bs-toggle="modal" data-bs-target="#modalSearchMobileCart">
                             <img src="{% static 'icons/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="34px">
                         </button>
                     </div>
@@ -204,14 +30,14 @@
             </div>
         </div>
 
-        <div class="offcanvas offcanvas-start flex-grow-1 c-bg-main" id="navbarHeaderMobile">
+        <div class="offcanvas offcanvas-start flex-grow-1 c-bg-main" id="navbarHeaderMobileCart">
 
             <div class="d-flex align-items-center offcanvas-header border-bottom pb-3 mb-3">
                 <h5 class="offcanvas-title c-light-active fs-21" id="bdSidebarOffcanvasLabel">
                     <img src="{% static 'icons/logo-icon.svg' %}" alt="Цветок" width="38px">
                     Цветок
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Закрыть" data-bs-target="#navbarHeaderMobile"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Закрыть" data-bs-target="#navbarHeaderMobileCart"></button>
             </div>
 
             <div class="offcanvas-body p-0 ps-3 align-items-center">
@@ -375,10 +201,74 @@
                         </a>
                     {% endif %}
                 </div>
+               
             </div>
         </div>
     </nav>
     <!-- Header bottom -->
-        
+
+    <!-- Order conditions nav -->
+    <nav class="container-fluid d-flex bd-gutter c-bg-card fixed-bottom order-conditions-mobile p-0">
+        <div class="row d-flex flex-wrap col-12 justify-content-between align-items-stretch m-0 p-2">
+            <div class="col-6 col-sm-7 col-md-8 text-center m-0 p-0">
+                <div class="d-flex d-sm-none align-items-center justify-content-center c-bg-gray border rounded-3 h-100 py-2">
+                    <h4 class="fs-17 pe-1">Итого:</h4>
+                    <div class="text-end d-grid">
+                        {% if cart.get_amount == cart.get_old_amount %}                                           
+                            <h4 class="fs-17">{{ cart.amount|floatformat:0 }} &#8381</h4>
+                        {% else %}    
+                            <span>
+                                <del class="old-price fs-11">{{ cart.get_old_amount|floatformat:0 }} &#8381</del>
+                            </span>
+
+                            <h4 class="c-new-price fs-17">{{ cart.amount|floatformat:0 }} &#8381</h4>                        
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="d-none d-sm-flex d-md-none align-items-center justify-content-center c-bg-gray border rounded-3 h-100 py-2">
+                    <h4 class="fs-19 pe-1">Итого:</h4>
+                    <div class="text-end d-grid">
+                        {% if cart.get_amount == cart.get_old_amount %}                                           
+                            <h4 class="fs-19">{{ cart.amount|floatformat:0 }} &#8381</h4>
+                        {% else %}    
+                            <span>
+                                <del class="old-price fs-13">{{ cart.get_old_amount|floatformat:0 }} &#8381</del>
+                            </span>
+
+                            <h4 class="c-new-price fs-19">{{ cart.amount|floatformat:0 }} &#8381</h4>                        
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="d-none d-md-flex align-items-center justify-content-center c-bg-gray border rounded-3 h-100 py-2">
+                    <h4 class="fs-21 pe-1">Итого:</h4>
+                    <div class="text-end d-grid">
+                        {% if cart.get_amount == cart.get_old_amount %}                                           
+                            <h4 class="fs-21">{{ cart.amount|floatformat:0 }} &#8381</h4>
+                        {% else %}    
+                            <span>
+                                <del class="old-price fs-15">{{ cart.get_old_amount|floatformat:0 }} &#8381</del>
+                            </span>
+
+                            <h4 class="c-new-price fs-21">{{ cart.amount|floatformat:0 }} &#8381</h4>                        
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 col-sm-5 col-md-4 text-center m-0 p-0">
+                <div class="d-block d-sm-none h-100 w-100">
+                    <button class="fs-17 btn c-btn-accept rounded-3 h-100 w-100">Перейти к оформлению</button>
+                </div>
+                <div class="d-none d-sm-block d-md-none h-100 w-100">
+                    <button class="fs-19 btn c-btn-accept rounded-3 h-100 w-100">Перейти к оформлению</button>
+                </div>
+                <div class="d-none d-md-block h-100 w-100">
+                    <button class="fs-21 btn c-btn-accept rounded-3 h-100 w-100">Перейти к оформлению</button>
+                </div>
+            </div>
+            
+        </div>  
+
+    </nav>
+    <!-- Order conditions nav -->
 </header>
-<!-- Mobile  -->
