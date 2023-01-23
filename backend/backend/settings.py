@@ -91,14 +91,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
-#     }
-# }
-
 DATABASES = {
     "default": {
         "ENGINE": os.getenv("SQL_ENGINE"),
@@ -168,13 +160,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 if int(os.getenv('PRODUCTION_VERSION')):
-    # for prod
+    # static and media for prod
     STATIC_URL = '/static/'
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    STATIC_ROOT = BASE_DIR / 'static'
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'media'
+
+    # for nginx
+    CSRF_TRUSTED_ORIGINS = ["http://kirovcvetok.ru/", "http://.kirovcvetok.ru/", "https://kirovcvetok.ru/", "https://.kirovcvetok.ru/"]
+
 else:
-    # for dev
+    # static and media for dev
     STATIC_URL = '/static/'
     STATICFILES_DIRS = [
         BASE_DIR / 'static',
@@ -197,9 +193,6 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
 }
-
-# for nginx
-CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://localhost:1337", "http://127.0.0.1:1337", "http://kirovcvetok.ru/", "http://.kirovcvetok.ru/"]
 
 # ssl
 if int(os.getenv('SSL')):
