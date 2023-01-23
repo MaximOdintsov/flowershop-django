@@ -2,7 +2,7 @@
 
 {% block static %}
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
 {% endblock %}
 
 
@@ -57,7 +57,7 @@
                                                 <span class="visually-hidden">Дальше</span>
                                             </button>
                                         {% else %}
-                                            <img src="{% static 'icons/image_not_found.jpeg' %}"
+                                            <img src="{% static 'products/icons/image_not_found.jpeg' %}"
                                             alt="item.product.title" class="img-fluid rounded-start">
                                         {% endif %}
                                     </div>
@@ -124,7 +124,7 @@
                                                         <form action="{% url 'remove_one_item_to_cart' item.product.id %}" method="post">
                                                             {% csrf_token %}
                                                             <button type="submit" class="btn px-3 py-2">
-                                                                <img src="{% static 'icons/minus-icon.svg' %}" alt="minus-item" width="15rem">
+                                                                <img src="{% static 'products/icons/minus-icon.svg' %}" alt="minus-item" width="15rem">
                                                             </button>
                                                         </form>
                                                     </li>
@@ -137,7 +137,7 @@
                                                         <form action="{% url 'add_one_item_to_cart' item.product.id %}" method="post">
                                                             {% csrf_token %}
                                                             <button type="submit" class="btn px-3 py-2">
-                                                                <img src="{% static 'icons/plus-icon.svg' %}" alt="plus-item" width="15rem">
+                                                                <img src="{% static 'products/icons/plus-icon.svg' %}" alt="plus-item" width="15rem">
                                                             </button>
                                                         </form>
                                                     </li>     
@@ -356,7 +356,7 @@
                                                 <span class="visually-hidden">Дальше</span>
                                             </button>
                                         {% else %}
-                                            <img src="{% static 'icons/image_not_found.jpeg' %}"
+                                            <img src="{% static 'products/icons/image_not_found.jpeg' %}"
                                             alt="item.product.title" class="img-fluid rounded-start">
                                         {% endif %}
                                     </div>
@@ -427,7 +427,7 @@
                                                         <form action="{% url 'remove_one_item_to_cart' item.product.id %}" method="post">
                                                             {% csrf_token %}
                                                             <button type="submit" class="btn px-2 py-1">
-                                                                <img src="{% static 'icons/minus-icon.svg' %}" alt="minus-item" width="15rem">
+                                                                <img src="{% static 'products/icons/minus-icon.svg' %}" alt="minus-item" width="15rem">
                                                             </button>
                                                         </form>
                                                     </li>
@@ -440,7 +440,7 @@
                                                         <form action="{% url 'add_one_item_to_cart' item.product.id %}" method="post">
                                                             {% csrf_token %}
                                                             <button type="submit" class="btn px-2 py-1">
-                                                                <img src="{% static 'icons/plus-icon.svg' %}" alt="plus-item" width="15rem">
+                                                                <img src="{% static 'products/icons/plus-icon.svg' %}" alt="plus-item" width="15rem">
                                                             </button>
                                                         </form>
                                                     </li>     
