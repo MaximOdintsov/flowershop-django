@@ -29,7 +29,7 @@
                         {{ search_form.search_text }}
                         
                         <button type="submit" class="btn c-bg-button" aria-label="modalSearchLabel">  
-                            <img src="{% static 'products/icons/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="29" height="29">
+                            <img src="{% static 'products/icons/light/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="29" height="29">
                         </button>
                     </div>
                 </form>
@@ -84,8 +84,9 @@
                             <form action="{% url 'add_one_item_to_cart' product.id %}" class="col-8 d-flex justify-content-center" method="post">
                                 {% csrf_token %}
                                 <button class="btn p-0">
-                                    <img src="{% static 'products/icons/add-to-cart-icon.png' %}" alt="shopping-bag-icon" width="35rem">
+                                    <img src="{% static 'products/icons/dark/add-to-cart-icon.png' %}" alt="shopping-bag-icon" width="35rem">
                                 </button>
+
                             </form>
                         </div>
                     </div>
@@ -185,14 +186,14 @@
                                         {% csrf_token %}
 
                                         <div class="col-5 justify-content-center border rounded-3 row m-0 p-0">
-                                            <button class="btn col-4 c-btn-white rounded-0 m-0 p-0" type="button" onclick="this.nextElementSibling.stepDown();">
-                                                <img src="{% static 'products/icons/minus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
+                                            <button class="btn col-4 c-btn-white rounded-3 m-0 p-0" type="button" onclick="this.nextElementSibling.stepDown();">
+                                                <img src="{% static 'products/icons/dark/minus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
                                             </button>
 
                                             {{ cart_add_quantity_form.quantity }}
 
-                                            <button class="btn col-4 c-btn-white rounded-0 m-0 p-0" type="button" onclick="this.previousElementSibling.stepUp();">
-                                                <img src="{% static 'products/icons/plus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
+                                            <button class="btn col-4 c-btn-white rounded-3 m-0 p-0" type="button" onclick="this.previousElementSibling.stepUp();">
+                                                <img src="{% static 'products/icons/dark/plus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
                                             </button>
                                         </div>
 
@@ -264,7 +265,7 @@
                                 <form action="{% url 'add_one_item_to_cart' product.id %}" class="col-8 d-flex justify-content-center" method="post">
                                     {% csrf_token %}
                                     <button class="btn p-0">
-                                        <img src="{% static 'products/icons/add-to-cart-icon.png' %}" alt="shopping-bag-icon" width="35rem">
+                                        <img src="{% static 'products/icons/dark/add-to-cart-icon.png' %}" alt="shopping-bag-icon" width="35rem">
                                     </button>
                                 </form>
                             </div>
@@ -403,14 +404,14 @@
                                             {% csrf_token %}
 
                                             <div class="col-4 justify-content-center border rounded-3 row m-0 p-0">
-                                                <button class="btn col-4 c-btn-white rounded-0 m-0 p-0" type="button" onclick="this.nextElementSibling.stepDown();">
-                                                    <img src="{% static 'products/icons/minus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
+                                                <button class="btn col-4 c-btn-white rounded-3 m-0 p-0" type="button" onclick="this.nextElementSibling.stepDown();">
+                                                    <img src="{% static 'products/icons/dark/minus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
                                                 </button>
 
                                                 {{ cart_add_quantity_form.quantity }}
 
-                                                <button class="btn col-4 c-btn-white rounded-0 m-0 p-0" type="button" onclick="this.previousElementSibling.stepUp();">
-                                                    <img src="{% static 'products/icons/plus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
+                                                <button class="btn col-4 c-btn-white rounded-3 m-0 p-0" type="button" onclick="this.previousElementSibling.stepUp();">
+                                                    <img src="{% static 'products/icons/dark/plus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
                                                 </button>
                                             </div>
 

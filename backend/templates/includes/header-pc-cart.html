@@ -11,7 +11,7 @@
                     <div class="d-flex place-holder-color">
                         {{ search_form.search_text }}
                         <button type="submit" class="btn c-bg-button px-1 btn-border-c-third" aria-label="SearchCartPC">  
-                            <img src="{% static 'products/icons/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="29" height="29">
+                            <img src="{% static 'products/icons/light/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="29" height="29">
                         </button>
                     </div>
                 </form>
@@ -19,7 +19,7 @@
         </div>
 
         <a class="navbar-brand px-3 px-lg-2 me-0 me-lg-2" href="{% url 'product_list' %}">
-            <img src="{% static 'products/icons/logo-icon.svg' %}" alt="Цветок" width="37px">
+            <img src="{% static 'products/icons/light/logo-icon.svg' %}" alt="Цветок" width="37px">
             <h1 class="d-lg-inline-block fs-21 c-light-active">Цветок</h1>
         </a>
         
@@ -95,7 +95,7 @@
                     <li class="nav-item dropdown col-auto">
                         {% with total_items=cart.length_cart %}
                             <button class="btn c-bg-button nav-link dropdown-toggle btn-border-c-third" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="{% static 'products/icons/shopping-bag-icon.png' %}" alt="shopping-bag-icon" width="29px">
+                                <img src="{% static 'products/icons/light/cart-icon.png' %}" alt="shopping-bag-icon" width="29px">
                             </button>
 
                             <ul class="dropdown-menu dropdown-menu-end rounded-3 py-0 ">
@@ -136,7 +136,12 @@
 
                     <li class="nav-item dropdown col-auto">
                         <button class="btn c-bg-button nav-link dropdown-toggle btn-border-c-third" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{% static 'products/icons/user-icon.png' %}" alt="user-icon" width="29px">
+                            {% if user.is_authenticated %}
+                                <img src="{% static 'products/icons/light/user-verify-icon.png' %}" alt="user-icon" width="29px">
+                            {% else %}
+                                <img src="{% static 'products/icons/light/user-denied-icon.png' %}" alt="user-icon" width="29px">
+                            {% endif %}
+
                         </button>
 
                         <ul class="dropdown-menu dropdown-menu-end rounded-3 text-center py-0">
@@ -161,7 +166,7 @@
                     
                     <li class="nav-item col-auto">
                         <a class="d-flex align-items-center p-2" href="https://vk.com/id141455317" target="_blank">
-                            <img src="{% static 'products/icons/vk-header-icon.png' %}" alt="vk.com" width="35px">
+                            <img src="{% static 'products/icons/light/vk-header-icon.png' %}" alt="vk.com" width="35px">
                         </a>
                     </li>
                 </ul>

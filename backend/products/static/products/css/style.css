@@ -7,7 +7,7 @@ body {
 }
 
 .card {
-    box-shadow: 0 5px 10px -8px #101411;
+    box-shadow: 0 5px 10px -8px #1b1d1c;
     --bs-card-border-radius: var(--bs-border-radius-lg) !important;
     --bs-card-inner-border-radius: var(--bs-border-radius-lg) !important;
     transition: all .2s;
@@ -25,7 +25,7 @@ body {
     color: #DDFFA3 !important;
 }
 .c-black {
-    color: rgb(33,37,41) !important;
+    color: #212529 !important;
 }
 .c-light {
     color: rgba(255, 255, 255, 0.85) !important;
