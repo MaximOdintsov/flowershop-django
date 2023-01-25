@@ -112,6 +112,7 @@ class MyPasswordChangeView(auth_views.PasswordChangeView):
 
 
 
+
 # class PasswordResetConfirmView(django_views.PasswordResetConfirmView):
 #     post_reset_login = True
 

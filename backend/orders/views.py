@@ -134,6 +134,7 @@ class OrderCreateView(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         cart = Order.get_cart(self.request.user)
         cart.make_order()
+        cart.make_order_on_site()
         data = form.cleaned_data
 
         cart.first_name = data['first_name']

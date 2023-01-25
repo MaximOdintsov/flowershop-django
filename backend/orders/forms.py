@@ -38,10 +38,15 @@ class OrderCreateForm(forms.ModelForm):
         (1, 'Самовывоз'),
         (2, 'Доставка курьером'),
     ]
+    PAYMENT_CASH = 1
+    PAYMENT_CARD = 2
+    PAYMENT_TRANSFER = 3
+    PAYMENT_ONLINE = 4
     PAYMENT_CHOICES = [
-        (1, 'Наличные'),
-        (2, 'Безналичные'),
-        (3, 'Онлайн оплата'),
+        (PAYMENT_CASH, 'Оплата наличными'),
+        (PAYMENT_CARD, 'Оплата картой'),
+        (PAYMENT_TRANSFER, 'Перевод на карту'),
+        (PAYMENT_ONLINE, 'Онлайн оплата')
     ]
 
     first_name = forms.CharField(

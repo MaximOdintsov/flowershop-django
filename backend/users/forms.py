@@ -130,37 +130,6 @@ class MyRegistrationForm(forms_auth.UserCreationForm):
             'placeholder': 'Повторите пароль',
         })
 
-    # YEARS = [x for x in range(1940, 2022)]
-    # SEX_CHOICES = [
-    #     ('N', 'Не выбран'),
-    #     ('M', 'Мужчина'),
-    #     ('F', 'Женщина'),
-    # ]
-    #
-    # sex = forms.TypedChoiceField(
-    #     label=_('Sex'),
-    #     choices=SEX_CHOICES,
-    #     required=False
-    # )
-    # date_of_birth = forms.DateField(
-    #     label=_('Day of Birth'),
-    #     initial='1990-01-01',
-    #     widget=forms.SelectDateWidget(years=YEARS),
-    # )
-    #
-    #     self.fields['sex'].widget.attrs.update({
-    #         'class': 'form-select',
-    #         'placeholder': 'Выберите пол',
-    #     })
-    #     self.fields['date_of_birth'].widget.attrs.update({
-    #         'class': 'form-select col-sm-4',
-    #         'style': 'margin-right: calc(var(--bs-gutter-x) * .5)',
-    #         'placeholder': 'Дата рождения',
-    #     })
-    # save():
-    #   sex = self.cleaned_data['sex'],
-    #   date_of_birth = self.cleaned_data['date_of_birth'],
-
 
 class MyAuthenticationForm(forms_auth.AuthenticationForm):
     username = forms_auth.UsernameField(widget=forms.TextInput(attrs={
@@ -310,7 +279,7 @@ class MyPasswordChangeForm(forms_auth.PasswordChangeForm):
                 'autocomplete': 'current-password',
                 'autofocus': True,
                 'class': 'form-control',
-                'placeholder': 'Введите старый пароль',
+                'placeholder': 'Введите пароль',
             }
         ),
     )

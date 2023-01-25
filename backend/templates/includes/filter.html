@@ -1,32 +1,33 @@
-<h4 class="ps-3 mt-4">Фильтры</h4>
-<form action="{% url 'product_filter' %}">
-    <ul class="nav nav-tabs">
+<div class="">
+    <h4 class="ps-3 mt-4">Фильтры</h4>
+    <form action="{% url 'product_filter' %}">
+        <ul class="nav nav-tabs align-items-center">
 
-        {% for field in filter_form %}
-            <li class="nav-item dropdown-center">
-                <a class="nav-link dropdown-toggle" data-bs-auto-close="outside" data-bs-toggle="dropdown" role="button" aria-expanded="false">
-                    {{ field.label }}
-                </a>
+            {% for field in filter_form %}
+                <li class="nav-item dropdown-center">
+                    <a class="nav-link c-link-main dropdown-toggle" data-bs-auto-close="outside" data-bs-toggle="dropdown" role="button" aria-expanded="false">
+                        {{ field.label }}
+                    </a>
 
-                <ul class="dropdown-menu c-bg-body">
-                    {% for radio in field %}
-                        <li class="dropdown-item">
+                    <ul class="dropdown-menu c-bg-body">
+                        {% for radio in field %}
+                            <li class="dropdown-item">
+                                
+                                {{ radio.tag }}
+                                <label class="form-check-label" for="{{ radio.id_for_label }}">
+                                    {{ radio.choice_label }}
+                                </label>
                             
-                            {{ radio.tag }}
-                            <label class="form-check-label" for="{{ radio.id_for_label }}">
-                                {{ radio.choice_label }}
-                            </label>
-                           
-                        </li>
-                    {% endfor %}  
-                </ul>   
-        {% endfor %}
-
-        <li class="nav-item">
-            <button class="btn c-bg-button" type="submit">Найти</button>
-        </li>
-        <li>
-            <a href="{% url 'product_list' %}" class="btn c-bg-button">Сбросить фильтры</a>
-        </li>
-    </ul>
-</form>
+                            </li>
+                        {% endfor %}  
+                    </ul>   
+            {% endfor %}
+            <li class="nav-item">
+                <button class="btn c-btn-primary me-3" type="submit">Найти</button>
+            </li>
+            <li>
+                <a href="{% url 'product_list' %}" class="btn c-btn-danger me-3">Сбросить фильтры</a>
+            </li>
+        </ul>
+    </form>
+</div>

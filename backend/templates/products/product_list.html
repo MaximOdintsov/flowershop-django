@@ -29,7 +29,7 @@
                         {{ search_form.search_text }}
                         
                         <button type="submit" class="btn c-bg-button" aria-label="modalSearchLabel">  
-                            <img src="{% static 'products/icons/light/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="29" height="29">
+                            <img src="{% static 'products/icons/dark/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="29" height="29">
                         </button>
                     </div>
                 </form>
@@ -55,9 +55,9 @@
                     <a href="{{ product.slug }}" class="c-link-main text-decoration-none" target="_blank" data-bs-toggle="modal" data-bs-target="#Modal-pc-{{ product.id }}">
                         <img src="{{ product.preview.url }}" class="card-img-top" alt="{{ product.title }}">
                         <div class="card-body d-flex text-center justify-content-center align-items-center py-3" style="height: 80px">
-                            <h2 class="d-none d-lg-block d-xl-none fs-16 m-0">{{ product.title }}</h2>
-                            <h2 class="d-none d-xl-block d-xxl-none fs-17 m-0">{{ product.title }}</h2>
-                            <h2 class="d-none d-xxl-block fs-19 m-0">{{ product.title }}</h2>
+                            <h2 class="c-link-main d-none d-lg-block d-xl-none fs-16 m-0">{{ product.title }}</h2>
+                            <h2 class="c-link-main d-none d-xl-block d-xxl-none fs-17 m-0">{{ product.title }}</h2>
+                            <h2 class="c-link-main d-none d-xxl-block fs-19 m-0">{{ product.title }}</h2>
                         </div>
                     </a>
 
@@ -220,6 +220,7 @@
                 </div>
                 {% endif %}
             </div>
+            {% include 'includes/paginator.html' %}
         </div>
         <!-- PC -->
 
@@ -442,9 +443,12 @@
                 {% endif %}
 
             </div>
+            {% include 'includes/paginator.html' %}
         </div>
         <!-- Mobile -->
-        {% include 'includes/paginator.html' %}
+        
+
+
     </main>
     {% include 'includes/footer.html' %}
 

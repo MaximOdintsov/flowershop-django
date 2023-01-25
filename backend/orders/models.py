@@ -35,10 +35,12 @@ class Order(models.Model):
     ]
     PAYMENT_CASH = 1
     PAYMENT_CARD = 2
-    PAYMENT_ONLINE = 3
+    PAYMENT_TRANSFER = 3
+    PAYMENT_ONLINE = 4
     PAYMENT_CHOICES = [
-        (PAYMENT_CASH, 'Наличные'),
-        (PAYMENT_CARD, 'Безналичные'),
+        (PAYMENT_CASH, 'Оплата наличными'),
+        (PAYMENT_CARD, 'Оплата картой'),
+        (PAYMENT_TRANSFER, 'Перевод на карту'),
         (PAYMENT_ONLINE, 'Онлайн оплата')
     ]
     READINESS_PREPARING = 1
@@ -54,11 +56,14 @@ class Order(models.Model):
 
     amount = models.DecimalField('Сумма', max_digits=10, decimal_places=2, default=0, null=True, blank=True)
     receipt_method = models.PositiveSmallIntegerField('Способ получения', choices=RECEIPT_CHOICES, null=True, blank=True)
+
     payment_method = models.PositiveSmallIntegerField('Способ оплаты', choices=PAYMENT_CHOICES, null=True, blank=True)
+    payment_state = models.BooleanField('Статус оплаты', default=False)
+
     order_status = models.PositiveSmallIntegerField('Статус заказа', choices=STATUS_CHOICES, default=STATUS_CART)
     readiness_status = models.PositiveSmallIntegerField('Статус готовности', choices=READINESS_CHOICES, null=True, blank=True)
-    payment_state = models.BooleanField('Оплачен', default=False)
     creation_time = models.DateTimeField('Время создания заказа', default=timezone.now)
+    order_on_site = models.BooleanField('Заказ с сайта', default=False)
 
     update_component_flag = models.BooleanField('Флаг обновления компонента', default=False)
 
@@ -91,7 +96,6 @@ class Order(models.Model):
             cart = Order.objects.create(user=user,
                                         order_status=Order.STATUS_CART,
                                         amount=0)
-
         return cart
 
     def get_amount(self):
@@ -111,6 +115,11 @@ class Order(models.Model):
         if items and self.order_status == self.STATUS_CART:
             self.order_status = self.STATUS_PENDING_CONFIRMATION
             self.save()
+
+    def make_order_on_site(self):
+        """Order placed on the site"""
+        self.order_on_site = True
+        self.save()
 
     def recalculate_components_quantity(self):
 

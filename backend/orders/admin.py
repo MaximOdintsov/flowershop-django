@@ -14,7 +14,7 @@ class Order(admin.ModelAdmin):
     fields = ('user', 'receipt_method', 'payment_method', 'payment_state', 'order_status', 'readiness_status')
 
     list_display = ['creation_time', 'readiness_status', 'order_status', 'first_name', 'phone', 'address',
-                    'amount', 'receipt_method', 'payment_state', 'payment_method']
+                    'amount', 'receipt_method', 'payment_state', 'payment_method', 'order_on_site']
     list_editable = ['order_status', 'readiness_status', 'payment_state', 'payment_method', 'receipt_method']
     inlines = [OrderItemInline, ]
 

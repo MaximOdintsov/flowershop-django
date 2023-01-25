@@ -2,7 +2,7 @@
 
 {% if is_paginated %}
     {% get_proper_elided_page_range paginator page_obj.number 2 1 as page_range %}
-    <nav class="pb-2 m-0">
+    <nav class="py-3 m-0">
         <ul class="pagination justify-content-center">
 
             {% for page_num in page_range %}

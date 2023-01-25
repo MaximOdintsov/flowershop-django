@@ -8,146 +8,229 @@
 {% block title %}Регистрация{% endblock title %}
 
 {% block content %}
-    <main>
-        <div class="container-fluid container-auth">
-            <div class="row d-flex justify-content-center align-items-center">
-                
-                <div class="col col-11 col-sm-11 col-md-9 col-lg-7 col-xl-3 col-xxl-3 rounded-4 
-                bg-dark position-absolute top-50 start-50 translate-middle form-card">
-                
-                    <form method="post" action="{% url 'registration' %}" class="row g-3 needs-validation form-auth">
-                        {% csrf_token %}
 
-                        <ul class="nav nav-tabs nav-form" role="tablist">
-                            <li role="presentation">
-                                <a href="{% url 'login' %}" aria-controls="login" role="tab" data-toggle="tab">вход</a>
-                            </li>
-                            <li role="presentation" class="form-auth-active">
-                                <a href="{% url 'registration' %}" aria-controls="registration" role="tab" data-toggle="tab">регистрация</a>
-                            </li>
-                        </ul>
-                 
-                        <div class="form-floating mb-2 col-md-12 position-relative">
-                            {% if form.username.errors %}
-                                {{ form.username }}
-                                <label for="{{ form.username.id_for_label }}" class="form-label">Имя пользователя</label>
+    <!-- PC -->
+    <div class="d-none d-md-flex position-absolute top-50 start-50 translate-middle justify-content-center">
+        <div class="c-bg-form border rounded-3 px-4 py-2" style="width: 550px;">
 
-                                <div class="text-danger">
-                                    <small>{{ form.username.errors }}</small>
-                                </div>
-                            {% else %}
-                                {{ form.username }}
-                                <label for="{{ form.username.id_for_label }}" class="form-label">Имя пользователя</label>
-                            {% endif %}
+            <ul class="nav pb-3">
+                <li class="nav-item ps-0 pe-2 py-2">
+                    <a class="c-link-auth fs-24 pe-1" href="{% url 'login' %}">ВХОД</a>
+                </li>
+                <li class="nav-item ps-0 pe-2 py-2">
+                    <a class="c-link-auth-active fs-24 pb-1" href="{% url 'registration' %}">РЕГИСТРАЦИЯ</a>
+                </li>
+            </ul>
+
+            <form method="post" action="{% url 'registration' %}" class="row g-3 p-2">
+                {% csrf_token %}
+
+                <div class="form-floating col-6 p-0">
+                    {% if form.username.errors %}
+                        {{ form.username }}
+                        <label for="{{ form.username.id_for_label }}" class="form-label">Имя пользователя</label>
+
+                        <div class="text-danger">
+                            <small>{{ form.username.errors }}</small>
                         </div>
-
-                        <div class="form-floating mb-2 col-md-12 position-relative">
-                            {% if form.email.errors %}
-                                {{ form.email }}
-                                <label for="{{ form.email.id_for_label }}" class="form-label">Электронная почта</label>
-                                
-                                <div class="text-danger">
-                                    <small>{{ form.email.errors }}</small>
-                                </div>
-                            {% else %}
-                                {{ form.email }}
-                                <label for="{{ form.email.id_for_label }}" class="form-label">Электронная почта</label>
-                            {% endif %}
-                        </div>
-
-                        <div class="form-floating mb-2 col-6 position-relative">
-                            {% if form.first_name.errors %}
-                                {{ form.first_name }}
-                                <label for="{{ form.first_name.id_for_label }}" class="form-label">Ваше имя</label>
-                                
-                                <div class="text-danger">
-                                    <small>{{ form.first_name.errors }}</small>
-                                </div>
-                            {% else %}
-                                {{ form.first_name }}
-                                <label for="{{ form.first_name.id_for_label }}" class="form-label">Ваше имя</label>
-                            {% endif %}
-                        </div>
-
-                        <div class="form-floating mb-2 col-6 position-relative">
-                            {% if form.last_name.errors %}
-                                {{ form.last_name }}
-                                <label for="{{ form.last_name.id_for_label }}" class="form-label">Ваша фамилия</label>
-                                
-                                <div class="text-danger">
-                                    <small>{{ form.last_name.errors }}</small>
-                                </div>
-                            {% else %}
-                                {{ form.last_name }}
-                                <label for="{{ form.last_name.id_for_label }}" class="form-label">Ваша фамилия</label>
-                            {% endif %}
-                        </div>
-
-<!--                        <div class="form-check mb-2 d-block col-12 col-md-4">-->
-<!--                            {% if form.date_of_birth.errors %}-->
-<!--                                <label class="form-check-label text-light" for="{{ form.date_of_birth.id_for_label }}">Дата рождения</label>-->
-<!--                                <div class="d-flex">-->
-<!--                                    {{ form.date_of_birth }}-->
-<!--                                </div>-->
-<!--                                -->
-<!--                                <div class="text-danger">-->
-<!--                                    <small>{{ form.date_of_birth.errors }}</small>-->
-<!--                                </div>-->
-<!--                            {% else %}-->
-<!--                                <label class="form-check-label text-light" for="{{ form.date_of_birth.id_for_label }}">Дата рождения</label>-->
-<!--                                <div class="d-flex">-->
-<!--                                    {{ form.date_of_birth }}-->
-<!--                                </div>-->
-<!--                            {% endif %}-->
-<!--                        </div>-->
-
-<!--                        <div class="form-check mb-2 position-relative dropdown">-->
-<!--                            {% if form.sex.errors %}-->
-<!--                                <label class="form-check-label text-light" for="{{form.sex.id_for_label}}">Выберите пол</label>-->
-<!--                                {{ form.sex }}-->
-
-<!--                                <div class="text-danger">-->
-<!--                                    <small>{{ form.sex.errors }}</small>-->
-<!--                                </div>-->
-<!--                            {% else %}-->
-<!--                                <label class="form-check-label text-light" for="{{form.sex.id_for_label}}">Выберите пол</label>-->
-<!--                                {{ form.sex }}-->
-<!--                            {% endif %}-->
-<!--                        </div>-->
-
-                        <div class="form-floating mb-2 col-md-6 position-relative">
-                            {% if form.password1.errors %}
-                                {{ form.password1 }}
-                                <label for="{{ form.password1.id_for_label }}" class="form-label">Введите пароль</label>
-                                
-                                <div class="text-danger">
-                                    <small>{{ form.password1.errors }}</small>
-                                </div>
-                            {% else %}
-                                {{ form.password1 }}
-                                <label for="{{ form.password1.id_for_label }}" class="form-label">Введите пароль</label>
-                            {% endif %}
-                        </div>
-
-                        <div class="form-floating mb-2 col-md-6 position-relative">
-                            {% if form.password2.errors %}
-                                {{ form.password2 }}
-                                <label for="{{ form.password2.id_for_label }}" class="form-label">Повторите пароль</label>
-                                
-                                <div class="text-danger">
-                                    <small>{{ form.password2.errors }}</small>
-                                </div>
-                            {% else %}
-                                {{ form.password2 }}
-                                <label for="{{ form.password2.id_for_label }}" class="form-label">Повторите пароль</label>
-                            {% endif %}
-                        </div>
-
-                        <button class='btn btn-light' type="submit">Зарегистрироваться</button>
-                    </form>
-
+                    {% else %}
+                        {{ form.username }}
+                        <label for="{{ form.username.id_for_label }}" class="form-label">Имя пользователя</label>
+                    {% endif %}                    
                 </div>
-            </div>
+
+                <div class="form-floating col-6 p-0">
+                    {% if form.email.errors %}
+                        {{ form.email }}
+                        <label for="{{ form.email.id_for_label }}" class="form-label">Электронная почта</label>
+                        
+                        <div class="text-danger">
+                            <small>{{ form.email.errors }}</small>
+                        </div>
+                    {% else %}
+                        {{ form.email }}
+                        <label for="{{ form.email.id_for_label }}" class="form-label">Электронная почта</label>
+                    {% endif %}
+                </div>
+                
+                <div class="form-floating col-6 p-0">
+                    {% if form.first_name.errors %}
+                        {{ form.first_name }}
+                        <label for="{{ form.first_name.id_for_label }}" class="form-label">Ваше имя</label>
+                        
+                        <div class="text-danger">
+                            <small>{{ form.first_name.errors }}</small>
+                        </div>
+                    {% else %}
+                        {{ form.first_name }}
+                        <label for="{{ form.first_name.id_for_label }}" class="form-label">Ваше имя</label>
+                    {% endif %}
+                </div>
+
+                <div class="form-floating col-6 p-0">
+                    {% if form.last_name.errors %}
+                        {{ form.last_name }}
+                        <label for="{{ form.last_name.id_for_label }}" class="form-label">Ваша фамилия</label>
+                        
+                        <div class="text-danger">
+                            <small>{{ form.last_name.errors }}</small>
+                        </div>
+                    {% else %}
+                        {{ form.last_name }}
+                        <label for="{{ form.last_name.id_for_label }}" class="form-label">Ваша фамилия</label>
+                    {% endif %}
+                </div>
+
+                <div class="form-floating p-0">
+                    {% if form.password1.errors %}
+                        {{ form.password1 }}
+                        <label for="{{ form.password1.id_for_label }}" class="form-label">Введите пароль</label>
+                        
+                        <div class="text-danger">
+                            <small>{{ form.password1.errors }}</small>
+                        </div>
+                    {% else %}
+                        {{ form.password1 }}
+                        <label for="{{ form.password1.id_for_label }}" class="form-label">Введите пароль</label>
+                    {% endif %}
+                </div>
+
+                <div class="form-floating p-0">
+                    {% if form.password2.errors %}
+                        {{ form.password2 }}
+                        <label for="{{ form.password2.id_for_label }}" class="form-label">Повторите пароль</label>
+                        
+                        <div class="text-danger">
+                            <small>{{ form.password2.errors }}</small>
+                        </div>
+                    {% else %}
+                        {{ form.password2 }}
+                        <label for="{{ form.password2.id_for_label }}" class="form-label">Повторите пароль</label>
+                    {% endif %}
+                </div>
+
+                <button class='btn c-btn-form-primary' type="submit">Зарегистрироваться</button>
+                <a class="c-link-info col-12 col-sm-8 p-0" href="{% url 'password_reset' %}">Забыли пароль?</a>
+            </form>
+
         </div>
-    </main>
+    </div>
+    <!-- PC -->
+
+    <!-- Mobile -->
+    <div class="d-flex d-md-none row justify-content-center c-bg-form h-100 pt-2" style="min-height: 100vh;">
+        <div class="c-bg-form px-4 py-3">
+
+            <ul class="d-flex d-sm-none nav justify-content-center pb-3">
+                <li class="nav-item ps-0 pe-2 py-2">
+                    <a class="c-link-auth fs-24 pe-1" href="{% url 'login' %}">ВХОД</a>
+                </li>
+                <li class="nav-item ps-0 pe-2 py-2">
+                    <a class="c-link-auth-active fs-24 pb-1" href="{% url 'registration' %}">РЕГИСТРАЦИЯ</a>
+                </li>
+            </ul>
+            <ul class="d-none d-sm-flex nav justify-content-center pb-3">
+                <li class="nav-item ps-0 pe-2 py-2">
+                    <a class="c-link-auth fs-30 pe-1" href="{% url 'login' %}">ВХОД</a>
+                </li>
+                <li class="nav-item ps-0 pe-2 py-2">
+                    <a class="c-link-auth-active fs-30 pb-1" href="{% url 'registration' %}">РЕГИСТРАЦИЯ</a>
+                </li>
+            </ul>
+
+            <form method="post" action="{% url 'registration' %}" class="row justify-content-center g-2 p-2">
+                {% csrf_token %}
+
+                <div class="form-floating col-sm-8 p-0">
+                    {% if form.username.errors %}
+                        {{ form.username }}
+                        <label for="{{ form.username.id_for_label }}" class="form-label">Имя пользователя</label>
+
+                        <div class="text-danger">
+                            <small>{{ form.username.errors }}</small>
+                        </div>
+                    {% else %}
+                        {{ form.username }}
+                        <label for="{{ form.username.id_for_label }}" class="form-label">Имя пользователя</label>
+                    {% endif %}                    
+                </div>
+
+                <div class="form-floating col-sm-8 p-0">
+                    {% if form.email.errors %}
+                        {{ form.email }}
+                        <label for="{{ form.email.id_for_label }}" class="form-label">Электронная почта</label>
+                        
+                        <div class="text-danger">
+                            <small>{{ form.email.errors }}</small>
+                        </div>
+                    {% else %}
+                        {{ form.email }}
+                        <label for="{{ form.email.id_for_label }}" class="form-label">Электронная почта</label>
+                    {% endif %}
+                </div>
+                
+                <div class="form-floating col-sm-8 p-0">
+                    {% if form.first_name.errors %}
+                        {{ form.first_name }}
+                        <label for="{{ form.first_name.id_for_label }}" class="form-label">Ваше имя</label>
+                        
+                        <div class="text-danger">
+                            <small>{{ form.first_name.errors }}</small>
+                        </div>
+                    {% else %}
+                        {{ form.first_name }}
+                        <label for="{{ form.first_name.id_for_label }}" class="form-label">Ваше имя</label>
+                    {% endif %}
+                </div>
+
+                <div class="form-floating col-sm-8 p-0">
+                    {% if form.last_name.errors %}
+                        {{ form.last_name }}
+                        <label for="{{ form.last_name.id_for_label }}" class="form-label">Ваша фамилия</label>
+                        
+                        <div class="text-danger">
+                            <small>{{ form.last_name.errors }}</small>
+                        </div>
+                    {% else %}
+                        {{ form.last_name }}
+                        <label for="{{ form.last_name.id_for_label }}" class="form-label">Ваша фамилия</label>
+                    {% endif %}
+                </div>
+
+                <div class="form-floating col-sm-8 p-0">
+                    {% if form.password1.errors %}
+                        {{ form.password1 }}
+                        <label for="{{ form.password1.id_for_label }}" class="form-label">Введите пароль</label>
+                        
+                        <div class="text-danger">
+                            <small>{{ form.password1.errors }}</small>
+                        </div>
+                    {% else %}
+                        {{ form.password1 }}
+                        <label for="{{ form.password1.id_for_label }}" class="form-label">Введите пароль</label>
+                    {% endif %}
+                </div>
+
+                <div class="form-floating col-sm-8 p-0">
+                    {% if form.password2.errors %}
+                        {{ form.password2 }}
+                        <label for="{{ form.password2.id_for_label }}" class="form-label">Повторите пароль</label>
+                        
+                        <div class="text-danger">
+                            <small>{{ form.password2.errors }}</small>
+                        </div>
+                    {% else %}
+                        {{ form.password2 }}
+                        <label for="{{ form.password2.id_for_label }}" class="form-label">Повторите пароль</label>
+                    {% endif %}
+                </div>
+
+                <button class='btn c-btn-form-primary col-12 col-sm-8' type="submit">Войти</button>
+                <a class="c-link-info col-12 col-sm-8 p-0" href="{% url 'password_reset' %}">Забыли пароль?</a>
+            </form>
+
+        </div>
+    </div>
+    <!-- Mobile -->
+
 {% endblock content %}
