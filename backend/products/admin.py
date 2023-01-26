@@ -25,7 +25,9 @@ class ProductCompositionInline(admin.TabularInline):
 
 @admin.register(ProductCategory)
 class ProductCategory(admin.ModelAdmin):
-    fields = ('title', 'slug')
+    fields = ('title', )
+    list_display = ['title', 'slug', 'show_in_filter']
+    list_editable = ['slug', 'show_in_filter']
 
 
 @admin.register(ProductComponent)
@@ -35,14 +37,12 @@ class ProductComponent(admin.ModelAdmin):
             'widget': forms.TextInput(attrs={'size': 10})
         },
     }
-    prepopulated_fields = {"slug": ("title",)}
-
-    fields = ('title', 'slug', 'price', 'quantity_in_stock', 'show_in_filter')
-    list_display = ['title', 'price', 'new_arrival', 'quantity_in_stock',
+    fields = ('title', 'price', 'quantity_in_stock', 'show_in_filter')
+    list_display = ['title', 'slug', 'price', 'new_arrival', 'quantity_in_stock',
                     'quantity_of_sold', 'available', 'show_in_filter']
     list_editable = ['price', 'new_arrival', 'available', 'show_in_filter']
 
-    list_per_page = 40
+    list_per_page = 30
     ordering = ['quantity_of_sold', 'price']
 
 
@@ -55,11 +55,11 @@ class Product(admin.ModelAdmin):
     }
     inlines = [ProductGalleryInline, ProductCompositionInline]
 
-    fields = ('category', 'title', 'slug', 'preview', 'discount', 'status')
-    list_display = ['title', 'category', 'discount', 'new_price', 'status']
-    list_editable = ['category', 'discount', 'status']
+    fields = ('category', 'title', 'preview', 'discount', 'status')
+    list_display = ['title', 'slug', 'category', 'discount', 'new_price', 'status']
+    list_editable = ['category', 'slug', 'discount', 'status']
 
-    list_per_page = 40
+    list_per_page = 30
 
 
 # class ProductGalleryInline(admin.TabularInline):

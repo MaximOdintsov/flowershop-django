@@ -221,3 +221,4 @@ def recalculate_order_amount_after_delete(sender, instance, **kwargs):
     order = instance.order
     order.amount = order.get_amount()
     order.save_for_models()
+

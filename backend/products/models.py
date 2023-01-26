@@ -1,4 +1,7 @@
 from decimal import Decimal
+from django.utils.text import slugify
+
+import translators as ts
 
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
@@ -6,9 +9,25 @@ from django.db.models.signals import post_save, pre_save, post_delete
 from django.dispatch import receiver
 
 
+def get_translated_slug(self):
+
+    try:
+        if (self.slug == str(self.id)) or (self.slug is None):
+            translated_title = ts.google(self.title, 'ru', 'en')
+            slug = slugify(translated_title)
+            if slug:
+                self.slug = slug
+            else:
+                raise Exception()
+    except Exception:
+        slug = self.id
+        self.slug = slug
+
+
 class ProductCategory(models.Model):
     title = models.CharField('Имя категории', max_length=100)
-    slug = models.SlugField('Название на английском', max_length=150, unique=True, null=False)
+    slug = models.SlugField('Название на английском', max_length=150, unique=True, null=True)
+    show_in_filter = models.BooleanField('Показывать в фильтре', default=False)
 
     class Meta:
         verbose_name = 'Категория продукта'
@@ -17,10 +36,15 @@ class ProductCategory(models.Model):
     def __str__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        super(ProductCategory, self).save()
+        get_translated_slug(self)
+        super(ProductCategory, self).save()
+
 
 class ProductComponent(models.Model):
     title = models.CharField('Название', max_length=150)
-    slug = models.SlugField('Название на английском', max_length=150, unique=True)
+    slug = models.SlugField('Название на английском', max_length=150, unique=True, null=True)
 
     price = models.DecimalField('Цена', max_digits=10, decimal_places=2)
 
@@ -50,6 +74,11 @@ class ProductComponent(models.Model):
         self.quantity_in_stock += self.new_arrival
         self.new_arrival = 0
 
+    def save(self, *args, **kwargs):
+        super(ProductComponent, self).save()
+        get_translated_slug(self)
+        super(ProductComponent, self).save()
+
 
 @receiver(pre_save, sender=ProductComponent)
 def recalculate_quantity_in_stock_before_save(sender, instance, **kwargs):
@@ -78,7 +107,7 @@ class Product(models.Model):
     category = models.ForeignKey(ProductCategory, verbose_name='Категория', on_delete=models.PROTECT)
 
     title = models.CharField('Название', max_length=150)
-    slug = models.SlugField('Название на английском', max_length=150, unique=True)
+    slug = models.SlugField('Название на английском', max_length=150, unique=True, null=True)
     preview = models.ImageField('Превью', upload_to='products/previews')
 
     price = models.DecimalField('Цена без скидки', max_digits=10, decimal_places=2, default=0)
@@ -140,6 +169,11 @@ class Product(models.Model):
         items = self.orderitem_set.all()
         for item in items:
             item.save()
+
+    def save(self, *args, **kwargs):
+        super(Product, self).save()
+        get_translated_slug(self)
+        super(Product, self).save()
 
 
 @receiver(pre_save, sender=Product)

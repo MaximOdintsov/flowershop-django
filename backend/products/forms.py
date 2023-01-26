@@ -19,7 +19,7 @@ class ProductSearchForm(forms.Form):
 
 class ProductFilterForm(forms.Form):
     try:
-        categories = ProductCategory.objects.all()
+        categories = ProductCategory.objects.filter(show_in_filter=True)
         if categories:
             CATEGORY_CHOICES = [
                 (category.id, category.title) for category in categories
@@ -36,8 +36,8 @@ class ProductFilterForm(forms.Form):
                     }
                 ),
             )
-    except:
-        print('Error')
+    except Exception:
+        print(Exception)
 
     PRICE_CHOICE = [
         ('A', 'Сначала дешевле'),
