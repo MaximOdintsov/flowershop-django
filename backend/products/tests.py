@@ -19,8 +19,20 @@ class TestDataBase(TestCase):
         self.category = ProductCategory.objects.get(slug='flowers')
         self.component_1 = ProductComponent.objects.get(slug='chamomile')
         self.component_2 = ProductComponent.objects.get(slug='red-roze')
-        self.composition_1 = ProductComposition.objects.get(id=3)
-        self.composition_2 = ProductComposition.objects.get(id=2)
+
+        product = Product.objects.get(slug='bouquet-of-roses-and-daisies')
+        compositions = ProductComposition.objects.filter(product=product)
+        composition_list = []
+        for composition in compositions:
+            composition_list.append(composition)
+        self.composition_1 = composition_list[0]
+        self.composition_2 = composition_list[1]
+
+        self.composition_1.id = 1
+        self.composition_2.id = 2
+        self.composition_1.save()
+        self.composition_2.save()
+
         self.product = Product.objects.get(slug='bouquet-of-roses-and-daisies')
         self.product_empty = Product.objects.create(id=10,
                                                     category=self.category,
@@ -63,7 +75,7 @@ class TestDataBase(TestCase):
         self.component_1.save()
         self.component_2.save()
 
-        composition_1 = ProductComposition.objects.get(id=3)
+        composition_1 = ProductComposition.objects.get(id=1)
         composition_2 = ProductComposition.objects.get(id=2)
         price_1 = 2 * composition_1.quantity
         price_2 = 6 * composition_2.quantity
@@ -152,15 +164,15 @@ class TestDataBase(TestCase):
                                           component=self.component_2)
         product = Product.objects.get(slug='empty')
 
-        self.assertEqual(self.component_1.available, True)
+        self.assertEqual(self.component_1.available, False)
         self.assertEqual(self.component_2.available, True)
-        self.assertNotEqual(product.status, Product.STATUS_UNAVAILABLE)
+        self.assertEqual(product.status, Product.STATUS_UNAVAILABLE)
 
-        self.component_1.available = False
+        self.component_1.available = True
         self.component_1.save()
         product = Product.objects.get(slug='empty')
 
-        self.assertEqual(product.status, Product.STATUS_UNAVAILABLE)
+        self.assertEqual(product.status, Product.STATUS_AVAILABLE)
 
     def test_update_productcomponent_quantity(self):
         """

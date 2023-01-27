@@ -24,7 +24,6 @@
         </a>
         
         <div class="offcanvas flex-grow-1 c-bg-main" id="navbarHeaderPC">
-
             <div class="offcanvas-body p-4 pt-0 p-lg-0 align-items-center">
                 <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav">
                     
@@ -42,9 +41,7 @@
                         <a class="nav-link dropdown-toggle c-link-light p-2" data-bs-auto-close="outside" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Контакты
                         </a>
-                        
                         <ul class="dropdown-menu py-0">
-
                             <li class="text-center py-0">
                                 <span class="dropdown-item c-btn-light rounded-0 rounded-top p-2">
                                     +7-909-141-32-42
@@ -55,7 +52,6 @@
                                     kirov.cvetok@yandex.ru
                                 </span>
                             </li>
-                            
                             <li class="row justify-content-between m-0 p-0">
                                 <div class="col-6 border-end m-0 p-0">
                                     <a class="dropdown-item c-btn-primary text-center rounded-0 rounded-start p-2" href="tel:+7-909-141-32-42">
@@ -72,11 +68,9 @@
                     </li>
                     
                     <li class="nav-item dropdown col-auto">
-                        
                         <a class="nav-link dropdown-toggle c-link-light p-2" data-bs-auto-close="outside" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Адрес
                         </a>
-
                         <ul class="dropdown-menu p-0">
                             <li class="text-center border-bottom py-0">
                                 <span class="dropdown-item c-bg-light rounded-0 rounded-top p-2">
@@ -96,8 +90,10 @@
                         {% with total_items=cart.length_cart %}
                             <button class="btn c-bg-button nav-link dropdown-toggle btn-border-c-third" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="{% static 'products/icons/light/cart-icon.png' %}" alt="Корзина" width="29px">
+                                    {% if cart.length_cart > 0 %}
+                                    <span class="position-absolute top-25 start-75 translate-middle p-1 c-bg-red rounded-circle"></span>
+                                {% endif %}
                             </button>
-
                             <ul class="dropdown-menu dropdown-menu-end rounded-3 py-0 ">
                                 {% if user.is_authenticated %}
                                     {% if total_items > 0 %}
@@ -121,14 +117,12 @@
                                 {% else %}
                                     <p class="p-2 m-0 c-bg-light rounded-0 rounded-top">
                                         Для добавления товаров в корзину нужно войти в аккаунт
-                                    </p>
-                                    
+                                    </p>  
                                     <li class="text-center py-0">
                                         <a href="{% url 'login' %}" class="dropdown-item btn c-btn-primary rounded-0 rounded-bottom p-2">
                                             Войти
                                         </a>
                                     </li>
-
                                 {% endif %}
                             </ul>
                         {% endwith %}
@@ -142,7 +136,6 @@
                                  <img src="{% static 'products/icons/light/user-denied-icon.png' %}" alt="Профиль" width="29px">
                             {% endif %}
                         </button>
-
                         <ul class="dropdown-menu dropdown-menu-end rounded-3 text-center py-0">
                             {% if user.is_authenticated %}
                                 <li><a class="dropdown-item btn c-btn-light roudned-0 rounded-top p-2" type="button">{{ user }}</a></li>
@@ -327,18 +320,28 @@
                 </div>
 
                 <div class="col-4 text-center m-0">
-                    <a class="d-block d-sm-none c-link-main" href="{% url 'cart' %}">
+
+                    <a class="d-block d-sm-none c-link-main " href="{% url 'cart' %}">
                         <img src="{% static 'products/icons/dark/cart-icon.png' %}" alt="Корзина" width="32px">
+                        {% if cart.length_cart > 0 %}
+                            <span class="position-absolute top-25 start-75 translate-middle p-1 c-bg-red rounded-circle"></span>
+                        {% endif %}
                         <br>
                         <span class="fs-16">Корзина</span>
                     </a>
                     <a class="d-none d-sm-block d-md-none c-link-main" href="{% url 'cart' %}">
                         <img src="{% static 'products/icons/dark/cart-icon.png' %}" alt="Корзина" width="35px">
+                        {% if cart.length_cart > 0 %}
+                            <span class="position-absolute top-25 start-75 translate-middle p-1 c-bg-red rounded-circle"></span>
+                        {% endif %}
                         <br>
                         <span class="fs-17">Корзина</span>
                     </a>
                     <a class="d-none d-md-block c-link-main" href="{% url 'cart' %}">
                         <img src="{% static 'products/icons/dark/cart-icon.png' %}" alt="Корзина" width="37px">
+                        {% if cart.length_cart > 0 %}
+                            <span class="position-absolute top-25 start-75 translate-middle p-1 c-bg-red rounded-circle"></span>
+                        {% endif %}
                         <br>
                         <span class="fs-19">Корзина</span>
                     </a>

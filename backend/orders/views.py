@@ -95,7 +95,7 @@ class RemoveOneItemToCart(LoginRequiredMixin, View):
 @login_required(login_url=reverse_lazy('login'))
 def cart_view(request):
     cart = Order.get_cart(request.user)
-    items = cart.orderitem_set.all()
+    items = cart.orderitem_set.order_by('creation_time')
 
     cart_add_quantity_form = AddQuantityForm()
     search_form = ProductSearchForm()
@@ -155,44 +155,3 @@ class OrderCreateView(LoginRequiredMixin, FormView):
 class OrderCreatedView(TemplateView):
     template_name = 'orders/order_created.html'
 
-# class OrderCreateView(LoginRequiredMixin, View):
-#     login_url = '/login'
-#     redirect_field_name = 'redirect_to'
-#     template_name = 'orders/order_create.html'
-#
-#     def get(self, request):
-#         cart = Order.get_cart(request.user)
-#         items = cart.orderitem_set.all()
-#         if len(items):
-#             context = {
-#                 'form': OrderCreateForm
-#             }
-#             return render(request, self.template_name, context)
-#         else:
-#             return redirect('cart')
-#
-#     def post(self, request):
-#         form = OrderCreateForm(request.POST)
-#         user = request.user
-#
-#         cart = Order.get_cart(request.user)
-#         items = cart.orderitem_set.all()
-#         if len(items):
-#             if form.is_valid():
-#                 cart = Order.get_cart(user)
-#                 order = form.save(user=user.id)
-#
-#                 for item in cart:
-#                     OrderItem.objects.create(order=order,
-#                                              product=item['product'],
-#                                              price=item['discount_price'],
-#                                              quantity=item['quantity'])
-#                 # очистка корзины
-#                 cart.clear()
-#                 return render(request, 'orders/order_created.html',
-#                               context={'order': order})
-#             else:
-#                 return render(request, 'orders/order_create.html', context={'form': form})
-#
-#         else:
-#             return redirect('cart')

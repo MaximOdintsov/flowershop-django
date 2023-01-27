@@ -79,6 +79,10 @@ body {
     background-color: rgb(33,37,41) !important;
 }
 
+.c-bg-red {
+    background-color: #FF4D51 !important;
+}
+
 .c-new-price {
     color: #FF4D51 !important;
 }

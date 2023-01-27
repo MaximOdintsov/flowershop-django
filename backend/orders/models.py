@@ -182,6 +182,7 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, verbose_name='Заказ', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, verbose_name='Товар', on_delete=models.PROTECT)
     quantity = models.PositiveSmallIntegerField('Количество в заказе', default=1)
+    creation_time = models.DateTimeField('Время добавления товара', default=timezone.now)
     price = models.DecimalField('Цена', max_digits=10, decimal_places=2)
 
     class Meta:
