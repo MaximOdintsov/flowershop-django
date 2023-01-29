@@ -6,7 +6,28 @@
 {% endblock %}
 
 
-{% block title %} Цветок {% endblock %}
+{% block title %} Цветок - Доставка цветов в Кирове {% endblock %}
+
+{% block description %} 
+<meta name="description" 
+content="У нас вы можете заказать доставку цветов дешево или купить цветы прямо в ТЦ Север по адресу г.Киров, ул.Октябрьский проспект, 2А, 1 этаж. Бесплатная доставка от 2000&#8381;. Оформить заказ с доставкой на дом можно как на сайте, так и по телефону +79091413242. Доставка от 1-го часа. У нас большой ассортимент цветов, авторских букетов и монобукетов, эксклюзивные композиции на заказ и в наличии!">
+{% endblock %}
+
+{% block robots %} <meta name="robots" content="all"> {% endblock %}
+
+{% block keywords %} <meta name="keywords" 
+content="Цветок, Цветы Киров, Букеты Киров, Доставка цветов, Заказать цветы, Авторские букеты, Монобукеты, Композиции, Розы, Тюльпаны, Хризантемы" /> {% endblock %}
+
+{% block opengraph %} 
+<meta property="og:title" content="Доставка цветов в Кирове"/>
+<meta property="og:image" content="{% static 'products/icons/favicon.svg' %}"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:description" content="Нужен подарок на праздник? Можете заказать авторский букет или композицию на нашем сайте!"/>
+<meta property="og:type" content="product"/>
+<meta property="og:url" content= "https://kirovcvetok.ru/"/>
+<meta property="og:site_name" content="Цветок - Доставка цветов"/>
+{% endblock %}
 
 
 {% block content %}
@@ -50,174 +71,188 @@
                 {% if products %}
                 {% for product in products %}
 
-                <!-- Card -->
-                <div class="col-5 col-lg-2 col-xl-2 card border border-0 c-bg-card mx-2 px-0">
-                    <a href="{{ product.slug }}" class="c-link-main text-decoration-none" target="_blank" data-bs-toggle="modal" data-bs-target="#Modal-pc-{{ product.id }}">
-                        <img src="{{ product.preview.url }}" class="card-img-top" alt="{{ product.title }}">
-                        <div class="card-body d-flex text-center justify-content-center align-items-center py-3" style="height: 80px">
-                            <h2 class="c-link-main d-none d-lg-block d-xl-none fs-16 m-0">{{ product.title }}</h2>
-                            <h2 class="c-link-main d-none d-xl-block d-xxl-none fs-17 m-0">{{ product.title }}</h2>
-                            <h2 class="c-link-main d-none d-xxl-block fs-19 m-0">{{ product.title }}</h2>
-                        </div>
-                    </a>
-
-                    <div class="card-footer d-flex justify-content-between align-items-end h-100" style="background-color: #eff3e9">
-
-                        <div>
-                            {% if product.discount == 0 %}
-                            <span class="fs-19">
-                                {{ product.new_price|floatformat:0 }} &#8381;
-                            </span>
-                            {% else %}
-                            <div class="d-grid text-start">
-                                <span>
-                                    <del class="old-price fs-13">{{ product.price|floatformat:0 }} &#8381;</del>
-                                </span>
-                                <span class="badge rounded-3 c-bg-new-price-badge">
-                                    <span class="c-new-price fs-19">{{ product.new_price|floatformat:0 }} &#8381;</span>
-                                </span>
+                    <!-- Card -->
+                    <section itemscope itemtype="https://schema.org/Product" class="col-5 col-lg-2 col-xl-2 card border border-0 c-bg-card mx-2 px-0">
+                        <a href="{{ product.slug }}" class="c-link-main text-decoration-none" target="_blank" data-bs-toggle="modal" data-bs-target="#Modal-pc-{{ product.id }}">
+                            <img itemprop="image" src="{{ product.preview.url }}" class="card-img-top" alt="{{ product.title }}">
+                            <div class="card-body d-flex text-center justify-content-center align-items-center py-3" style="height: 80px">
+                                <article itemprop="name" class="c-link-main d-none d-lg-block d-xl-none fs-16 m-0">{{ product.title }}</article>
+                                <article itemprop="name" class="c-link-main d-none d-xl-block d-xxl-none fs-17 m-0">{{ product.title }}</article>
+                                <article itemprop="name" class="c-link-main d-none d-xxl-block fs-19 m-0">{{ product.title }}</article>
                             </div>
-                            {% endif %}
-                        </div>
+                        </a>
 
-                        <div>
-                            <form action="{% url 'add_one_item_to_cart' product.id %}" class="col-8 d-flex justify-content-center" method="post">
-                                {% csrf_token %}
-                                <button class="btn p-0">
-                                    <img src="{% static 'products/icons/dark/add-to-cart-icon.png' %}" alt="shopping-bag-icon" width="35rem">
-                                </button>
+                        <div class="card-footer d-flex justify-content-between align-items-end h-100" style="background-color: #eff3e9">
 
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <!-- Card -->
-
-                <!-- Modal -->
-                <div class="modal fade modal-lg" id="Modal-pc-{{ product.id }}" aria-labelledby="ModalLabel-pc-{{ product.id }}" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                        <div class="modal-content rounded-3">
-                            <div class="modal-header">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="container">
-                                    <div class="row row-cols-2">
-                                        <div class="col">
-
-                                            <!--Carousel images-->
-                                            <div id="carouselModal-pc-{{ product.slug }}" class="carousel carousel-dark slide" data-bs-ride="carousel" data-bs-touch="true">
-
-                                                <div class="carousel-inner">
-                                                    <div class="carousel-item active" data-bs-interval="50000">
-                                                        <div class="d-flex justify-content-center">
-                                                            <img class="d-block w-75" src="{{ product.preview.url }}" alt="product {{ product.title }}">
-                                                        </div>
-                                                    
-                                                    </div>
-
-                                                    {% for product_image in product.productgallery_set.all %}
-                                                    <div class="carousel-item" data-bs-interval="50000">
-                                                        <div class="d-flex justify-content-center">
-                                                            <img class="d-block w-75" src="{{ product_image.image.url }}" alt="product {{ product.title }}">
-                                                        </div>
-                                                    </div>
-                                                    {% endfor %}
-                                                </div>
-
-                                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselModal-pc-{{ product.slug }}" data-bs-slide="prev">
-                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                    <span class="visually-hidden">Назад</span>
-                                                </button>
-                                                <button class="carousel-control-next" type="button" data-bs-target="#carouselModal-pc-{{ product.slug }}" data-bs-slide="next">
-                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                    <span class="visually-hidden">Дальше</span>
-                                                </button>
-
-                                            </div>
-                                            <!--Carousel images-->
-                                        </div>
-
-                                        <div class="col">
-                                            <h2>
-                                                <a href="{{ product.get_url }}" class="c-link-main fs-24">
-                                                {{ product.title }}
-                                                </a>
-                                            </h2>
-
-                                            <div class="">
-                                                <p>Состоит из:</p>
-                                                <ul>
-                                                    {% for product_component in product.productcomposition_set.all %}
-                                                    <li>
-                                                        {{ product_component.component.title }} -
-                                                        {{ product_component.quantity }} шт.
-                                                    </li>
-                                                    {% endfor %}
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="modal-footer row justify-content-between align-items-center m-0">
-                                <div class="col-2 m-0 p-0 ms-4">
-
-                                    {% if product.discount == 0 %}
-                                    <span class="fs-21">
-                                        {{ product.new_price|floatformat:0 }} &#8381;
+                            <div itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+                                {% if product.discount == 0 %}
+                                    <span itemprop="price" content="{{ product.new_price }}" class="fs-19">
+                                        {{ product.new_price|floatformat:0 }}
+                                        <span itemprop="priceCurrency" content="RUB">&#8381;</span>
                                     </span>
-                                    {% else %}
+                                {% else %}
                                     <div class="d-grid text-start">
                                         <span>
-                                            <del class="old-price fs-16">{{ product.price|floatformat:0 }} &#8381;</del>
+                                            <del itemprop="price" itemtype="https://schema.org/SalePrice" content="{{ product.price }}" class="old-price fs-13">
+                                                {{ product.price|floatformat:0 }}
+                                                <span itemprop="priceCurrency" content="RUB">&#8381;</span>
+                                            </del>
                                         </span>
                                         <span class="badge rounded-3 c-bg-new-price-badge">
-                                            <span class="c-new-price fs-21">{{ product.new_price|floatformat:0 }} &#8381;</span>
+                                            <span itemprop="price" content="{{ product.new_price }}" class="c-new-price fs-19">
+                                                {{ product.new_price|floatformat:0 }}
+                                                <span itemprop="priceCurrency" content="RUB">&#8381;</span>
+                                            </span>
                                         </span>
                                     </div>
-                                    {% endif %}
+                                {% endif %}
+                            </div>
 
+                            <div>
+                                <form action="{% url 'add_one_item_to_cart' product.id %}" class="col-8 d-flex justify-content-center" method="post">
+                                    {% csrf_token %}
+                                    <button class="btn p-0">
+                                        <img src="{% static 'products/icons/dark/add-to-cart-icon.png' %}" alt="shopping-bag-icon" width="35rem">
+                                    </button>
+
+                                </form>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Card -->
+
+                    <!-- Modal -->
+                    <section class="modal fade modal-lg" id="Modal-pc-{{ product.id }}" aria-labelledby="ModalLabel-pc-{{ product.id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                            <div itemscope itemtype="https://schema.org/Product" class="modal-content rounded-3">
+                                <div class="modal-header">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container">
+                                        <div class="row row-cols-2">
+                                            <div class="col">
+
+                                                <!--Carousel images-->
+                                                <div id="carouselModal-pc-{{ product.slug }}" class="carousel carousel-dark slide" data-bs-ride="carousel" data-bs-touch="true">
+
+                                                    <div class="carousel-inner">
+                                                        <div class="carousel-item active" data-bs-interval="50000">
+                                                            <div class="d-flex justify-content-center">
+                                                                <img itemprop="image" class="d-block w-75" src="{{ product.preview.url }}" alt="product {{ product.title }}">
+                                                            </div>
+                                                        
+                                                        </div>
+
+                                                        {% for product_image in product.productgallery_set.all %}
+                                                        <div class="carousel-item" data-bs-interval="50000">
+                                                            <div class="d-flex justify-content-center">
+                                                                <img itemprop="image" class="d-block w-75" src="{{ product_image.image.url }}" alt="product {{ product.title }}">
+                                                            </div>
+                                                        </div>
+                                                        {% endfor %}
+                                                    </div>
+
+                                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselModal-pc-{{ product.slug }}" data-bs-slide="prev">
+                                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                        <span class="visually-hidden">Назад</span>
+                                                    </button>
+                                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselModal-pc-{{ product.slug }}" data-bs-slide="next">
+                                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                        <span class="visually-hidden">Дальше</span>
+                                                    </button>
+
+                                                </div>
+                                                <!--Carousel images-->
+                                            </div>
+
+                                            <div class="col">
+                                                <article itemprop="name">
+                                                    <a href="{{ product.get_url }}" class="c-link-main fs-24">
+                                                    {{ product.title }}
+                                                    </a>
+                                                </article>
+
+                                                <div class="">
+                                                    <p>Состоит из:</p>
+                                                    <ul>
+                                                        {% for product_component in product.productcomposition_set.all %}
+                                                        <li>
+                                                            {{ product_component.component.title }} -
+                                                            {{ product_component.quantity }} шт.
+                                                        </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="col-6 m-0 p-0 me-3">
-                                    <form action="{% url 'add_item_to_cart' product.id %}" class="row m-0" method="post">
-                                        {% csrf_token %}
+                                <div class="modal-footer row justify-content-between align-items-center m-0">
+                                    <div itemprop="offers" itemscope itemtype="https://schema.org/Offer" class="col-2 m-0 p-0 ms-4">
 
-                                        <div class="col-5 justify-content-center border rounded-3 row m-0 p-0">
-                                            <button class="btn col-4 c-btn-white rounded-3 m-0 p-0" type="button" onclick="this.nextElementSibling.stepDown();">
-                                                <img src="{% static 'products/icons/dark/minus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
-                                            </button>
-
-                                            {{ cart_add_quantity_form.quantity }}
-
-                                            <button class="btn col-4 c-btn-white rounded-3 m-0 p-0" type="button" onclick="this.previousElementSibling.stepUp();">
-                                                <img src="{% static 'products/icons/dark/plus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
-                                            </button>
+                                        {% if product.discount == 0 %}
+                                        <span itemprop="price" content="{{ product.new_price }}" class="fs-21">
+                                            {{ product.new_price|floatformat:0 }}
+                                            <span itemprop="priceCurrency" content="RUB">&#8381;</span>
+                                        </span>
+                                        {% else %}
+                                        <div class="d-grid text-start">
+                                            <span>
+                                                <del itemprop="price" itemtype="https://schema.org/SalePrice" content="{{ product.price }}" class="old-price fs-16">
+                                                    {{ product.price|floatformat:0 }}
+                                                    <span itemprop="priceCurrency" content="RUB">&#8381;</span>
+                                                </del>
+                                            </span>
+                                            <span class="badge rounded-3 c-bg-new-price-badge">
+                                                <span itemprop="price" class="c-new-price fs-21">
+                                                    {{ product.new_price|floatformat:0 }}
+                                                    <span itemprop="priceCurrency" content="RUB">&#8381;</span>
+                                                </span>
+                                            </span>
                                         </div>
+                                        {% endif %}
 
-                                        <button type="submit" class="btn c-btn-primary col-6 p-3 m-0 ms-3">
-                                            <span>Добавить в корзину</span>
-                                        </button>
+                                    </div>
 
-                                    </form>
+                                    <div class="col-6 m-0 p-0 me-3">
+                                        <form action="{% url 'add_item_to_cart' product.id %}" class="row m-0" method="post">
+                                            {% csrf_token %}
+
+                                            <div class="col-5 justify-content-center border rounded-3 row m-0 p-0">
+                                                <button class="btn col-4 c-btn-white rounded-3 m-0 p-0" type="button" onclick="this.nextElementSibling.stepDown();">
+                                                    <img src="{% static 'products/icons/dark/minus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
+                                                </button>
+
+                                                {{ cart_add_quantity_form.quantity }}
+
+                                                <button class="btn col-4 c-btn-white rounded-3 m-0 p-0" type="button" onclick="this.previousElementSibling.stepUp();">
+                                                    <img src="{% static 'products/icons/dark/plus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
+                                                </button>
+                                            </div>
+
+                                            <button type="submit" class="btn c-btn-primary col-6 p-3 m-0 ms-3">
+                                                <span>Добавить в корзину</span>
+                                            </button>
+
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <!-- Modal -->
+                    </section>
+                    <!-- Modal -->
                 {% endfor %}
                 {% else %}
-                <div class="text-center">
-                    <p>Продуктов по данному фильтру нет</p>
-                    <p>
-                        Если у Вас возникли вопросы, то позвоните нам
-                        <br>
-                        <strong><a class="dropdown-item" href="tel:+7-909-141-32-42">+79091413242</a></strong>
-                    </p>
-                </div>
+                    <div class="text-center">
+                        <p>Продуктов по данному фильтру нет</p>
+                        <p>
+                            Если у Вас возникли вопросы, то позвоните нам
+                            <br>
+                            <strong><a class="dropdown-item" href="tel:+7-909-141-32-42">+79091413242</a></strong>
+                        </p>
+                    </div>
                 {% endif %}
             </div>
             {% include 'includes/paginator.html' %}
@@ -234,34 +269,40 @@
                 {% if products %}
                 {% for product in products %}
                     <!-- Card -->
-                    <div class="col-5 col-sm-3 card border border-0 c-bg-card mx-2 px-0">
+                    <section itemscope itemtype="https://schema.org/Product" class="col-5 col-sm-3 card border border-0 c-bg-card mx-2 px-0">
                         <a href="{{ product.slug }}" class="c-link-main text-decoration-none" target="_blank" data-bs-toggle="modal" data-bs-target="#Modal-mobile-{{ product.id }}">
-                            <img src="{{ product.preview.url }}" class="card-img-top" alt="{{ product.title }}">
+                            <img itemprop="image" src="{{ product.preview.url }}" class="card-img-top" alt="{{ product.title }}">
                             <div class="card-body d-flex text-center justify-content-center align-items-center py-3" style="height: 80px">
-                                <h2 class="d-block d-sm-none fs-16 m-0">{{ product.title }}</h2>
-                                <h2 class="d-none d-sm-block d-md-none fs-16 m-0">{{ product.title }}</h2>
-                                <h2 class="d-none d-md-block fs-17 m-0">{{ product.title }}</h2>
+                                <article itemprop="name" class="d-block d-sm-none fs-16 m-0">{{ product.title }}</article>
+                                <article itemprop="name" class="d-none d-sm-block d-md-none fs-16 m-0">{{ product.title }}</article>
+                                <article itemprop="name" class="d-none d-md-block fs-17 m-0">{{ product.title }}</article>
                             </div>
                         </a>
 
                         <div class="card-footer d-flex justify-content-between align-items-end h-100" style="background-color: #eff3e9">
-                            <div>
+                            <div itemprop="offers" itemscope itemtype="https://schema.org/Offer">
                                 {% if product.discount == 0 %}
-                                <span class="fs-19">
-                                    {{ product.new_price|floatformat:0 }} &#8381;
-                                </span>
+                                    <span itemprop="price" content="{{ product.new_price }}" class="fs-19">
+                                        {{ product.new_price|floatformat:0 }}
+                                        <span itemprop="priceCurrency" content="RUB">&#8381;</span>
+                                    </span>
                                 {% else %}
-                                <div class="d-grid text-start">
-                                    <span>
-                                        <del class="old-price fs-11">{{ product.price|floatformat:0 }} &#8381;</del>
-                                    </span>
-                                    <span class="badge rounded-3 c-bg-new-price-badge">
-                                        <span class="c-new-price fs-19">{{ product.new_price|floatformat:0 }} &#8381;</span>
-                                    </span>
-                                </div>
+                                    <div class="d-grid text-start">
+                                        <span>
+                                            <del itemprop="price" itemtype="https://schema.org/SalePrice" class="old-price fs-11">
+                                                {{ product.price|floatformat:0 }}
+                                                <span itemprop="priceCurrency" content="RUB">&#8381;</span>
+                                            </del>
+                                        </span>
+                                        <span class="badge rounded-3 c-bg-new-price-badge">
+                                            <span itemprop="price" content="{{ product.new_price }}" class="c-new-price fs-19">
+                                                {{ product.new_price|floatformat:0 }}
+                                                <span itemprop="priceCurrency" content="RUB">&#8381;</span>
+                                            </span>
+                                        </span>
+                                    </div>
                                 {% endif %}
                             </div>
-
                             <div>
                                 <form action="{% url 'add_one_item_to_cart' product.id %}" class="col-8 d-flex justify-content-center" method="post">
                                     {% csrf_token %}
@@ -271,13 +312,13 @@
                                 </form>
                             </div>
                         </div>
-                    </div>
+                    </section>
                     <!-- Card -->
 
                     <!-- Modal -->
-                    <div class="modal fade m-0 p-0" id="Modal-mobile-{{ product.id }}" tabindex="-1" aria-labelledby="ModalLabel-mobile-{{ product.id }}" aria-hidden="true">
+                    <section class="modal fade m-0 p-0" id="Modal-mobile-{{ product.id }}" tabindex="-1" aria-labelledby="ModalLabel-mobile-{{ product.id }}" aria-hidden="true">
                         <div class="modal-dialog modal-fullscreen-lg-down">
-                            <div class="modal-content">
+                            <div itemscope itemtype="https://schema.org/Product" class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
@@ -292,16 +333,16 @@
                                                 <div class="carousel-inner">
                                                     <div class="carousel-item active" data-bs-interval="50000">
                                                         <div class="d-flex justify-content-center">
-                                                            <img class="d-block d-sm-none w-75" src="{{ product.preview.url }}" alt="product {{ product.title }}">
-                                                            <img class="d-none d-sm-block w-50" src="{{ product.preview.url }}" alt="product {{ product.title }}">
+                                                            <img itemprop="image" class="d-block d-sm-none w-75" src="{{ product.preview.url }}" alt="product {{ product.title }}">
+                                                            <img itemprop="image" class="d-none d-sm-block w-50" src="{{ product.preview.url }}" alt="product {{ product.title }}">
                                                         </div>
                                                     </div>
 
                                                     {% for product_image in product.productgallery_set.all %}
                                                     <div class="carousel-item" data-bs-interval="50000">
                                                         <div class="d-flex justify-content-center">
-                                                            <img class="d-block d-sm-none w-75" src="{{ product_image.image.url }}" alt="product {{ product.title }}">
-                                                            <img class="d-none d-sm-block w-50" src="{{ product_image.image.url }}" alt="product {{ product.title }}">
+                                                            <img itemprop="image" class="d-block d-sm-none w-75" src="{{ product_image.image.url }}" alt="product {{ product.title }}">
+                                                            <img itemprop="image" class="d-none d-sm-block w-50" src="{{ product_image.image.url }}" alt="product {{ product.title }}">
                                                         </div>
                                                     </div>
                                                     {% endfor %}
@@ -321,27 +362,34 @@
                                         </div>
 
                                         <div class="col-12 text-center">
-                                            <h2 class="my-4">
+                                            <article itemprop="name" class="my-4">
                                                 <a href="#" class="c-link-main fs-30">
                                                 {{ product.title }}
                                                 </a>
-                                            </h2>
+                                            </article>
 
-                                            <div class="d-block d-sm-none text-cente m-0 p-0 pb-3">
+                                            <div itemprop="offers" itemscope itemtype="https://schema.org/Offer" class="d-block d-sm-none text-cente m-0 p-0 pb-3">
 
                                                 {% if product.discount == 0 %}
-                                                <span class="fs-24">
-                                                    {{ product.new_price|floatformat:0 }} &#8381;
-                                                </span>
+                                                    <span itemprop="price" content="{{ product.new_price }}" class="fs-24">
+                                                        {{ product.new_price|floatformat:0 }}
+                                                        <span itemprop="priceCurrency" content="RUB">&#8381;</span>
+                                                    </span>
                                                 {% else %}
-                                                <div class="d-grid text-center">
-                                                    <span>
-                                                        <del class="old-price fs-17">{{ product.price|floatformat:0 }} &#8381;</del>
-                                                    </span>
-                                                    <span class="rounded-3">
-                                                        <span class="c-new-price fs-24">{{ product.new_price|floatformat:0 }} &#8381;</span>
-                                                    </span>
-                                                </div>
+                                                    <div class="d-grid text-center">
+                                                        <span>
+                                                            <del itemprop="price" itemtype="https://schema.org/SalePrice" content="{{ product.price }}" class="old-price fs-17">
+                                                                {{ product.price|floatformat:0 }}
+                                                                <span itemprop="priceCurrency" content="RUB">&#8381;</span>
+                                                            </del>
+                                                        </span>
+                                                        <span class="rounded-3">
+                                                            <span itemprop="price" class="c-new-price fs-24">
+                                                                {{ product.new_price|floatformat:0 }}
+                                                                <span itemprop="priceCurrency" content="RUB">&#8381;</span>
+                                                            </span> 
+                                                        </span>
+                                                    </div>
                                                 {% endif %}
         
                                             </div>
@@ -381,25 +429,29 @@
                                 <!-- Footer -->
                                 <!-- Footer for sm and md -->
                                 <div class="d-none d-sm-flex modal-footer row justify-content-between align-items-center m-0 px-4">
-                                    <div class="col-3 m-0 p-0">
-
+                                    <div itemprop="offers" itemscope itemtype="https://schema.org/Offer" class="col-3 m-0 p-0">
                                         {% if product.discount == 0 %}
-                                        <span class="fs-30">
-                                            {{ product.new_price|floatformat:0 }} &#8381;
-                                        </span>
+                                            <span itemprop="price" content="{{ product.new_price }}" class="fs-30">
+                                                {{ product.new_price|floatformat:0 }};
+                                                <span itemprop="priceCurrency" content="RUB">&#838;1</span>
+                                            </span>
                                         {% else %}
-                                        <div class="d-grid text-start">
-                                            <span>
-                                                <del class="old-price fs-16">{{ product.price|floatformat:0 }} &#8381;</del>
-                                            </span>
-                                            <span class="badge rounded-3 c-bg-new-price-badge">
-                                                <span class="c-new-price fs-24">{{ product.new_price|floatformat:0 }} &#8381;</span>
-                                            </span>
-                                        </div>
+                                            <div class="d-grid text-start">
+                                                <span>
+                                                    <del itemprop="price" itemtype="https://schema.org/SalePrice" content="{{ product.price }}" class="old-price fs-16">
+                                                        {{ product.price|floatformat:0 }}
+                                                        <span itemprop="priceCurrency" content="RUB">&#8381;</span>
+                                                    </del>
+                                                </span>
+                                                <span class="badge rounded-3 c-bg-new-price-badge">
+                                                    <span itemprop="price" class="c-new-price fs-24">
+                                                        {{ product.new_price|floatformat:0 }}
+                                                        <span itemprop="priceCurrency" content="RUB">&#8381;</span>
+                                                    </span>
+                                                </span>
+                                            </div>
                                         {% endif %}
-
                                     </div>
-
                                     <div class="col-8 m-0 p-0">
                                         <form action="{% url 'add_item_to_cart' product.id %}" class="row m-0" method="post">
                                             {% csrf_token %}
@@ -427,7 +479,7 @@
                                 
                             </div>
                         </div>
-                    </div>
+                    </section>
                     <!-- Modal -->
 
                 {% endfor %}

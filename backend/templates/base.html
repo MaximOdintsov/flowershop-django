@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" xmlns:og="http://ogp.me/ns#">
     <head>
         {% block static %} {% endblock %}
         {% load static %}
@@ -7,9 +7,6 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="keywords" content="Цветок Киров">
-        <meta name="description" content="Цветы киров">
-        <meta itemprop="image" content="{% static 'products/icons/favicon.svg' %}">
 
         <meta name="yandex-verification" content="dd625cfd0e3fc2c7" />
         <link rel="icon" href="{% static 'products/icons/favicon.svg' %}">
@@ -17,7 +14,12 @@
         <title>
             {% block title %} {% endblock %}
         </title>
+        {% block description %} {% endblock %}
+        {% block robots %} {% endblock %}
+        {% block keywords %} {% endblock %}
+        {% block opengraph %} {% endblock %}
 
+        
         <!-- Yandex.Metrika counter -->
         <script type="text/javascript">
             (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
