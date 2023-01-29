@@ -66,7 +66,7 @@ class ProductFilterView(generic.ListView):
 
 class ProductSearchView(generic.ListView):
     """Поиск товаров"""
-    paginate_by = 30
+    paginate_by = 20
     model = Product
     context_object_name = 'products'
 
@@ -103,7 +103,7 @@ class ProductList(generic.ListView):
     model = Product
     context_object_name = 'products'
     queryset = Product.objects.filter(Q(status=2) | Q(status=3))
-    paginate_by = 30
+    paginate_by = 20
     template_name = 'products/product_list.html'
 
     def get_context_data(self, **kwargs):
