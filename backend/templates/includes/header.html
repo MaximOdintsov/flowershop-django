@@ -19,7 +19,7 @@
         </div>
 
         <a class="navbar-brand px-3 px-lg-2 me-0 me-lg-2" href="{% url 'product_list' %}">
-            <img src="{% static 'products/icons/light/logo-icon.svg' %}" alt="Цветок Киров" width="37px">
+            <img src="{% static 'products/icons/light/logo-icon.svg' %}" alt="Цветок Киров" width="37" height="37">
             <h1 class="d-lg-inline-block fs-21 c-light-active">Цветок</h1>
         </a>
         
@@ -89,7 +89,7 @@
                     <li class="nav-item dropdown col-auto">
                         {% with total_items=cart.length_cart %}
                             <button class="btn c-bg-button nav-link dropdown-toggle btn-border-c-third" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="{% static 'products/icons/light/cart-icon.png' %}" alt="Корзина" width="29px">
+                                <img src="{% static 'products/icons/light/cart-icon.png' %}" alt="Корзина" width="29" height="29">
                                     {% if cart.length_cart > 0 %}
                                     <span class="position-absolute top-25 start-75 translate-middle p-1 c-bg-red rounded-circle"></span>
                                 {% endif %}
@@ -131,9 +131,9 @@
                     <li class="nav-item dropdown col-auto">
                         <button class="btn c-bg-button nav-link dropdown-toggle btn-border-c-third" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {% if user.is_authenticated %}
-                                <img src="{% static 'products/icons/light/user-verify-icon.png' %}" alt="Профиль" width="29px">
+                                <img src="{% static 'products/icons/light/user-verify-icon.png' %}" alt="Профиль" width="29" height="29">
                             {% else %}
-                                 <img src="{% static 'products/icons/light/user-denied-icon.png' %}" alt="Профиль" width="29px">
+                                 <img src="{% static 'products/icons/light/user-denied-icon.png' %}" alt="Профиль" width="29" height="29">
                             {% endif %}
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end rounded-3 text-center py-0">
@@ -158,7 +158,7 @@
                     
                     <li class="nav-item col-auto">
                         <a class="d-flex align-items-center p-2" href="https://vk.com/id141455317" target="_blank">
-                            <img src="{% static 'products/icons/light/vk-header-icon.png' %}" alt="vk.com" width="35px">
+                            <img src="{% static 'products/icons/light/vk-header-icon.png' %}" alt="vk.com" width="35" height="35">
                         </a>
                     </li>
                 </ul>
@@ -177,14 +177,15 @@
     <!-- Header top -->
     <nav class="container-fluid bd-gutter flex-wrap px-sm-4" aria-label="MainNavigationMobile">
         <div class="bd-navbar-toggle">
-            <button class="navbar-toggler rounded-3 p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarHeaderMobile" aria-controls="navbarHeaderMobile" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon "></span>
+            <button class="navbar-toggler rounded-3  p-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarHeaderMobile" aria-controls="navbarHeaderMobile" aria-expanded="false" aria-label="Toggle navigation">
+                <img src="{% static 'products/icons/light/menu-icon.png' %}" alt="Боковая панель" width="37" height="37">
             </button>
         </div>
+
         <a class="navbar-brand d-inline px-3 me-0" href="{% url 'product_list' %}">
             
             <h1 class="d-flex align-items-center fs-21 m-0">
-                <img src="{% static 'products/icons/light/logo-icon.svg' %}" alt="Цветок" width="38px">
+                <img src="{% static 'products/icons/light/logo-icon.svg' %}" alt="Цветок" width="38" height="38">
                 Цветок
             </h1>
         </a>
@@ -194,7 +195,7 @@
                 <form action="{% url 'product_search' %}" method="get" class="col text-center">
                     <div class="d-flex place-holder-color">
                         <button type="button" class="btn c-bg-button btn-border-c-third" data-bs-toggle="modal" data-bs-target="#modalSearch">
-                            <img src="{% static 'products/icons/light/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="34px">
+                            <img src="{% static 'products/icons/light/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="34" height="34">
                         </button>
                     </div>
                 </form>
@@ -205,7 +206,7 @@
 
             <div class="d-flex align-items-center offcanvas-header border-bottom pb-3 mb-3">
                 <h5 class="offcanvas-title c-light-active fs-21" id="bdSidebarOffcanvasLabel">
-                    <img src="{% static 'products/icons/light/logo-icon.svg' %}" alt="Цветок" width="38px">
+                    <img src="{% static 'products/icons/light/logo-icon.svg' %}" alt="Цветок" width="38" height="38">
                     Цветок
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Закрыть" data-bs-target="#navbarHeaderMobile"></button>
@@ -215,12 +216,9 @@
                 
                 <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav me-3">
                     <li class="nav-item dropdown col-12">
-                        <a class="d-block d-sm-none nav-link dropdown-toggle c-link-light py-2 px-0" data-bs-auto-close="outside" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{% static 'products/icons/light/contacts-icon.png' %}" alt="Каталог" width="30px">
-                            <span class="ms-2 fs-15">Контакты</span>
-                        </a>
-                        <a class="d-none d-sm-block nav-link dropdown-toggle c-link-light py-2 px-0" data-bs-auto-close="outside" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{% static 'products/icons/light/contacts-icon.png' %}" alt="Каталог" width="32px">
+
+                        <a class="d-block nav-link dropdown-toggle c-link-light py-2 px-0" data-bs-auto-close="outside" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{% static 'products/icons/light/contacts-icon.png' %}" alt="Каталог" width="32" height="32">
                             <span class="ms-2 fs-17">Контакты</span>
                         </a>
                         <ul class="dropdown-menu py-0">
@@ -252,12 +250,8 @@
                     </li>
 
                     <li class="nav-item dropdown col-12">
-                        <a class="d-block d-sm-none nav-link dropdown-toggle c-link-light pt-2 pb-0 px-0" data-bs-auto-close="outside" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{% static 'products/icons/light/location-pin-icon.png' %}" alt="Каталог" width="30px">
-                            <span class="ms-2 fs-15">Адрес</span>
-                        </a>
-                        <a class="d-none d-sm-block nav-link dropdown-toggle c-link-light pt-2 pb-0 px-0" data-bs-auto-close="outside" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{% static 'products/icons/light/location-pin-icon.png' %}" alt="Каталог" width="32px">
+                        <a class="d-block nav-link dropdown-toggle c-link-light pt-2 pb-0 px-0" data-bs-auto-close="outside" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{% static 'products/icons/light/location-pin-icon.png' %}" alt="Каталог" width="32" height="32">
                             <span class="ms-2 fs-17">Адрес</span>
                         </a>
                         <ul class="dropdown-menu mt-2">
@@ -279,14 +273,9 @@
                     </li>
 
                     <li class="nav-item col-12">
-                        <a class="d-block d-sm-none nav-link c-link-light p-0 px-0" href="https://vk.com/id141455317" target="_blank">
+                        <a class="d-block nav-link c-link-light p-0 px-0" href="https://vk.com/id141455317" target="_blank">
                             <img src="{% static 'products/icons/light/vk-header-icon.png' %}" alt="vk.com" width="34px">
                             <span class="ms-2 fs-15">Наш vk</span>
-                        </a>
-
-                        <a class="d-none d-sm-block nav-link c-link-light p-0 px-0" href="https://vk.com/id141455317" target="_blank">
-                            <img src="{% static 'products/icons/light/vk-header-icon.png' %}" alt="vk.com" width="36px">
-                            <span class="ms-2 fs-17">Наш vk</span>
                         </a>
                     </li>
                 </ul>
@@ -303,17 +292,17 @@
         <div class="row col-12 justify-content-between align-items-center m-0 p-2">
                 <div class="col-4 text-center m-0">
                     <a class="d-block d-sm-none c-link-main" href="{% url 'product_list' %}">
-                        <img src="{% static 'products/icons/dark/catalog-icon.png' %}" alt="Каталог" width="32px">
+                        <img src="{% static 'products/icons/dark/catalog-icon.png' %}" alt="Каталог" width="32">
                         <br>
                         <span class="fs-16">Каталог</span>
                     </a>
                     <a class="d-none d-sm-block d-md-none c-link-main" href="{% url 'product_list' %}">
-                        <img src="{% static 'products/icons/dark/catalog-icon.png' %}" alt="Каталог" width="35px">
+                        <img src="{% static 'products/icons/dark/catalog-icon.png' %}" alt="Каталог" width="35">
                         <br>
                         <span class="fs-17">Каталог</span>
                     </a>
                     <a class="d-none d-md-block c-link-main" href="{% url 'product_list' %}">
-                        <img src="{% static 'products/icons/dark/catalog-icon.png' %}" alt="Каталог" width="37px">
+                        <img src="{% static 'products/icons/dark/catalog-icon.png' %}" alt="Каталог" width="37">
                         <br>
                         <span class="fs-19">Каталог</span>
                     </a>
@@ -322,7 +311,7 @@
                 <div class="col-4 text-center m-0">
 
                     <a class="d-block d-sm-none c-link-main " href="{% url 'cart' %}">
-                        <img src="{% static 'products/icons/dark/cart-icon.png' %}" alt="Корзина" width="32px">
+                        <img src="{% static 'products/icons/dark/cart-icon.png' %}" alt="Корзина" width="32">
                         {% if cart.length_cart > 0 %}
                             <span class="position-absolute top-25 start-75 translate-middle p-1 c-bg-red rounded-circle"></span>
                         {% endif %}
@@ -330,7 +319,7 @@
                         <span class="fs-16">Корзина</span>
                     </a>
                     <a class="d-none d-sm-block d-md-none c-link-main" href="{% url 'cart' %}">
-                        <img src="{% static 'products/icons/dark/cart-icon.png' %}" alt="Корзина" width="35px">
+                        <img src="{% static 'products/icons/dark/cart-icon.png' %}" alt="Корзина" width="35">
                         {% if cart.length_cart > 0 %}
                             <span class="position-absolute top-25 start-75 translate-middle p-1 c-bg-red rounded-circle"></span>
                         {% endif %}
@@ -338,7 +327,7 @@
                         <span class="fs-17">Корзина</span>
                     </a>
                     <a class="d-none d-md-block c-link-main" href="{% url 'cart' %}">
-                        <img src="{% static 'products/icons/dark/cart-icon.png' %}" alt="Корзина" width="37px">
+                        <img src="{% static 'products/icons/dark/cart-icon.png' %}" alt="Корзина" width="37">
                         {% if cart.length_cart > 0 %}
                             <span class="position-absolute top-25 start-75 translate-middle p-1 c-bg-red rounded-circle"></span>
                         {% endif %}
@@ -350,33 +339,33 @@
                 <div class="col-4 text-center m-0">
                     {% if user.is_authenticated %}
                         <a class="d-block d-sm-none c-link-main" href="{% url 'logout' %}">
-                            <img src="{% static 'products/icons/dark/user-verify-icon.png' %}" alt="Профиль" width="32px">
+                            <img src="{% static 'products/icons/dark/user-verify-icon.png' %}" alt="Профиль" width="32">
                             <br>
                             <span class="fs-16">Выйти</span>
                         </a>
                         <a class="d-none d-sm-block d-md-none c-link-main" href="{% url 'logout' %}">
-                            <img src="{% static 'products/icons/dark/user-verify-icon.png' %}" alt="Профиль" width="35px">
+                            <img src="{% static 'products/icons/dark/user-verify-icon.png' %}" alt="Профиль" width="35">
                             <br>
                             <span class="fs-17">Выйти</span>
                         </a>
                         <a class="d-none d-md-block c-link-main" href="{% url 'logout' %}">
-                            <img src="{% static 'products/icons/dark/user-verify-icon.png' %}" alt="Профиль" width="37px">
+                            <img src="{% static 'products/icons/dark/user-verify-icon.png' %}" alt="Профиль" width="37">
                             <br>
                             <span class="fs-19">Выйти</span>
                         </a>
                     {% else %}
                         <a class="d-block d-sm-none c-link-main" href="{% url 'login' %}">
-                            <img src="{% static 'products/icons/dark/user-denied-icon.png' %}" alt="Профиль" width="32px">
+                            <img src="{% static 'products/icons/dark/user-denied-icon.png' %}" alt="Профиль" width="32">
                             <br>
                             <span class="fs-16">Войти</span>
                         </a>
                         <a class="d-none d-sm-block d-md-none c-link-main" href="{% url 'login' %}">
-                            <img src="{% static 'products/icons/dark/user-denied-icon.png' %}" alt="Профиль" width="35px">
+                            <img src="{% static 'products/icons/dark/user-denied-icon.png' %}" alt="Профиль" width="35">
                             <br>
                             <span class="fs-17">Войти</span>
                         </a>
                         <a class="d-none d-md-block c-link-main" href="{% url 'login' %}">
-                            <img src="{% static 'products/icons/dark/user-denied-icon.png' %}" alt="Профиль" width="37px">
+                            <img src="{% static 'products/icons/dark/user-denied-icon.png' %}" alt="Профиль" width="37">
                             <br>
                             <span class="fs-19">Войти</span>
                         </a>
