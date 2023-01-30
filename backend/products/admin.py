@@ -40,7 +40,7 @@ class ProductComponent(admin.ModelAdmin):
     fields = ('title', 'price', 'quantity_in_stock', 'show_in_filter')
     list_display = ['title', 'slug', 'price', 'new_arrival', 'quantity_in_stock',
                     'quantity_of_sold', 'available', 'show_in_filter']
-    list_editable = ['price', 'new_arrival', 'available', 'show_in_filter']
+    list_editable = ['price', 'slug', 'new_arrival', 'available', 'show_in_filter']
 
     list_per_page = 30
     ordering = ['quantity_of_sold', 'price']
