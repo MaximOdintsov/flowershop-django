@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 
     # 'djoser',
     'phonenumber_field',
+    'webp_doubles',
 
     'products',
     'users',
@@ -198,3 +199,9 @@ if int(os.getenv('SSL')):
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+
+# webp_doubles
+MODELS_WITH_IMAGES_FOR_WEBP = {
+    'products.Product': ['preview', ],
+    'products.ProductGallery': ['image', ],
+}
