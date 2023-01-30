@@ -47,8 +47,6 @@ WORKDIR $APP_HOME
 
 # install dependencies
 RUN apk update && apk add libpq
-RUN apk add libgd
-
 RUN pip install --upgrade pip
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements.txt .
