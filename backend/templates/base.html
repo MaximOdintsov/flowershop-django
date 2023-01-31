@@ -9,7 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <meta name="yandex-verification" content="dd625cfd0e3fc2c7" />
-        <link rel="icon" href="{% static 'products/icons/favicon.svg' %}">
+        <link rel="icon" href="{% static 'products/icons/favicon.ico' %}">
 
         <title>
             {% block title %} {% endblock %}
@@ -17,8 +17,17 @@
         {% block description %} {% endblock %}
         {% block robots %} {% endblock %}
         {% block keywords %} {% endblock %}
-        {% block opengraph %} {% endblock %}
 
+        <!-- OpenGraph -->
+        <meta property="og:title" content="Доставка цветов в Кирове"/>
+        <meta property="og:image" content="{% static 'products/img/open-graph-image.svg' %}"/>
+        <meta property="og:image:width" content="1200"/>
+        <meta property="og:image:height" content="630"/>
+        <meta property="og:description" content="Нужен подарок на праздник? Можете заказать авторский букет или композицию на нашем сайте!"/>
+        <meta property="og:type" content="product"/>
+        <meta property="og:url" content= "https://kirovcvetok.ru/"/>
+        <meta property="og:site_name" content="Цветок - Доставка цветов"/>
+        <!-- OpenGraph -->
         
         <!-- Yandex.Metrika counter -->
         <script type="text/javascript">
