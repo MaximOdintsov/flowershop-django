@@ -1,5 +1,5 @@
 from django.urls import path
-
+from django.views.generic import TemplateView
 from .views import (AddItemToCart,
                     AddOneItemToCart,
                     RemoveItemToCart,
@@ -10,6 +10,7 @@ from .views import (AddItemToCart,
 
 urlpatterns = [
     # path('add-item-to-cart/<int:pk>', add_item_to_cart, name='add_item_to_cart'),
+    path('delivery_and_payment/', TemplateView.as_view(template_name='orders/delivery_and_payment.html'), name='delivery_and_payment'),
     path('cart/add_item_to_cart/<int:pk>', AddItemToCart.as_view(), name='add_item_to_cart'),
     path('cart/add_one_item_to_cart/<int:pk>', AddOneItemToCart.as_view(), name='add_one_item_to_cart'),
 

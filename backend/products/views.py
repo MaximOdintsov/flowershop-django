@@ -20,7 +20,6 @@ class ProductFilterView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         cart_add_quantity_form = AddQuantityForm()
-        search_form = ProductSearchForm()
         filter_form = ProductFilterForm()
 
         context = super().get_context_data(**kwargs)
@@ -31,7 +30,6 @@ class ProductFilterView(generic.ListView):
             context['items'] = items
         finally:
             context['cart_add_quantity_form'] = cart_add_quantity_form
-            context['search_form'] = search_form
             context['filter_form'] = filter_form
 
             return context
@@ -82,7 +80,6 @@ class ProductSearchView(generic.ListView):
 
     def get_context_data(self, *args, **kwargs):
         cart_add_quantity_form = AddQuantityForm()
-        search_form = ProductSearchForm()
         filter_form = ProductFilterForm()
 
         context = super().get_context_data(**kwargs)
@@ -93,7 +90,6 @@ class ProductSearchView(generic.ListView):
             context['items'] = items
         finally:
             context['cart_add_quantity_form'] = cart_add_quantity_form
-            context['search_form'] = search_form
             context['filter_form'] = filter_form
 
             return context
@@ -108,7 +104,6 @@ class ProductList(generic.ListView):
 
     def get_context_data(self, **kwargs):
         cart_add_quantity_form = AddQuantityForm()
-        search_form = ProductSearchForm()
         filter_form = ProductFilterForm()
 
         context = super().get_context_data(**kwargs)
@@ -119,7 +114,6 @@ class ProductList(generic.ListView):
             context['items'] = items
         finally:
             context['cart_add_quantity_form'] = cart_add_quantity_form
-            context['search_form'] = search_form
             context['filter_form'] = filter_form
 
             return context

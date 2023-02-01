@@ -98,15 +98,19 @@ def cart_view(request):
     items = cart.orderitem_set.order_by('creation_time')
 
     cart_add_quantity_form = AddQuantityForm()
-    search_form = ProductSearchForm()
     filter_form = ProductFilterForm()
+
+    available = 1
+    for item in items:
+        if item.product.status == 1 or item.product.status == 4:
+            available = 0
 
     context = {
         'cart': cart,
         'items': items,
         'cart_add_quantity_form': cart_add_quantity_form,
-        'search_form': search_form,
         'filter_form': filter_form,
+        'available': available,
     }
 
     return render(request, 'orders/cart.html', context)
@@ -123,10 +127,17 @@ class OrderCreateView(LoginRequiredMixin, FormView):
     def get(self, request, *args, **kwargs):
         cart = Order.get_cart(self.request.user)
         items = cart.orderitem_set.all()
+        available = 1
+        for item in items:
+            if item.product.status == 1 or item.product.status == 4:
+                available = 0
+                return redirect('cart')
+
         if len(items):
             context = self.get_context_data(**kwargs)
             context['cart'] = cart
             context['items'] = items
+            context['available'] = available
             return self.render_to_response(context)
         else:
             return redirect('cart')

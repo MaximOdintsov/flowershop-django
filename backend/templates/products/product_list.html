@@ -158,10 +158,14 @@ content="Цветок, Цветы Киров, Букеты Киров, Дост�
                                             </div>
 
                                             <div class="col">
-                                                <article itemprop="name">
-                                                    <a href="{{ product.get_url }}" class="c-link-main fs-24">
+                                                <article class="pb-3">
+                                                    <a itemprop="name" href="{{ product.get_url }}" class="c-link-main fs-24">
                                                     {{ product.title }}
                                                     </a>
+                                                    {% if product.status == 3 %}
+                                                        <br>
+                                                        <span class="c-main fs-16">ТОЛЬКО ПОД ЗАКАЗ</span>
+                                                    {% endif %}
                                                 </article>
 
                                                 <div class="">
@@ -357,6 +361,10 @@ content="Цветок, Цветы Киров, Букеты Киров, Дост�
                                                 <a href="#" class="c-link-main fs-30">
                                                 {{ product.title }}
                                                 </a>
+                                                {% if product.status == 3 %}
+                                                    <br>
+                                                    <span class="c-main fs-16">ТОЛЬКО ПОД ЗАКАЗ</span>
+                                                {% endif %}
                                             </article>
 
                                             <div itemprop="offers" itemscope itemtype="https://schema.org/Offer" class="d-block d-sm-none text-cente m-0 p-0 pb-3">

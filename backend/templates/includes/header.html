@@ -7,7 +7,7 @@
         
         <div class="d-flex">
             <div class="product-search">
-                <form action="{% url 'product_search' %}" method="get" class="col-10 col-xl-12 text-center">
+                <form action="{% url 'product_search' %}" method="get" class="col-10 col-xl-12 text-end">
                     <div class="d-flex place-holder-color">
                         {{ search_form.search_text }}
                         <button type="submit" class="btn c-bg-button px-1 btn-border-c-third" aria-label="Search">  
@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <a class="navbar-brand px-3 px-lg-2 me-0 me-lg-2" href="{% url 'product_list' %}">
+        <a class="navbar-brand px-3 px-lg-1 m-0 mb-1" href="{% url 'product_list' %}">
             <h1 class="d-lg-inline-block fs-21 c-light-active m-0">Цветок</h1>
         </a>
         
@@ -32,8 +32,8 @@
                         </a>
                     </li>
                     <li class="nav-item col-auto d-flex">     
-                        <a class="nav-link c-link-light p-2" aria-current="true" href="{% url 'product_list' %}">
-                            Доставка
+                        <a class="nav-link c-link-light p-2" aria-current="true" href="{% url 'delivery_and_payment' %}">
+                            Доставка и оплата
                         </a>
                     </li>
                     <li class="nav-item dropdown col-auto" >

@@ -21,6 +21,32 @@ content="Корзина товаров">
     {% include 'includes/header-pc-cart.html' %}
     {% include 'includes/header-mobile-cart.html' %}      
 
+    <!-- Modal for search in header -->
+    <div class="modal fade" id="modalSearchMobileCart" tabindex="-1" aria-labelledby="modalSearchLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content c-bg-body">
+
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalSearchLabel">Поиск товаров</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+
+                <form action="{% url 'product_search' %}" method="get" class="col text-center">
+                    <div class="modal-body place-holder-color d-flex">
+                        {{ search_form.search_text }}
+                        
+                        <button type="submit" class="btn c-bg-button" aria-label="modalSearchLabel">  
+                            <img src="{% static 'products/icons/dark/magnifying-glass-icon.png' %}" alt="Поиск товаров" width="29" height="29">
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <!-- Modal for search in header -->
+
     <!-- PC -->
     <div class="container d-none d-lg-block">
         <div class="row mx-0">
@@ -73,10 +99,16 @@ content="Корзина товаров">
                                     <!-- Text  -->
                                     <div class="col-7">
                                         <div class="card-body border-bottom p-3">
-                                            <h2 class="card-title text-center fs-21 pb-4 m-0">{{ item.product.title }}</h2>
-
-                                            <div class="d-flex row justify-content-between align-items-end p-0 m-0">         
-                                                
+                                            {% if item.product.status == 3 %}
+                                                <h2 class="card-title text-center fs-21 pb-1 m-0">{{ item.product.title }}</h2>
+                                                <p class="c-new-price text-center fs-16 pb-4 m-0">Товар доступен только под заказ!</p>
+                                            {% elif item.product.status == 4 %}
+                                                <h2 class="card-title text-center fs-21 pb-1 m-0">{{ item.product.title }}</h2>
+                                                <p class="c-new-price text-center fs-16 pb-4 m-0">Товар НЕДОСТУПЕН!</p>
+                                            {% else %}
+                                                <h2 class="card-title text-center fs-21 pb-4 m-0">{{ item.product.title }}</h2>
+                                            {% endif %}
+                                            <div class="d-flex row justify-content-between align-items-end p-0 m-0">
                                                 <div class="col-7 d-grid d-xl-none m-0 p-0">
                                                     {% if item.product.discount == 0 %}
                                                         <span class="fs-16">
@@ -263,7 +295,7 @@ content="Корзина товаров">
                                             <del class="old-price fs-14">{{ cart.get_old_amount }} &#8381</del>
                                         </span>
 
-                                        <h4 class="c-new-price fs-19">{{ cart.amount }} &#8381</span>                        
+                                        <h4 class="c-new-price fs-19">{{ cart.amount }} &#8381</h4>
                                     {% endif %}
                                 </div>
                             </div>
@@ -288,13 +320,24 @@ content="Корзина товаров">
                             </div>
 
                             <div class="row border-top m-0 p-0 mt-3 pt-3">
-                                <form class="col-12 ext-cetnter m-0 p-0 mb-1" action="{% url 'order_create' %}" target="_self" method="get">
-                                    <button class="col-12 btn c-btn-accept rounded-3">Оформить заказ</button>
-                                </form>
-
-                                <form class="col-12 text-cetnter m-0 p-0 mt-1" action="{% url 'product_list' %}" class="mt-2 pt-2" target="_self" method="get">
+                                {% if available == 1 %}
+                                    <form class="col-12 text-center m-0 p-0 mb-1" action="{% url 'order_create' %}" target="_self" method="get">
+                                        <button class="col-12 btn c-btn-accept rounded-3">Оформить заказ</button>
+                                    </form>
+                                {% elif available == 0 %}
+                                    <form class="col-12 text-center m-0 p-0 mb-1" action="{% url 'order_create' %}" target="_self" method="get">
+                                        <button type="button" class="col-12 btn c-btn-accept rounded-3" type="button" data-bs-html="true"
+                                        data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Для того, чтобы оформить заказ, нужно удалить недоступный товар из корзины. <br> По всем вопросам звоните на +79091413242">
+                                            Оформить заказ
+                                        </button>
+                                    </form>
+                                {% endif %}
+                                <form class="col-12 text-center m-0 p-0 mt-1" action="{% url 'product_list' %}" target="_self" method="get">
                                     <button class="col-12 btn text-light c-btn-main rounded-3">Перейти в каталог</button>
                                 </form>
+
+
+
                             </div>
                         </div>
                     </div>
@@ -374,10 +417,21 @@ content="Корзина товаров">
 
                                         <!-- Top  -->
                                         <div class="card-body border-bottom p-3">
-                                            <h2 class="d-block d-sm-none card-title text-center fs-17 pb-4 m-0">{{ item.product.title }}</h2>
-                                            <h2 class="d-none d-sm-block d-md-none card-title text-center fs-17 pb-4 m-0">{{ item.product.title }}</h2>
-                                            <h2 class="d-none d-md-block card-title text-center fs-17 pb-4 m-0">{{ item.product.title }}</h2>
-
+                                            {% if item.product.status == 3 %}
+                                                <h2 class="d-block d-sm-none card-title text-center fs-24 pb-1 m-0">{{ item.product.title }}</h2>
+                                                <h2 class="d-none d-sm-block d-md-none card-title text-center fs-19 pb-1 m-0">{{ item.product.title }}</h2>
+                                                <h2 class="d-none d-md-block card-title text-center fs-21 pb-1 m-0">{{ item.product.title }}</h2>
+                                                <p class="c-new-price text-center fs-16 pb-4 m-0">Товар доступен только под заказ!</p>
+                                            {% elif item.product.status == 4 %}
+                                                <h2 class="d-block d-sm-none card-title text-center fs-24 pb-1 m-0">{{ item.product.title }}</h2>
+                                                <h2 class="d-none d-sm-block d-md-none card-title text-center fs-19 pb-1 m-0">{{ item.product.title }}</h2>
+                                                <h2 class="d-none d-md-block card-title text-center fs-21 pb-1 m-0">{{ item.product.title }}</h2>
+                                                <p class="c-new-price text-center fs-16 pb-4 m-0">Товар НЕДОСТУПЕН!</p>
+                                            {% else %}
+                                                <h2 class="d-block d-sm-none card-title text-center fs-24 pb-4 m-0">{{ item.product.title }}</h2>
+                                                <h2 class="d-none d-sm-block d-md-none card-title text-center fs-19 pb-4 m-0">{{ item.product.title }}</h2>
+                                                <h2 class="d-none d-md-block card-title text-center fs-21 pb-4 m-0">{{ item.product.title }}</h2>
+                                            {% endif %}
 
                                             <div class="d-flex row justify-content-between align-items-end p-0 m-0">         
                                                 <div class="d-grid d-sm-none col-6 p-0 ps-2">
@@ -518,8 +572,10 @@ content="Корзина товаров">
             </div>
         {% endif %}
     </div>
-
-    
     <!-- Mobile -->
 
+    <script>
+        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+    </script>
 {% endblock %}

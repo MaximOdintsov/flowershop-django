@@ -1,10 +1,134 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block static %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
+{% endblock %}
+{% block title %} Доставка и оплата {% endblock %}
+{% block description %} <meta name="description" content="Доставка и оплата товаров"> {% endblock %}
+{% block robots %} <meta name="robots" content="all"> {% endblock %}
+{% block keywords %} <meta name="keywords" content="Доставка, Оплата, Доставка цветов, Цветы Киров, Букеты Киров, Цветок" /> {% endblock %}
 
-</body>
-</html>
+
+{% block content %}
+
+    {% include 'includes/header.html' %}
+    <main class="container-lg">
+        <h1 class="fs-30 text-center pt-3">Доставка и Оплата</h1>
+        <div class="py-3">
+            <h2 class="fs-24 text-center pb-2">Доставка</h2>
+            <ul>
+                <li>Доставка осуществляется службой доставки Яндекс Доставка.</li>
+                <li>Доставка в черте Кирова осуществляется бесплатно от стоимости заказа 2000 &#8381;.</li>
+                <li>В праздничные дни (Новый год, 14 февраля, 8 марта и т.д.) доставка осуществляется платно.</li>
+            </ul>
+            <p class="text-center py-1"><strong>Актуальные цены на доставку:</strong></p>
+            <div class="row m-0 p-0">
+                <ul class="col-8 list-group m-0 p-0">
+                    <li class="list-group-item rounded-0 rounded-top c-main fs-19">Район</li>
+                    <li class="list-group-item rounded-0">Киров</li>
+                    <li class="list-group-item rounded-0">Нововятск (до переезда)</li>
+                    <li class="list-group-item rounded-0">Нововятск</li>
+                    <li class="list-group-item rounded-0">Чистые пруды</li>
+                    <li class="list-group-item rounded-0">Аэропорт</li>
+                    <li class="list-group-item rounded-0">Бахта</li>
+                    <li class="list-group-item rounded-0">Белая Холуница</li>
+                    <li class="list-group-item rounded-0">Боровица</li>
+                    <li class="list-group-item rounded-0">Вахруши</li>
+                    <li class="list-group-item rounded-0">Вятские Поляны</li>
+                    <li class="list-group-item rounded-0">Ганино</li>
+                    <li class="list-group-item rounded-0">Гирсово</li>
+                    <li class="list-group-item rounded-0">Дороничи</li>
+                    <li class="list-group-item rounded-0">Зониха</li>
+                    <li class="list-group-item rounded-0">Кирово-Чепецк</li>
+                    <li class="list-group-item rounded-0">Коминтерн</li>
+                    <li class="list-group-item rounded-0">Костино</li>
+                    <li class="list-group-item rounded-0">Лянгасово</li>
+                    <li class="list-group-item rounded-0">Макарье</li>
+                    <li class="list-group-item rounded-0">Мурыгино</li>
+                    <li class="list-group-item rounded-0">Нижнеивкино</li>
+                    <li class="list-group-item rounded-0">Нолинск</li>
+                    <li class="list-group-item rounded-0">Омутнинск</li>
+                    <li class="list-group-item rounded-0">Оричи</li>
+                    <li class="list-group-item rounded-0">Орлов</li>
+                    <li class="list-group-item rounded-0">Пасегово</li>
+                    <li class="list-group-item rounded-0">Порошино</li>
+                    <li class="list-group-item rounded-0">Посёлок Восточный</li>
+                    <li class="list-group-item rounded-0">Радужный</li>
+                    <li class="list-group-item rounded-0">Садаковский</li>
+                    <li class="list-group-item rounded-0">Слободской</li>
+                    <li class="list-group-item rounded-0">Стрижи</li>
+                    <li class="list-group-item rounded-0">Субботиха</li>
+                    <li class="list-group-item rounded-0">Чирки</li>
+                    <li class="list-group-item rounded-0 rounded-bottom">Котельнич</li>
+                </ul>
+                <ul class="col-4 list-group text-center m-0 p-0">
+                    <li class="list-group-item rounded-0 rounded-top c-main fs-19">Цена</li>
+                    <li class="list-group-item rounded-0">200 &#8381;</li>
+                    <li class="list-group-item rounded-0">280 &#8381;</li>
+                    <li class="list-group-item rounded-0">350 &#8381;</li>
+                    <li class="list-group-item rounded-0">250 &#8381;</li>
+                    <li class="list-group-item rounded-0">520 &#8381;</li>
+                    <li class="list-group-item rounded-0">550 &#8381;</li>
+                    <li class="list-group-item rounded-0">1620 &#8381;</li>
+                    <li class="list-group-item rounded-0">400 &#8381;</li>
+                    <li class="list-group-item rounded-0">520 &#8381;</li>
+                    <li class="list-group-item rounded-0">4000 &#8381;</li>
+                    <li class="list-group-item rounded-0">300 &#8381;</li>
+                    <li class="list-group-item rounded-0">480 &#8381;</li>
+                    <li class="list-group-item rounded-0">350 &#8381;</li>
+                    <li class="list-group-item rounded-0">350 &#8381;</li>
+                    <li class="list-group-item rounded-0">800 &#8381;</li>
+                    <li class="list-group-item rounded-0">350 &#8381;</li>
+                    <li class="list-group-item rounded-0">350 &#8381;</li>
+                    <li class="list-group-item rounded-0">400 &#8381;</li>
+                    <li class="list-group-item rounded-0">270 &#8381;</li>
+                    <li class="list-group-item rounded-0">700 &#8381;</li>
+                    <li class="list-group-item rounded-0">1100 &#8381;</li>
+                    <li class="list-group-item rounded-0">2800 &#8381;</li>
+                    <li class="list-group-item rounded-0">2000 &#8381;</li>
+                    <li class="list-group-item rounded-0">950 &#8381;</li>
+                    <li class="list-group-item rounded-0">1700 &#8381;</li>
+                    <li class="list-group-item rounded-0">400 &#8381;</li>
+                    <li class="list-group-item rounded-0">350 &#8381;</li>
+                    <li class="list-group-item rounded-0">3700 &#8381;</li>
+                    <li class="list-group-item rounded-0">360 &#8381;</li>
+                    <li class="list-group-item rounded-0">250 &#8381;</li>
+                    <li class="list-group-item rounded-0">720 &#8381;</li>
+                    <li class="list-group-item rounded-0">750 &#8381;</li>
+                    <li class="list-group-item rounded-0">300 &#8381;</li>
+                    <li class="list-group-item rounded-0">250 &#8381;</li>
+                    <li class="list-group-item rounded-0 rounded-bottom">300 &#8381;</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="py-3">
+            <h2 class="fs-24 text-center pb-2">Оплата</h2>
+            <p>При оформлении заказа на сайте или по номеру телефона <a href="tel:+7-909-141-32-42">+79091413242</a>, оплатить его можно сразу или при получении.</p>
+            <p><strong>Способы оплаты:</strong></p>
+            <ul>
+                <li>Оплата картой</li>
+                <li>Оплата наличными</li>
+                <li>Оплата банковским переводом</li>
+                <li>Безналичная оплата</li>
+                <li>Оплата по QR-коду</li>
+                <li>СБП</li>
+            </ul>
+        </div>
+
+        <div class="py-3">
+            <h2 class="fs-24 text-center pb-2">Возврат товара</h2>
+            <p>
+                В соответствии с Законом Российской Федерации «О защите прав потребителей» от 07.02.1992 № 2300-1 (в ред. от 25.10.2007г.) и Постановлением Правительства
+                Российской Федерации от 19.01.1998 № 55 (в ред. 27.03.2007г.) срезанные цветы и горшечные растения обмену и возврату не подлежат
+                (указаны в Перечне непродовольственных товаров надлежащего качества, не подлежащих возврату или обмену).
+                <br>
+                Покупатель имеет право отказаться от получения товара в момент доставки, если доставлен товар ненадлежащего качества
+                (на основании п.3 ст. 497 ГК РФ, статья 21 Закона "О защите прав потребителей").
+            </p>
+        </div>
+    </main>
+
+    {% include 'includes/footer.html' %}
+
+{% endblock %}

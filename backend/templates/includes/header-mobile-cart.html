@@ -256,15 +256,39 @@
             </div>
 
             <div class="col-6 col-sm-5 col-md-4 text-center m-0 p-0">
-                <form class="d-block d-sm-none h-100 w-100" action="{% url 'order_create' %}" target="_self" method="get">
-                    <button class="fs-17 btn c-btn-accept rounded-3 h-100 w-100">Оформить заказ</button>
-                </form>
-                <form class="d-none d-sm-block d-md-none h-100 w-100" action="{% url 'order_create' %}" target="_self" method="get">
-                    <button class="fs-19 btn c-btn-accept rounded-3 h-100 w-100">Оформить заказ</button>
-                </form>
-                <form class="d-none d-md-block h-100 w-100" action="{% url 'order_create' %}" target="_self" method="get">
-                    <button class="fs-21 btn c-btn-accept rounded-3 h-100 w-100">Оформить заказ</button>
-                </form>
+                {% if available == 1 %}
+                    
+                    <form class="d-block d-sm-none h-100 w-100" action="{% url 'order_create' %}" target="_self" method="get">
+                        <button class="fs-17 btn c-btn-accept rounded-3 h-100 w-100">Оформить заказ</button>
+                    </form>
+                    <form class="d-none d-sm-block d-md-none h-100 w-100" action="{% url 'order_create' %}" target="_self" method="get">
+                        <button class="fs-19 btn c-btn-accept rounded-3 h-100 w-100">Оформить заказ</button>
+                    </form>
+                    <form class="d-none d-md-block h-100 w-100" action="{% url 'order_create' %}" target="_self" method="get">
+                        <button class="fs-21 btn c-btn-accept rounded-3 h-100 w-100">Оформить заказ</button>
+                    </form>
+                    
+                {% elif available == 0 %}
+                    <form class="d-block d-sm-none h-100 w-100" action="{% url 'order_create' %}" target="_self" method="get">
+                        <button type="button" class="fs-17 btn c-btn-accept rounded-3 h-100 w-100" data-bs-html="true" data-bs-container="body" data-bs-toggle="popover" 
+                        data-bs-placement="top" data-bs-content="Для того, чтобы оформить заказ, нужно удалить недоступный товар из корзины. <br> По всем вопросам звоните на +79091413242">
+                            Оформить заказ
+                        </button>
+                    </form>
+                    <form class="d-none d-sm-block d-md-none h-100 w-100" action="{% url 'order_create' %}" target="_self" method="get">
+                        <button type="button" class="fs-19 btn c-btn-accept rounded-3 h-100 w-100" data-bs-html="true" data-bs-container="body" data-bs-toggle="popover" 
+                        data-bs-placement="top" data-bs-content="Для того, чтобы оформить заказ, нужно удалить недоступный товар из корзины. <br> По всем вопросам звоните на +79091413242">
+                            Оформить заказ
+                        </button>
+                    </form>
+                    <form class="d-none d-md-block h-100 w-100" action="{% url 'order_create' %}" target="_self" method="get">
+                        <button type="button" class="fs-21 btn c-btn-accept rounded-3 h-100 w-100" data-bs-html="true" data-bs-container="body" data-bs-toggle="popover" 
+                        data-bs-placement="top" data-bs-content="Для того, чтобы оформить заказ, нужно удалить недоступный товар из корзины. <br> По всем вопросам звоните на +79091413242">
+                            Оформить заказ
+                        </button>
+                    </form>
+                {% endif %}
+
             </div>
             
         </div>  
