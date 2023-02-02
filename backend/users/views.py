@@ -40,7 +40,8 @@ class MyRegistrationView(views.View):
 
         if form.is_valid():
             form.save()
-            username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
+            username = email
             password = form.cleaned_data.get('password2')
 
             user = authenticate(username=username, password=password)

@@ -22,13 +22,7 @@ class MyRegistrationForm(forms_auth.UserCreationForm):
     error_messages = {
         'required': 'Это поле обязательно для заполнения',
     }
-
-    username = forms.CharField(
-        label=_('Username'),
-        min_length=4,
-        max_length=254,
-        error_messages=error_messages,
-    )
+    username = None
     email = forms.EmailField(
         label=_('Email'),
         max_length=254,
@@ -38,21 +32,7 @@ class MyRegistrationForm(forms_auth.UserCreationForm):
         required=False,
         label=_('First name'),
         error_messages=error_messages
-
     )
-    last_name = forms.CharField(
-        required=False,
-        label=_('Last name'),
-        error_messages=error_messages
-    )
-
-    def clean_username(self):
-        new_username = self.cleaned_data['username'].lower()
-        existing = User.objects.filter(username=new_username)
-
-        if existing:
-            raise ValidationError(f'Такое имя пользователя уже есть. Выберите другое.')
-        return new_username
 
     def clean_email(self):
         new_email = self.cleaned_data.get('email').lower()
@@ -66,10 +46,6 @@ class MyRegistrationForm(forms_auth.UserCreationForm):
         first_name = self.cleaned_data.get('first_name').title()
         return first_name
 
-    def clean_last_name(self):
-        last_name = self.cleaned_data.get('last_name').title()
-        return last_name
-
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
         password2 = self.cleaned_data.get('password2')
@@ -79,10 +55,9 @@ class MyRegistrationForm(forms_auth.UserCreationForm):
 
     def save(self, commit=True):
         user = User.objects.create(
-            username=self.cleaned_data['username'],
             email=self.cleaned_data['email'],
+            username=self.cleaned_data['email'],
             first_name=self.cleaned_data['first_name'],
-            last_name=self.cleaned_data['last_name'],
             password=self.cleaned_data['password2'],
         )
         user.set_password(self.cleaned_data['password1'])
@@ -93,21 +68,12 @@ class MyRegistrationForm(forms_auth.UserCreationForm):
     class Meta(forms_auth.UserCreationForm.Meta):
         model = User
         fields = (
-            'username',
             'email',
             'first_name',
-            'last_name',
         )
-        field_classes = {
-            'username': forms_auth.UsernameField,
-        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs.update({
-            'class': 'form-control',
-            'placeholder': 'Имя пользователя',
-        })
         self.fields['email'].widget.attrs.update({
             'class': 'form-control',
             'placeholder': 'Ваш email',
@@ -116,11 +82,6 @@ class MyRegistrationForm(forms_auth.UserCreationForm):
             'class': 'form-control',
             'placeholder': 'Ваше имя',
         })
-        self.fields['last_name'].widget.attrs.update({
-            'class': 'form-control',
-            'placeholder': 'Ваша фамилия',
-        })
-
         self.fields['password1'].widget.attrs.update({
             'class': 'form-control',
             'placeholder': 'Введите пароль',

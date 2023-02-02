@@ -12,7 +12,7 @@ class UserManager(BaseUserManager):
         """
         if not username:
             if not email:
-                raise ValueError(_('The email must be set'))
+                raise ValueError(_('The email or username must be set'))
 
         if email:
             email = self.normalize_email(email)

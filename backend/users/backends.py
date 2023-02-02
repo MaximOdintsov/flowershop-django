@@ -11,7 +11,6 @@ class AuthBackend(object):
     supports_inactive_user = False
 
     def authenticate(self, request, username, password):
-
         try:
             user = User.objects.get(
                 Q(username=username) | Q(email=username)

@@ -11,7 +11,7 @@ User = get_user_model()
 class User(UserAdmin):
     fieldsets = (
         (None, {"fields": ("username", "password")}),
-        (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
+        (_("Personal info"), {"fields": ("first_name", "email")}),
         (
             _("Permissions"),
             {
