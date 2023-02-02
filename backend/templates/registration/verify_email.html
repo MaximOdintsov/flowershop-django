@@ -1,5 +1,5 @@
 {% load i18n %}{% autoescape off %}
-Здравствуйте, {{ user.first_name }} {{ user.last_name }}!
+Здравствуйте, {{ user.first_name }}!
 
 Пожалуйста, перейдите по ссылке, чтобы завершить регистрацию:
 {{ protocol }}://{{ domain }}{% url 'verify_email' uidb64=uid token=token %}

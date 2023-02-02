@@ -13,7 +13,7 @@ def send_email_for_verify(request, user):
     email_template_name = 'registration/verify_email.html'
     use_https = True
     shop_name = 'флористический салон Цветок'
-    email_for_questions = 'flowershop.kirov@gmail.com'
+    email_for_questions = 'questions@kirovcvetok.ru'
 
     context = {
         'user': user,
