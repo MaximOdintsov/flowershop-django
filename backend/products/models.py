@@ -116,6 +116,9 @@ class Product(models.Model):
 
     status = models.PositiveSmallIntegerField('Статус', choices=STATUS_CHOICES, default=STATUS_REVIEW)
 
+    header_title = models.TextField('Заголовок в поиске', null=True, blank=True)
+    header_description = models.TextField('Описание продукта в поиске', null=True, blank=True)
+
     class Meta:
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'

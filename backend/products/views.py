@@ -121,8 +121,6 @@ class ProductList(generic.ListView):
 # def product_detail(request, slug):
 #     product_id = Product.objects.get(slug=slug).id
 #
-#     cart = Cart(request)
-#     quantity = cart.counter(str(product_id))
 #     product = get_object_or_404(Product,
 #                                 Q(id=product_id),
 #                                 Q(slug=slug),

@@ -55,7 +55,7 @@ class Product(admin.ModelAdmin):
     }
     inlines = [ProductGalleryInline, ProductCompositionInline]
 
-    fields = ('category', 'title', 'preview', 'discount', 'status')
+    fields = ('category', 'title', 'preview', 'discount', 'status', 'header_title', 'header_description')
     list_display = ['title', 'slug', 'category', 'discount', 'new_price', 'status']
     list_editable = ['category', 'slug', 'discount', 'status']
 
