@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block static %} {% load static %} {% endblock %}
-{% block title %}{% if product.header_title %}{{ product.header_title }}{% else %}{{ product.title }} из {% for product_component in product.productcomposition_set.all %}{{ product_component.component.title }}, {% endfor %}купить в Кирове за {{ product.new_price }}{% endif %}{% endblock %}
+{% block title %}{% if product.header_title %}{{ product.header_title }}{% else %}{{ product.title }} из {% for product_component in product.productcomposition_set.all %}{{ product_component.component.title }}, {% endfor %}купить в Кирове.{% endif %} Цена: {{ product.new_price }} руб.{% endblock %}
 {% block description %}<meta name="description" content="{% if product.header_description %}{{ product.header_description }}{% else %}Заказать или купить букет из {% for product_component in product.productcomposition_set.all %}{{ product_component.component.title }}, {% endfor %}в Кирове. Бесплатная доставка от 2000 руб. В наличии всегда свежие и красивые цветы!{% endif %}">{% endblock %}
 {% block robots %}<meta name="robots" content="all">{% endblock %}
 {% block keywords %}<meta name="keywords" content="Цветок, Цветы Киров, Букеты Киров, Доставка цветов, {{ product.title }}, {% for product_component in product.productcomposition_set.all %} {{ product_component.component.title }} {% endfor %}">{% endblock %}
@@ -9,7 +9,8 @@
     {% include 'includes/header.html' %}
     <main class="container-lg d-flex justify-content-center px-0 mb-md-5 pb-md-5 px-md-5 pt-md-5">
         <div class="row col-12 col-lg-10 m-0 p-0 c-bg-light rounded-3" itemscope itemtype="https://schema.org/Product">
-
+            
+            <meta itemprop="category" content="{{ product.category }}">
             <section class="col-12 border-bottom p-2 m-0 mb-2">
                 <a onclick="history.back()" data-bs-toggle="tooltip" data-bs-placement="top"
                 data-bs-custom-class="custom-tooltip" data-bs-title="В каталог">
@@ -51,6 +52,7 @@
                     <h1 class="fs-24" itemprop="name">
                         {{ product.title }}
                     </h1>
+                    <meta itemscope itemtype="http://schema.org/Offer">
                     {% if product.status == 2 %}
                         <link itemprop="availability" href="https://schema.org/InStock"/>
                     {% elif product.status == 3 %}
