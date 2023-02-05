@@ -4,7 +4,6 @@
 <!-- PC -->
 <header class="d-none d-lg-flex navbar navbar-expand-lg navbar-dark bd-navbar sticky-top c-bg-main">
     <nav class="container-xxl bd-gutter flex-nowrap px-4" aria-label="MainNavigationPCCart">
-        
         <div class="d-flex">
             <div class="product-search">
                 <form action="{% url 'product_search' %}" method="get" class="col-10 col-xl-12 text-center">
@@ -17,16 +16,12 @@
                 </form>
             </div>
         </div>
-
         <a class="navbar-brand px-3 px-lg-2 me-0 me-lg-2" href="{% url 'product_list' %}">
             <h1 class="d-lg-inline-block fs-21 c-light-active m-0">Цветок</h1>
         </a>
-        
         <div class="offcanvas flex-grow-1 c-bg-main" id="navbarHeaderPC">
-
             <div class="offcanvas-body p-4 pt-0 p-lg-0 align-items-center">
                 <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav">
-                    
                     <li class="nav-item col-auto d-flex">
                         <a class="nav-link c-link-light p-2" aria-current="true" href="{% url 'product_list' %}">
                             Каталог
@@ -41,9 +36,7 @@
                         <a class="nav-link dropdown-toggle c-link-light p-2" data-bs-auto-close="outside" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Контакты
                         </a>
-                        
                         <ul class="dropdown-menu py-0">
-
                             <li class="text-center py-0">
                                 <span class="dropdown-item c-btn-light rounded-0 rounded-top p-2">
                                     +7-909-141-32-42
@@ -54,7 +47,6 @@
                                     kirov.cvetok@yandex.ru
                                 </span>
                             </li>
-                            
                             <li class="row justify-content-between m-0 p-0">
                                 <div class="col-6 border-end m-0 p-0">
                                     <a class="dropdown-item c-btn-primary text-center rounded-0 rounded-start p-2" href="tel:+7-909-141-32-42">
@@ -71,11 +63,9 @@
                     </li>
                     
                     <li class="nav-item dropdown col-auto">
-                        
                         <a class="nav-link dropdown-toggle c-link-light p-2" data-bs-auto-close="outside" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Адрес
                         </a>
-
                         <ul class="dropdown-menu p-0">
                             <li class="text-center border-bottom py-0">
                                 <span class="dropdown-item c-bg-light rounded-0 rounded-top p-2">
@@ -88,15 +78,12 @@
                         </ul>
                     </li>
                 </ul>
-                
                 <ul class="navbar-nav flex-row flex-wrap ms-md-auto ">
-
                     <li class="nav-item dropdown col-auto">
                         {% with total_items=cart.length_cart %}
                             <button class="btn c-bg-button nav-link dropdown-toggle btn-border-c-third" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="{% static 'products/icons/light/cart-icon.png' %}" alt="shopping-bag-icon" width="29px">
                             </button>
-
                             <ul class="dropdown-menu dropdown-menu-end rounded-3 py-0 ">
                                 {% if user.is_authenticated %}
                                     {% if total_items > 0 %}
@@ -121,18 +108,15 @@
                                     <p class="p-2 m-0 c-bg-light rounded-0 rounded-top">
                                         Для добавления товаров в корзину нужно войти в аккаунт
                                     </p>
-                                    
                                     <li class="text-center py-0">
                                         <a href="{% url 'login' %}" class="dropdown-item btn c-btn-primary rounded-0 rounded-bottom p-2">
                                             Войти
                                         </a>
                                     </li>
-
                                 {% endif %}
                             </ul>
                         {% endwith %}
                     </li>
-
                     <li class="nav-item dropdown col-auto">
                         <button class="btn c-bg-button nav-link dropdown-toggle btn-border-c-third" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {% if user.is_authenticated %}
@@ -140,9 +124,7 @@
                             {% else %}
                                 <img src="{% static 'products/icons/light/user-denied-icon.png' %}" alt="user-icon" width="29px">
                             {% endif %}
-
                         </button>
-
                         <ul class="dropdown-menu dropdown-menu-end rounded-3 text-center py-0">
                             {% if user.is_authenticated %}
                                 <li><a class="dropdown-item btn c-btn-light roudned-0 rounded-top p-2" type="button">{{ user }}</a></li>
@@ -157,12 +139,10 @@
                             {% endif %}
                         </ul> 
                     </li>
-
                     <li class="nav-item py-1 col-auto">
                         <div class="vr d-lg-flex h-100 mx-lg-2 text-white"></div>
                         <hr class="d-lg-none text-white-50">
                     </li>
-                    
                     <li class="nav-item col-auto">
                         <a class="d-flex align-items-center p-2" href="https://vk.com/id141455317" target="_blank">
                             <img src="{% static 'products/icons/light/vk-header-icon.png' %}" alt="vk.com" width="35px">
@@ -172,7 +152,6 @@
                 
             </div>
         </div>
-
     </nav>
 </header>
 <!-- PC -->

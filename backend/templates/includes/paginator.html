@@ -1,4 +1,6 @@
 {% load paginator_tag %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'products/css/style.css' %}">
 
 {% if is_paginated %}
     {% get_proper_elided_page_range paginator page_obj.number 2 1 as page_range %}

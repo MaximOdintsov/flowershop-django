@@ -1,20 +1,8 @@
 {% extends 'base.html' %}
-
-{% block static %}
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
-{% endblock %}
-
+{% block static %} {% load static %} {% endblock %}
 {% block title %} Цветы Киров {% endblock %}
-
-{% block description %} 
-<meta name="description" 
-content="Корзина товаров">
-{% endblock %}
-
-{% block robots %} <meta name="robots" content="all"> {% endblock %}
-
-{% block keywords %} <meta name="keywords" content="Корзина, Оформить заказ, Доставка цветов, Цветы Киров, Букеты Киров" /> {% endblock %}
+{% block description %}<meta name="description" content="Корзина товаров">{% endblock %}
+{% block robots %} <meta name="robots" content="none"> {% endblock %}
 
 {% block content %}
 
@@ -100,13 +88,25 @@ content="Корзина товаров">
                                     <div class="col-7">
                                         <div class="card-body border-bottom p-3">
                                             {% if item.product.status == 3 %}
-                                                <h2 class="card-title text-center fs-21 pb-1 m-0">{{ item.product.title }}</h2>
+                                                <h2 class="fs-21 pb-1 m-0">
+                                                    <a href="{% url 'product_detail' item.product.slug %}" class="c-link-main">
+                                                        {{ item.product.title }}
+                                                    </a>
+                                                </h2>
                                                 <p class="c-new-price text-center fs-16 pb-4 m-0">Товар доступен только под заказ!</p>
                                             {% elif item.product.status == 4 %}
-                                                <h2 class="card-title text-center fs-21 pb-1 m-0">{{ item.product.title }}</h2>
+                                                <h2 class="fs-21 pb-1 m-0">
+                                                    <a href="{% url 'product_detail' item.product.slug %}" class="c-link-main">
+                                                        {{ item.product.title }}
+                                                    </a>
+                                                </h2>
                                                 <p class="c-new-price text-center fs-16 pb-4 m-0">Товар НЕДОСТУПЕН!</p>
                                             {% else %}
-                                                <h2 class="card-title text-center fs-21 pb-4 m-0">{{ item.product.title }}</h2>
+                                                <h2 class="fs-21 pb-1 m-0">
+                                                    <a href="{% url 'product_detail' item.product.slug %}" class="c-link-main">
+                                                        {{ item.product.title }}
+                                                    </a>
+                                                </h2>
                                             {% endif %}
                                             <div class="d-flex row justify-content-between align-items-end p-0 m-0">
                                                 <div class="col-7 d-grid d-xl-none m-0 p-0">
@@ -418,19 +418,55 @@ content="Корзина товаров">
                                         <!-- Top  -->
                                         <div class="card-body border-bottom p-3">
                                             {% if item.product.status == 3 %}
-                                                <h2 class="d-block d-sm-none card-title text-center fs-24 pb-1 m-0">{{ item.product.title }}</h2>
-                                                <h2 class="d-none d-sm-block d-md-none card-title text-center fs-19 pb-1 m-0">{{ item.product.title }}</h2>
-                                                <h2 class="d-none d-md-block card-title text-center fs-21 pb-1 m-0">{{ item.product.title }}</h2>
+                                                <h2 class="d-block d-sm-none card-title text-center fs-24 pb-1 m-0">    
+                                                    <a href="{% url 'product_detail' item.product.slug %}" class="c-link-main">
+                                                        {{ item.product.title }}
+                                                    </a>
+                                                </h2>
+                                                <h2 class="d-none d-sm-block d-md-none card-title text-center fs-19 pb-1 m-0">
+                                                    <a href="{% url 'product_detail' item.product.slug %}" class="c-link-main">
+                                                        {{ item.product.title }}
+                                                    </a>
+                                                </h2>
+                                                <h2 class="d-none d-md-block card-title text-center fs-21 pb-1 m-0">
+                                                    <a href="{% url 'product_detail' item.product.slug %}" class="c-link-main">
+                                                        {{ item.product.title }}
+                                                    </a>
+                                                </h2>
                                                 <p class="c-new-price text-center fs-16 pb-4 m-0">Товар доступен только под заказ!</p>
                                             {% elif item.product.status == 4 %}
-                                                <h2 class="d-block d-sm-none card-title text-center fs-24 pb-1 m-0">{{ item.product.title }}</h2>
-                                                <h2 class="d-none d-sm-block d-md-none card-title text-center fs-19 pb-1 m-0">{{ item.product.title }}</h2>
-                                                <h2 class="d-none d-md-block card-title text-center fs-21 pb-1 m-0">{{ item.product.title }}</h2>
+                                                <h2 class="d-block d-sm-none card-title text-center fs-24 pb-1 m-0">
+                                                    <a href="{% url 'product_detail' item.product.slug %}" class="c-link-main">
+                                                        {{ item.product.title }}
+                                                    </a>
+                                                </h2>
+                                                <h2 class="d-none d-sm-block d-md-none card-title text-center fs-19 pb-1 m-0">
+                                                    <a href="{% url 'product_detail' item.product.slug %}" class="c-link-main">
+                                                        {{ item.product.title }}
+                                                    </a>
+                                                </h2>
+                                                <h2 class="d-none d-md-block card-title text-center fs-21 pb-1 m-0">
+                                                    <a href="{% url 'product_detail' item.product.slug %}" class="c-link-main">
+                                                        {{ item.product.title }}
+                                                    </a>
+                                                </h2>
                                                 <p class="c-new-price text-center fs-16 pb-4 m-0">Товар НЕДОСТУПЕН!</p>
                                             {% else %}
-                                                <h2 class="d-block d-sm-none card-title text-center fs-24 pb-4 m-0">{{ item.product.title }}</h2>
-                                                <h2 class="d-none d-sm-block d-md-none card-title text-center fs-19 pb-4 m-0">{{ item.product.title }}</h2>
-                                                <h2 class="d-none d-md-block card-title text-center fs-21 pb-4 m-0">{{ item.product.title }}</h2>
+                                                <h2 class="d-block d-sm-none card-title text-center fs-24 pb-4 m-0">
+                                                    <a href="{% url 'product_detail' item.product.slug %}" class="c-link-main">
+                                                        {{ item.product.title }}
+                                                    </a>
+                                                </h2>
+                                                <h2 class="d-none d-sm-block d-md-none card-title text-center fs-19 pb-4 m-0">
+                                                    <a href="{% url 'product_detail' item.product.slug %}" class="c-link-main">
+                                                        {{ item.product.title }}
+                                                    </a>
+                                                </h2>
+                                                <h2 class="d-none d-md-block card-title text-center fs-21 pb-4 m-0">
+                                                    <a href="{% url 'product_detail' item.product.slug %}" class="c-link-main">
+                                                        {{ item.product.title }}
+                                                    </a>
+                                                </h2>
                                             {% endif %}
 
                                             <div class="d-flex row justify-content-between align-items-end p-0 m-0">         

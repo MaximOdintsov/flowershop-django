@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% block static %} {% load static %} {% endblock %}
+{% block title %}{% if product.header_title %}{{ product.header_title }}{% else %}{{ product.title }} из {% for product_component in product.productcomposition_set.all %}{{ product_component.component.title }}, {% endfor %}купить в Кирове за {{ product.new_price }}{% endif %}{% endblock %}
+{% block description %}<meta name="description" content="{% if product.header_description %}{{ product.header_description }}{% else %}Заказать или купить букет из {% for product_component in product.productcomposition_set.all %}{{ product_component.component.title }}, {% endfor %}в Кирове. Бесплатная доставка от 2000 руб. В наличии всегда свежие и красивые цветы!{% endif %}">{% endblock %}
+{% block robots %}<meta name="robots" content="all">{% endblock %}
+{% block keywords %}<meta name="keywords" content="Цветок, Цветы Киров, Букеты Киров, Доставка цветов, {{ product.title }}, {% for product_component in product.productcomposition_set.all %} {{ product_component.component.title }} {% endfor %}">{% endblock %}
+
+{% block content %}
+    {% include 'includes/header.html' %}
+    <main class="container-lg d-flex justify-content-center px-0 mb-md-5 pb-md-5 px-md-5 pt-md-5">
+        <div class="row col-12 col-lg-10 m-0 p-0 c-bg-light rounded-3" itemscope itemtype="https://schema.org/Product">
+
+            <section class="col-12 border-bottom p-2 m-0 mb-2">
+                <a onclick="history.back()" data-bs-toggle="tooltip" data-bs-placement="top"
+                data-bs-custom-class="custom-tooltip" data-bs-title="В каталог">
+                    <img class="ms-4 ms-md-3" src="{% static 'products/icons/dark/back-icon.png' %}" alt="Назад" width="40">
+                </a>
+            </section>
+
+            <section class="col-12 col-md-6 carousel carousel-dark slide m-0 p-3" id="carouselImages" data-bs-ride="carousel" data-bs-touch="true">
+                <h2 class="d-none">Изображения товара</h2>
+                <div class="carousel-inner">
+                    <div class="carousel-item active" data-bs-interval="50000">
+                        <div class="d-flex justify-content-center">
+                            <img class="d-block w-75" src="{{ product.preview.url }}" alt="{{ product.title }}" itemprop="image">
+                        </div>
+                    
+                    </div>
+
+                    {% for product_image in product.productgallery_set.all %}
+                    <div class="carousel-item" data-bs-interval="50000">
+                        <div class="d-flex justify-content-center">
+                            <img class="d-block w-75" src="{{ product_image.image.url }}" alt="product {{ product.title }}">
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div> 
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselImages" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Назад</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselImages" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Дальше</span>
+                </button>
+            </section>
+
+            <section class="col-12 col-md-6 m-0 p-3">
+                <article class="text-center mb-4">
+                    <h1 class="fs-24" itemprop="name">
+                        {{ product.title }}
+                    </h1>
+                    {% if product.status == 2 %}
+                        <link itemprop="availability" href="https://schema.org/InStock"/>
+                    {% elif product.status == 3 %}
+                        <span class="c-light fs-16 badge text-bg-warning mt-2">ТОЛЬКО ПОД ЗАКАЗ</span>
+                        <link itemprop="availability" href="https://schema.org/PreOrder"/>
+                    {% elif product.status == 1 or product.status == 4 %}
+                        <link itemprop="availability" href="https://schema.org/OutOfStock"/>
+                    {% endif %}
+                </article>
+
+                <div class="row align-items-end m-0 mx-sm-5 m-md-0 mx-xxl-4">
+
+                    <div class="row col-12 justify-content-between align-items-center border rounded-3 m-0 p-0 mb-4" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                        <div class="col-3 m-0 p-0 ms-2 ms-md-1">
+                            {% if product.status == 2 or product.status == 3 %}
+                                {% if product.discount == 0 %}
+                                <span class="fs-17">
+                                    {{ product.new_price|floatformat:0 }} &#8381;
+                                </span>
+                                {% else %}
+                                <div class="d-grid text-start">
+                                    <span>
+                                        <del class="old-price fs-14">
+                                            {{ product.price|floatformat:0 }}&#8381;
+                                        </del>
+                                    </span>
+                                    <span class="badge rounded-3 c-bg-new-price-badge">
+                                        <span class="c-new-price fs-17">
+                                            {{ product.new_price|floatformat:0 }}&#8381;
+                                        </span>
+                                    </span>
+                                </div>
+                                {% endif %}
+                                <meta itemprop="price" content="{{ product.price }}"> <meta itemprop="priceCurrency" content="RUB">
+                                <link href="https://schema.org/ParcelService">
+                            {% else %}
+                                <span class="fs-13 badge text-bg-danger">
+                                    Недоступно
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-7 col-md-8 m-0 p-0 py-3 me-2 ms-md-1">
+                            <form action="{% url 'add_item_to_cart' product.id %}" class="row justify-content-between m-0" method="post">
+                                {% csrf_token %}
+
+                                <div class="col-8 col-sm-5 col-md-7 col-lg-5 justify-content-center border rounded-3 row m-0 p-0">
+                                    <button class="btn col-4 c-btn-white rounded-3 m-0 p-0" type="button" onclick="this.nextElementSibling.stepDown();">
+                                        <img src="{% static 'products/icons/dark/minus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
+                                    </button>
+
+                                    {{ cart_add_quantity_form.quantity }}
+
+                                    <button class="btn col-4 c-btn-white rounded-3 m-0 p-0" type="button" onclick="this.previousElementSibling.stepUp();">
+                                        <img src="{% static 'products/icons/dark/plus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
+                                    </button>
+                                </div>
+
+                                <button type="submit" class="btn c-btn-primary col-4 col-sm-6 col-md-5 col-lg-6 p-1 m-0">
+                                    <span>Купить</span>
+                                </button>
+
+                            </form>
+                        </div>
+                    </div>  
+
+                    <div class="col-12 text-center m-0 mb-4">
+                        <p class="border-bottom">Состав</p>
+                        <ul class="text-start">
+                            {% for product_component in product.productcomposition_set.all %}
+                            <li>
+                                {{ product_component.component.title }} -
+                                {{ product_component.quantity }} шт.
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+            </section>
+                                
+        </div>
+    </main>
+
+    <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
+
+    {% include 'includes/footer.html' %}
+
+{% endblock %}

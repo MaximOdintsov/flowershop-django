@@ -1,14 +1,7 @@
 {% extends 'base.html' %}
-
-{% block static %}
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
-{% endblock %}
-
-
-{% block title %} Выход из аккаунта {% endblock %}
-{% block robots %} <meta name="robots" content="none"> {% endblock %}
-
+{% block static %}{% load static %}{% endblock %}
+{% block title %}Выход из аккаунта{% endblock %}
+{% block robots %}<meta name="robots" content="none">{% endblock %}
 
 {% block content %}
     <p>Выйти</p>

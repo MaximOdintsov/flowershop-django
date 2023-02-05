@@ -150,7 +150,6 @@ class Product(models.Model):
                 number_of_composition_available.append(quantity)
 
         if number_of_composition_available:
-            mins = min(number_of_composition_available)
             return min(number_of_composition_available)
         return 0
 

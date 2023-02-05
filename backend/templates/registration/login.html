@@ -1,29 +1,15 @@
 {% extends 'base.html' %}
-
-{% block static %}
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
-{% endblock %}
-
-
-{% block title %} Вход {% endblock %}
-
-{% block description %} 
-<meta name="description" 
-content="Войти в аккаунт">
-{% endblock %}
-
+{% block static %}{% load static %}{% endblock %}
+{% block title %}Авторизация{% endblock %}
+{% block description %}<meta name="description" content="Авторизация на официальном сайте kirovcvetok.ru">{% endblock %}
 {% block robots %} <meta name="robots" content="all"> {% endblock %}
-
-{% block keywords %} <meta name="keywords" content="Авторизоваться, Войти в аккаунт" /> {% endblock %}
+{% block keywords %}<meta name="keywords" content="Зарегистрироваться, Авторизоваться, Войти в аккаунт, Цветок Киров, Цветы Киров, Букеты Киров, Доставка цветов">{% endblock %}
 
 
 {% block content %}
-    
     <!-- PC -->
     <div class="d-none d-md-flex position-absolute top-50 start-50 translate-middle justify-content-center">
         <div class="c-bg-form border rounded-3 px-4 py-2" style="width: 550px;">
-
             <ul class="nav pb-3">
                 <li class="nav-item ps-0 pe-2 py-2">
                     <a class="c-link-auth-active fs-24 pb-1 pe-1" href="{% url 'login' %}">ВХОД</a>
@@ -32,39 +18,31 @@ content="Войти в аккаунт">
                     <a class="c-link-auth fs-24" href="{% url 'registration' %}">РЕГИСТРАЦИЯ</a>
                 </li>
             </ul>
-
             <form method="post" action="{% url 'login' %}" class="row g-3  p-2">
                 {% csrf_token %}
-
                 <div class="form-floating p-0">
                     {{ form.username }}
                     <label for="{{ form.username.id_for_label }}" class="form-label">Имя пользователя или email</label>
                 </div>
-
                 <div class="form-floating p-0">
                     {{ form.password }}
                     <label for="{{ form.password.id_for_label }}" class="form-label">Пароль</label>
                 </div>
-
                 {% for error in form.non_field_errors %}
                     <div class="invalid-feedback d-block p-0">
                         {{ error }}
                     </div>
                 {% endfor %}
-
                 <button class='btn c-btn-form-primary' type="submit">Войти</button>
                 <a class="c-link-info col-12 col-sm-8 p-0" href="{% url 'password_reset' %}">Забыли пароль?</a>
             </form>
-
         </div>
     </div>
     <!-- PC -->
 
-
     <!-- Mobile -->
     <div class="d-flex d-md-none row justify-content-center c-bg-form h-100 pt-2" style="min-height: 100vh;">
         <div class="c-bg-form px-4 py-3">
-
             <ul class="d-flex d-sm-none nav justify-content-center pb-3">
                 <li class="nav-item ps-0 pe-2 py-2">
                     <a class="c-link-auth-active fs-24 pb-1 pe-1" href="{% url 'login' %}">ВХОД</a>
@@ -81,32 +59,25 @@ content="Войти в аккаунт">
                     <a class="c-link-auth fs-30" href="{% url 'registration' %}">РЕГИСТРАЦИЯ</a>
                 </li>
             </ul>
-
             <form method="post" action="{% url 'login' %}" class="row justify-content-center g-3 p-2">
                 {% csrf_token %}
-
                 <div class="form-floating col-12 col-sm-8 p-0">
                     {{ form.username }}
                     <label for="{{ form.username.id_for_label }}" class="form-label">Имя пользователя или email</label>
                 </div>
-
                 <div class="form-floating col-12 col-sm-8 p-0">
                     {{ form.password }}
                     <label for="{{ form.password.id_for_label }}" class="form-label">Пароль</label>
                 </div>
-
                 {% for error in form.non_field_errors %}
                     <div class="d-block invalid-feedback col-12 col-sm-8 p-0">
                         {{ error }}
                     </div>
                 {% endfor %}
-
                 <button class='btn c-btn-form-primary col-12 col-sm-8' type="submit">Войти</button>
                 <a class="c-link-info col-12 col-sm-8 p-0" href="{% url 'password_reset' %}">Забыли пароль?</a>
             </form>
-
         </div>
     </div>
     <!-- Mobile -->
-
 {% endblock %}

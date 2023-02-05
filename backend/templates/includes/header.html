@@ -3,8 +3,7 @@
 
 <!-- PC -->
 <header class="d-none d-lg-flex navbar navbar-expand-lg navbar-dark bd-navbar sticky-top c-bg-main">
-    <nav class="container-xxl bd-gutter flex-nowrap px-4" aria-label="MainNavigationPC">
-        
+    <nav class="container-xxl bd-gutter flex-nowrap px-4" aria-label="MainNavigationPC">  
         <div class="d-flex">
             <div class="product-search">
                 <form action="{% url 'product_search' %}" method="get" class="col-10 col-xl-12 text-end">
@@ -17,11 +16,9 @@
                 </form>
             </div>
         </div>
-
         <a class="navbar-brand px-3 px-lg-1 m-0 mb-1" href="{% url 'product_list' %}">
             <h1 class="d-lg-inline-block fs-21 c-light-active m-0">Цветок</h1>
         </a>
-        
         <div class="offcanvas flex-grow-1 c-bg-main" id="navbarHeaderPC">
             <div class="offcanvas-body p-4 pt-0 p-lg-0 align-items-center">
                 <ul class="navbar-nav flex-row flex-wrap bd-navbar-nav">

@@ -1,4 +1,7 @@
-<div class="">
+{% load static %}
+<link rel="stylesheet" href="{% static 'products/css/style.css' %}">
+
+<div>
     <h4 class="ps-3 mt-4">Фильтры</h4>
     <form action="{% url 'product_filter' %}">
         <ul class="nav nav-tabs align-items-center pb-2">

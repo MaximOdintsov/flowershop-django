@@ -1,13 +1,8 @@
 {% extends "base.html" %}
-
-{% block static %}
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
-{% endblock %}
-{% block robots %} <meta name="robots" content="none"> {% endblock %}
-
-
+{% block static %}{% load static %}{% endblock %}
 {% block title %} Верификация {% endblock title %}
+{% block robots %}<meta name="robots" content="none">{% endblock %}
+
 {% block content %}
 
     <div class="alert alert-success h-100 pt-2" style="min-height: 100vh;" role="alert">

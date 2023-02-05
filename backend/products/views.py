@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.shortcuts import get_object_or_404, render, get_list_or_404
 from django.views import generic
 
 
@@ -9,7 +10,6 @@ from .forms import ProductSearchForm, ProductFilterForm
 # from cart.cart import Cart
 
 from orders.models import Order, OrderItem
-
 from orders.forms import AddQuantityForm
 
 
@@ -28,11 +28,12 @@ class ProductFilterView(generic.ListView):
             items = cart.orderitem_set.all()
             context['cart'] = cart
             context['items'] = items
+        except Exception:
+            pass
         finally:
-            context['cart_add_quantity_form'] = cart_add_quantity_form
             context['filter_form'] = filter_form
-
-            return context
+            context['cart_add_quantity_form'] = cart_add_quantity_form
+        return context
 
     def get_queryset(self):
 
@@ -88,11 +89,12 @@ class ProductSearchView(generic.ListView):
             items = cart.orderitem_set.all()
             context['cart'] = cart
             context['items'] = items
+        except Exception:
+            pass
         finally:
-            context['cart_add_quantity_form'] = cart_add_quantity_form
             context['filter_form'] = filter_form
-
-            return context
+            context['cart_add_quantity_form'] = cart_add_quantity_form
+        return context
 
 
 class ProductList(generic.ListView):
@@ -112,26 +114,30 @@ class ProductList(generic.ListView):
             items = cart.orderitem_set.all()
             context['cart'] = cart
             context['items'] = items
+        except Exception:
+            pass
+        finally:
+            context['filter_form'] = filter_form
+            context['cart_add_quantity_form'] = cart_add_quantity_form
+        return context
+
+
+class ProductDetailView(generic.DetailView):
+    model = Product
+    context_object_name = 'product'
+    template_name = 'products/product_detail.html'
+
+    def get_context_data(self, **kwargs):
+        cart_add_quantity_form = AddQuantityForm()
+        context = super().get_context_data(**kwargs)
+
+        try:
+            cart = Order.get_cart(self.request.user)
+            items = cart.orderitem_set.all()
+            context['cart'] = cart
+            context['items'] = items
+        except Exception:
+            pass
         finally:
             context['cart_add_quantity_form'] = cart_add_quantity_form
-            context['filter_form'] = filter_form
-
-            return context
-
-# def product_detail(request, slug):
-#     product_id = Product.objects.get(slug=slug).id
-#
-#     product = get_object_or_404(Product,
-#                                 Q(id=product_id),
-#                                 Q(slug=slug),
-#                                 Q(available=True),
-#                                 Q(status=2) | Q(status=3))
-#
-#     cart_product_form = CartAddProductForm()
-#
-#     context = {
-#         'product': product,
-#         'cart_bouquet_form': cart_product_form,
-#         'quantity': quantity,
-#     }
-#     return render(request, template_name='products/product_detail.html', context=context)
+        return context

@@ -1,21 +1,9 @@
 {% extends 'base.html' %}
-
-{% block static %}
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
-{% endblock %}
-
+{% block static %}{% load static %}{% endblock %}
 {% block title %}Регистрация{% endblock title %}
-
-{% block description %} 
-<meta name="description" 
-content="Регистрация на kirovcvetok.ru">
-{% endblock %}
-
-{% block robots %} <meta name="robots" content="all"> {% endblock %}
-
-{% block keywords %} <meta name="keywords" content="Зарегистрироваться, Авторизоваться, Войти в аккаунт" /> {% endblock %}
-
+{% block description %}<meta name="description" content="Зарегистрироваться на официальном сайте kirovcvetok.ru">{% endblock %}
+{% block robots %}<meta name="robots" content="all">{% endblock %}
+{% block keywords %}<meta name="keywords" content="Зарегистрироваться, Авторизоваться, Войти в аккаунт, Цветок Киров, Цветы Киров, Букеты Киров, Доставка цветов">{% endblock %}
 
 {% block content %}
 

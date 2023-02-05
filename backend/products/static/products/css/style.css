@@ -56,9 +56,6 @@ body {
     color: rgb(33,37,41) !important;
 }
 
-.c-bg-body {
-    background-color: rgb(255, 255, 255) !important;
-}
 .c-bg-card {
     background-color: rgb(250, 250, 250);
 }
@@ -415,7 +412,6 @@ form .form-floating input {
     text-decoration: none;
     border-bottom: #8df3ce 3px solid;
 }
-
 /* Form */
 
 
