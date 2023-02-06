@@ -94,11 +94,11 @@
 
                             <!-- Microdata -->
                             {% if product.status == 2 %}
-                                <meta itemprop="availability" href="https://schema.org/InStock"/>
+                                <link itemprop="availability" href="https://schema.org/InStock"/>
                             {% elif product.status == 3 %}
-                                <meta itemprop="availability" href="https://schema.org/PreOrder"/>
+                                <link itemprop="availability" href="https://schema.org/PreOrder"/>
                             {% elif product.status == 1 or product.status == 4 %}
-                                <meta itemprop="availability" href="https://schema.org/OutOfStock"/>
+                                <link itemprop="availability" href="https://schema.org/OutOfStock"/>
                             {% endif %}
                             <div itemscope itemprop="eligibleRegion" itemtype="https://schema.org/GeoCircle">
                                 <div itemscope itemprop="address" itemtype="https://schema.org/PostalAddress">
