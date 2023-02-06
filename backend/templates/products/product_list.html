@@ -201,9 +201,8 @@
             </div>
             {% for product in product_list_price %}
             <div itemscope itemprop="itemListElement" itemtype="https://schema.org/ListItem">
-                <div itemprop="item">
+                <div itemprop="item" href="{% url 'product_detail' product.slug %}">
                     <meta itemprop="name" content="{{ product.title }}">
-                    <meta itemprop="url" content="{% url 'product_detail' product.slug %}">
                 </div>
             </div> 
             {% endfor %}
