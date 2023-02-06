@@ -33,28 +33,29 @@
     <main class="d-flex justify-content-center">
         <!-- PC -->
         <div class="container d-none d-lg-grid">
-            <div class="row justify-content-center products mx-0 pb-3">
+            <div class="row justify-content-center products mx-0 pb-3" itemscope itemtype="https://schema.org/ItemList">
                 <div class="col-12 px-lg-5">
                     {% include 'includes/filter.html' %}
                 </div>
 
                 {% if products %}
                 {% for product in products %}
-                    <section class="col-5 col-lg-2 col-xl-2 card border border-0 c-bg-card mx-2 px-0">
-                        <a href="{% url 'product_detail' product.slug %}" class="c-link-main text-decoration-none" target="_self">
-                            <img src="{{ product.preview.url }}" class="card-img-top" alt="{{ product.title }}">
-                            <div class="card-body d-flex text-center justify-content-center align-items-center py-3" style="height: 80px">
+                    <section class="col-5 col-lg-2 col-xl-2 card border border-0 c-bg-card mx-2 px-0" itemprop="itemListElement" itemscope itemtype="https://schema.org/Product">
+                        <meta itemprop="description" content="{{ product.header_description }}">
+                        <a href="{% url 'product_detail' product.slug %}" class="c-link-main text-decoration-none" target="_self" itemprop="url">
+                            <img class="card-img-top" src="{{ product.preview.url }}" alt="{{ product.title }}" itemprop="image">
+                            <div itemprop="name" class="card-body d-flex text-center justify-content-center align-items-center py-3" style="height: 80px">
                                 <article class="c-link-main d-none d-lg-block d-xl-none fs-16 m-0">{{ product.title }}</article>
                                 <article class="c-link-main d-none d-xl-block d-xxl-none fs-17 m-0">{{ product.title }}</article>
                                 <article class="c-link-main d-none d-xxl-block fs-19 m-0">{{ product.title }}</article>
                             </div>
                         </a>
-                        <div class="card-footer d-flex justify-content-between align-items-end h-100" style="background-color: #eff3e9">
+                        <div class="card-footer d-flex justify-content-between align-items-end h-100" style="background-color: #eff3e9" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
                             
                             {% if product.discount == 0 %}
-                                <span class="fs-19">
+                                <span itemprop="price" class="fs-19">
                                     {{ product.new_price|floatformat:0 }}
-                                    <span>&#8381;</span>
+                                    <span itemprop="priceCurrency" content="RUB">&#8381;</span>
                                 </span>
                             {% else %}
                                 <div class="d-grid text-start">
@@ -65,9 +66,9 @@
                                         </del>
                                     </span>
                                     <span class="badge rounded-3 c-bg-new-price-badge">
-                                        <span class="c-new-price fs-19">
+                                        <span class="c-new-price fs-19" itemprop="price">
                                             {{ product.new_price|floatformat:0 }}
-                                            <span>&#8381;</span>
+                                            <span itemprop="priceCurrency">&#8381;</span>
                                         </span>
                                     </span>
                                 </div>
@@ -201,9 +202,9 @@
             </div>
             {% for product in product_list_price %}
             <div itemscope itemprop="itemListElement" itemtype="https://schema.org/ListItem">
-                <div itemprop="item" href="{% url 'product_detail' product.slug %}">
+                <link itemprop="item" href="{% url 'product_detail' product.slug %}">
                     <meta itemprop="name" content="{{ product.title }}">
-                </div>
+                </link>
             </div> 
             {% endfor %}
         </div>

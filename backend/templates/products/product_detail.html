@@ -110,6 +110,8 @@
                                 </div>
                                 <meta itemprop="geoRadius" content="40000">   
                             </div>
+                            <meta itemprop="url" href="{% url 'product_detail' product.slug %}">
+                            
                         </div>
 
                         <div class="col-7 col-md-8 m-0 p-0 py-3 me-2 ms-md-1">
@@ -153,7 +155,6 @@
                         <meta href="isSimilarTo" content="{{ item }}">
                     {% endfor %}
                     <meta itemprop="description" content="{{ product.header_description }}">
-                    <meta itemprop="url" content="{% url 'product_detail' product.slug %}">
                 </div>
 
             </section>
