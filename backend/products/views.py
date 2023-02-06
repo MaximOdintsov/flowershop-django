@@ -33,6 +33,7 @@ class ProductFilterView(generic.ListView):
         finally:
             context['filter_form'] = filter_form
             context['cart_add_quantity_form'] = cart_add_quantity_form
+
         return context
 
     def get_queryset(self):
@@ -94,6 +95,7 @@ class ProductSearchView(generic.ListView):
         finally:
             context['filter_form'] = filter_form
             context['cart_add_quantity_form'] = cart_add_quantity_form
+
         return context
 
 
@@ -107,6 +109,9 @@ class ProductList(generic.ListView):
     def get_context_data(self, **kwargs):
         cart_add_quantity_form = AddQuantityForm()
         filter_form = ProductFilterForm()
+        product_list_price = Product.objects.filter(Q(status=2) | Q(status=3)).order_by('?')[:3]
+        min_price = Product.objects.order_by('new_price').first()
+        max_price = Product.objects.order_by('-new_price').first()
 
         context = super().get_context_data(**kwargs)
         try:
@@ -119,6 +124,10 @@ class ProductList(generic.ListView):
         finally:
             context['filter_form'] = filter_form
             context['cart_add_quantity_form'] = cart_add_quantity_form
+            context['product_list_price'] = product_list_price
+            context['min_price'] = min_price.new_price
+            context['max_price'] = max_price.new_price
+
         return context
 
 

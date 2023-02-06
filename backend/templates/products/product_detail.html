@@ -1,10 +1,18 @@
 {% extends 'base.html' %}
 {% block static %} {% load static %} {% endblock %}
-{% block title %}{% if product.header_title %}{{ product.header_title }}{% else %}{{ product.title }} из {% for product_component in product.productcomposition_set.all %}{{ product_component.component.title }}, {% endfor %}купить в Кирове.{% endif %} Цена: {{ product.new_price }} руб.{% endblock %}
+{% block title %}{% if product.header_title %}{{ product.header_title }}{% else %}{{ product.title }} из {% for product_component in product.productcomposition_set.all %}{{ product_component.component.title }}, {% endfor %}купить в Кирове.{% endif %} Цена: {{ product.new_price }} рублей.{% endblock %}
 {% block description %}<meta name="description" content="{% if product.header_description %}{{ product.header_description }}{% else %}Заказать или купить букет из {% for product_component in product.productcomposition_set.all %}{{ product_component.component.title }}, {% endfor %}в Кирове. Бесплатная доставка от 2000 руб. В наличии всегда свежие и красивые цветы!{% endif %}">{% endblock %}
 {% block robots %}<meta name="robots" content="all">{% endblock %}
 {% block keywords %}<meta name="keywords" content="Цветок, Цветы Киров, Букеты Киров, Доставка цветов, {{ product.title }}, {% for product_component in product.productcomposition_set.all %} {{ product_component.component.title }} {% endfor %}">{% endblock %}
-
+{% block opengraph %}
+<meta property="og:type" content="product">
+<meta property="og:title" content="{{ product.title }}">
+<meta property="og:url" content="">
+<meta property="og:image" content="{% url 'product_detail' product.slug %}">
+<meta property="og:description" content="{{ product.header_description }}">
+<meta property="product:price.amount" content="{{ product.new_price }}">
+<meta property="product:price.currency" content="RUB">
+{% endblock %}
 {% block content %}
     {% include 'includes/header.html' %}
     <main class="container-lg d-flex justify-content-center px-0 mb-md-5 pb-md-5 px-md-5 pt-md-5">
@@ -14,7 +22,7 @@
             <section class="col-12 border-bottom p-2 m-0 mb-2">
                 <a onclick="history.back()" data-bs-toggle="tooltip" data-bs-placement="top"
                 data-bs-custom-class="custom-tooltip" data-bs-title="В каталог">
-                    <img class="ms-4 ms-md-3" src="{% static 'products/icons/dark/back-icon.png' %}" alt="Назад" width="40">
+                    <img src="{% static 'products/icons/dark/back-icon.png' %}" alt="Назад" width="40">
                 </a>
             </section>
 
@@ -52,20 +60,11 @@
                     <h1 class="fs-24" itemprop="name">
                         {{ product.title }}
                     </h1>
-                    <meta itemscope itemtype="http://schema.org/Offer">
-                    {% if product.status == 2 %}
-                        <link itemprop="availability" href="https://schema.org/InStock"/>
-                    {% elif product.status == 3 %}
-                        <span class="c-light fs-16 badge text-bg-warning mt-2">ТОЛЬКО ПОД ЗАКАЗ</span>
-                        <link itemprop="availability" href="https://schema.org/PreOrder"/>
-                    {% elif product.status == 1 or product.status == 4 %}
-                        <link itemprop="availability" href="https://schema.org/OutOfStock"/>
-                    {% endif %}
                 </article>
 
                 <div class="row align-items-end m-0 mx-sm-5 m-md-0 mx-xxl-4">
 
-                    <div class="row col-12 justify-content-between align-items-center border rounded-3 m-0 p-0 mb-4" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                    <div class="row col-12 justify-content-between align-items-center border rounded-3 m-0 p-0 mb-4" itemscope itemprop="offers" itemtype="https://schema.org/Offer">
                         <div class="col-3 m-0 p-0 ms-2 ms-md-1">
                             {% if product.status == 2 or product.status == 3 %}
                                 {% if product.discount == 0 %}
@@ -87,12 +86,30 @@
                                 </div>
                                 {% endif %}
                                 <meta itemprop="price" content="{{ product.price }}"> <meta itemprop="priceCurrency" content="RUB">
-                                <link href="https://schema.org/ParcelService">
                             {% else %}
                                 <span class="fs-13 badge text-bg-danger">
                                     Недоступно
                                 </span>
                             {% endif %}
+
+                            <!-- Microdata -->
+                            {% if product.status == 2 %}
+                                <meta itemprop="availability" href="https://schema.org/InStock"/>
+                            {% elif product.status == 3 %}
+                                <meta itemprop="availability" href="https://schema.org/PreOrder"/>
+                            {% elif product.status == 1 or product.status == 4 %}
+                                <meta itemprop="availability" href="https://schema.org/OutOfStock"/>
+                            {% endif %}
+                            <div itemscope itemprop="eligibleRegion" itemtype="https://schema.org/GeoCircle">
+                                <div itemscope itemprop="address" itemtype="https://schema.org/PostalAddress">
+                                    <meta itemprop="addressCountry" content="Россия">
+                                    <meta itemprop="addressLocality" content="Киров">
+                                    <meta itemprop="addressRegion" content="Кировская область">    
+                                    <meta itemprop="postalCode" content="610047">
+                                    <meta itemprop="streetAddress" content="улица Октябрьский проспект, 2А">
+                                </div>
+                                <meta itemprop="geoRadius" content="40000">   
+                            </div>
                         </div>
 
                         <div class="col-7 col-md-8 m-0 p-0 py-3 me-2 ms-md-1">
@@ -130,6 +147,13 @@
                             {% endfor %}
                         </ul>
                     </div>
+
+                    <!-- Microdata -->
+                    {% for item in product.get_random_products %}
+                        <meta href="isSimilarTo" content="{{ item }}">
+                    {% endfor %}
+                    <meta itemprop="description" content="{{ product.header_description }}">
+                    <meta itemprop="url" content="{% url 'product_detail' product.slug %}">
                 </div>
 
             </section>

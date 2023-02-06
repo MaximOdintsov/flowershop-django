@@ -1,4 +1,6 @@
 from decimal import Decimal
+
+from django.db.models import Q
 from django.utils.text import slugify
 
 import translators as ts

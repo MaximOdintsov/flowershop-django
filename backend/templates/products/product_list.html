@@ -109,6 +109,7 @@
 
                 {% if products %}
                 {% for product in products %}
+
                     <section class="col-5 col-sm-3 card border border-0 c-bg-card mx-2 px-0">
                         <a href="{% url 'product_detail' product.slug %}" class="c-link-main text-decoration-none" target="_self">
                             <img class="card-img-top" src="{{ product.preview.url }}" alt="{{ product.title }}" >
@@ -165,9 +166,51 @@
                     </div>
                 {% endif %}
             </div>
+            
             {% include 'includes/paginator.html' %}
         </div>
         <!-- Mobile -->
     </main>
+
+    <!-- Microdata -->
+    <div itemscope itemtype="https://schema.org/Florist">
+        <meta itemprop="name" content="Цветок">
+        <meta itemprop="currenciesAccepted" content="RUB">
+        <meta itemprop="paymentAccepted" content="Наличные, Банковская карта, QR-код, Банковский перевод, Безналичная оплата, СБП"/>
+        <meta itemprop="openingHours" content="Пн-Пт 08:00-19:00"/>
+        <meta itemprop="openingHours" content="Сб 09:30-18:00"/>
+        <meta itemprop="openingHours" content="Вс 09:30-17:00"/>
+        <meta itemprop="priceRange" content="₽₽">
+        <meta itemprop="url" href="https://kirovcvetok.ru">
+        <meta itemprop="image" content="https://kirovcvetok.ru/static/products/img/open-graph-image.png">
+        <meta itemprop="email" content="questions@kirovcvetok.ru">
+        <meta itemprop="telephone" content="+7 909-141-32-42">
+        <meta itemprop="keywords" content="Цветы Киров, Цветок, Цветок Киров, Букеты Киров, Доставка цветов в Кирове, 8 марта, 14 февраля, подарок, розы, тюльпаны, пионы, хризантемы, гвоздика, герберы">
+        <div itemscope itemprop="address" itemtype="https://schema.org/PostalAddress">
+            <meta itemprop="addressCountry" content="Россия">
+            <meta itemprop="addressLocality" content="Киров">
+            <meta itemprop="addressRegion" content="Кировская область">    
+            <meta itemprop="postalCode" content="610047">
+            <meta itemprop="streetAddress" content="улица Октябрьский проспект, 2А, 1 этаж">
+        </div>
+        <div itemscope itemprop="hasOfferCatalog" itemtype="https://schema.org/OfferCatalog">
+            <div itemscope itemprop="itemListElement" itemtype="https://schema.org/AggregateOffer">
+                <meta itemprop="lowPrice" content="{{ min_price }}">
+                <meta itemprop="highPrice" content="{{ max_price }}">
+                <meta itemprop="priceCurrency" content="RUB">
+            </div>
+            {% for product in product_list_price %}
+            <div itemscope itemprop="itemListElement" itemtype="https://schema.org/ListItem">
+                <div itemprop="item">
+                    <meta itemprop="name" content="{{ product.title }}">
+                    <meta itemprop="url" content="{% url 'product_detail' product.slug %}">
+                </div>
+            </div> 
+            {% endfor %}
+        </div>
+        
+
+        </div>
+    </div>
     {% include 'includes/footer.html' %}
 {% endblock %}
