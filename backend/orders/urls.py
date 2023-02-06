@@ -5,8 +5,7 @@ from .views import (AddItemToCart,
                     RemoveItemToCart,
                     RemoveOneItemToCart,
                     cart_view,
-                    OrderCreateView,
-                    OrderCreatedView)
+                    OrderCreateView)
 
 urlpatterns = [
     # path('add-item-to-cart/<int:pk>', add_item_to_cart, name='add_item_to_cart'),
@@ -19,5 +18,5 @@ urlpatterns = [
 
     path('cart/', cart_view, name='cart'),
     path('create/', OrderCreateView.as_view(), name='order_create'),
-    path('created/', OrderCreatedView.as_view(), name='order_created'),
+    path('created/', TemplateView.as_view(template_name='orders/order_created.html'), name='order_created'),
 ]

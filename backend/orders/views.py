@@ -1,11 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.mail import send_mail
 from django.urls import reverse_lazy
+from backend import settings
 
 from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect, get_object_or_404
 
-from django.views.generic import View, FormView, TemplateView
+from django.views.generic import View, FormView
 
 from .models import Order
 from .forms import OrderCreateForm, AddQuantityForm
@@ -160,9 +162,14 @@ class OrderCreateView(LoginRequiredMixin, FormView):
                                  'receipt_method',
                                  'payment_method'])
 
+        message = f'Сумма заказа:{cart.amount} руб.\n' \
+                  f'Имя: {cart.first_name}\nНомер телефона: {cart.phone}\n' \
+                  f'Адрес: {cart.address}\nСпособ получения: {cart.receipt_method}'
+        send_mail(
+            f'Новый заказ №{cart.id}',
+            message,
+            settings.EMAIL_HOST_USER,
+            ['olga.odintsova@kirovcvetok.ru'],
+            fail_silently=False,
+        )
         return super(OrderCreateView, self).form_valid(form)
-
-
-class OrderCreatedView(TemplateView):
-    template_name = 'orders/order_created.html'
-

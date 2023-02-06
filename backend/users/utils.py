@@ -29,7 +29,7 @@ def send_email_for_verify(request, user):
         context=context,
     )
     email = EmailMessage(
-        'Veryfi email',
+        'Подтверждение почты',
         message,
         to=[user.email],
     )
