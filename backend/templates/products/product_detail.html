@@ -85,7 +85,8 @@
                                     </span>
                                 </div>
                                 {% endif %}
-                                <meta itemprop="price" content="{{ product.price|floatformat:0 }}"> <meta itemprop="priceCurrency" content="RUB">
+                                <meta itemprop="price" content="{{ product.price }}">
+                                <meta itemprop="priceCurrency" content="RUB">
                             {% else %}
                                 <span class="fs-13 badge text-bg-danger">
                                     Недоступно

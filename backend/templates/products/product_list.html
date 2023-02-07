@@ -53,9 +53,9 @@
                         <div class="card-footer d-flex justify-content-between align-items-end h-100" style="background-color: #eff3e9" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
                             
                             {% if product.discount == 0 %}
-                                <span itemprop="price" class="fs-19">
+                                <span class="fs-19">
                                     {{ product.new_price|floatformat:0 }}
-                                    <span itemprop="priceCurrency" content="RUB">&#8381;</span>
+                                    <span>&#8381;</span>
                                 </span>
                             {% else %}
                                 <div class="d-grid text-start">
@@ -66,13 +66,15 @@
                                         </del>
                                     </span>
                                     <span class="badge rounded-3 c-bg-new-price-badge">
-                                        <span class="c-new-price fs-19" itemprop="price">
+                                        <span class="c-new-price fs-19">
                                             {{ product.new_price|floatformat:0 }}
-                                            <span itemprop="priceCurrency">&#8381;</span>
+                                            <span>&#8381;</span>
                                         </span>
                                     </span>
                                 </div>
                             {% endif %}
+                            <meta itemprop="price" content="{{ product.price }}">
+                            <meta itemprop="priceCurrency" content="RUB">
 
                             <div>
                                 <form action="{% url 'add_one_item_to_cart' product.id %}" class="col-8 d-flex justify-content-center" method="post">
