@@ -10,7 +10,7 @@
 <meta property="og:url" content="">
 <meta property="og:image" content="{% url 'product_detail' product.slug %}">
 <meta property="og:description" content="{{ product.header_description }}">
-<meta property="product:price.amount" content="{{ product.new_price }}">
+<meta property="product:price.amount" content="{{ product.new_price|floatformat:0 }}">
 <meta property="product:price.currency" content="RUB">
 {% endblock %}
 {% block content %}
@@ -85,7 +85,7 @@
                                     </span>
                                 </div>
                                 {% endif %}
-                                <meta itemprop="price" content="{{ product.price }}"> <meta itemprop="priceCurrency" content="RUB">
+                                <meta itemprop="price" content="{{ product.price|floatformat:0 }}"> <meta itemprop="priceCurrency" content="RUB">
                             {% else %}
                                 <span class="fs-13 badge text-bg-danger">
                                     Недоступно

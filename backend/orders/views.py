@@ -167,7 +167,7 @@ class OrderCreateView(LoginRequiredMixin, FormView):
                   f'Адрес: {cart.address}\nСпособ получения: {cart.receipt_method}\n' \
                   f'Заказы на сайте: https://kirovcvetok.ru/admin/orders/order/'
         send_mail(
-            f'Новый заказ №{cart.id} от {cart.creation_time}',
+            f'Новый заказ №{cart.id}',
             message,
             settings.EMAIL_HOST_USER,
             ['olga.odintsova@kirovcvetok.ru'],

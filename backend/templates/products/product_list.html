@@ -196,8 +196,8 @@
         </div>
         <div itemscope itemprop="hasOfferCatalog" itemtype="https://schema.org/OfferCatalog">
             <div itemscope itemprop="itemListElement" itemtype="https://schema.org/AggregateOffer">
-                <meta itemprop="lowPrice" content="{{ min_price }}">
-                <meta itemprop="highPrice" content="{{ max_price }}">
+                <meta itemprop="lowPrice" content="{{ min_price|floatformat:0 }}">
+                <meta itemprop="highPrice" content="{{ max_price|floatformat:0 }}">
                 <meta itemprop="priceCurrency" content="RUB">
             </div>
             {% for product in product_list_price %}
