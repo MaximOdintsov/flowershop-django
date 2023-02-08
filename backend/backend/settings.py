@@ -48,15 +48,13 @@ INSTALLED_APPS = [
     'django_extensions',
     'django.contrib.postgres',
     'rest_framework',
-
-    # 'djoser',
     'phonenumber_field',
 
     'products',
     'users',
     'orders',
 
-    # должен быть последним / нужен для удаления медиа файлов
+    # удаление медиа
     'django_cleanup.apps.CleanupConfig',
 ]
 
@@ -76,7 +74,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "templates")],  # for templates search at the project level
+        'DIRS': [os.path.join(BASE_DIR, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,18 +121,17 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# add custom user model
+# Add custom user model
 AUTH_USER_MODEL = 'users.User'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-# authentication
+# Authentication
 AUTHENTICATION_BACKENDS = [
     'users.backends.AuthBackend'
 ]
 
-# email
-
+# Email
 EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_USE_SSL = bool(int(os.getenv('EMAIL_USE_SSL')))
@@ -156,12 +153,9 @@ TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
 if int(os.getenv('PRODUCTION_VERSION')):
-    # static and media for prod
     STATIC_URL = '/static/'
     STATIC_ROOT = BASE_DIR / 'static'
     MEDIA_URL = '/media/'
@@ -169,9 +163,7 @@ if int(os.getenv('PRODUCTION_VERSION')):
 
     # for nginx
     CSRF_TRUSTED_ORIGINS = ["http://kirovcvetok.ru/", "http://.kirovcvetok.ru/", "https://kirovcvetok.ru/", "https://.kirovcvetok.ru/"]
-
 else:
-    # static and media for dev
     STATIC_URL = '/static/'
     STATIC_ROOT = BASE_DIR / 'static'
     MEDIA_ROOT = BASE_DIR / 'media'
@@ -181,10 +173,9 @@ else:
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 LOGIN_URL = '/admin/login/'
 
-# for rest api
+# For rest api
 REST_FRAMEWORK = {
     # for output static files
     'DEFAULT_RENDERER_CLASSES': [
@@ -193,7 +184,7 @@ REST_FRAMEWORK = {
     ],
 }
 
-# ssl
+# SSL
 if int(os.getenv('SSL')):
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True

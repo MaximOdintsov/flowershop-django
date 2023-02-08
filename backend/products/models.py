@@ -236,21 +236,3 @@ def save_product_after_delete(sender, instance, **kwargs):
     product.price = product.get_price
     product.status = product.get_status
     product.save()
-
-
-# def save_slug(pk, slug, title):
-#     """
-#     Переводит поле title с ru на en и сохраняет в slug
-#     """
-#
-#     if (slug == str(pk)) or (len(slug) == 0):
-#         try:
-#             import translators as ts
-#             translated_title = ts.google(title)
-#             slug = slugify(translated_title)
-#             return slug
-#         except Exception:
-#             slug = pk
-#             return slug
-#     else:
-#         return slug

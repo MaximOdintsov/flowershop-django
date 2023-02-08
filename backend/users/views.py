@@ -45,7 +45,6 @@ class MyRegistrationView(views.View):
             password = form.cleaned_data.get('password2')
 
             user = authenticate(username=username, password=password)
-
             send_email_for_verify(request, user)
 
             return redirect('email_confirmation')
