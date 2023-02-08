@@ -61,7 +61,7 @@ class ProductComponent(models.Model):
         verbose_name = 'Компонент'
         verbose_name_plural = 'Компоненты'
         unique_together = ('slug', )
-        ordering = ['quantity_of_sold']
+        ordering = ['title', ]
 
     def __str__(self):
         return self.title
@@ -125,7 +125,7 @@ class Product(models.Model):
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
         unique_together = ('slug', 'id')
-        ordering = ['status']
+        ordering = ['title']
 
     def __str__(self):
         return f'{self.title} - доступно: {self.get_available_quantity_of_products}'
