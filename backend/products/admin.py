@@ -21,7 +21,7 @@ class ProductCompositionInline(admin.TabularInline):
     model = ProductComposition
     extra = 0
     fields = ('component', 'quantity')
-    ordering = ('component',)
+    ordering = ('title',)
 
 
 @admin.register(ProductCategory)
