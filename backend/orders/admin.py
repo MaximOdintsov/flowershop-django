@@ -11,7 +11,7 @@ class OrderItemInline(admin.TabularInline):
 
 @admin.register(models.Order)
 class Order(admin.ModelAdmin):
-    fields = ('user', 'receipt_method', 'payment_method', 'payment_state', 'order_status', 'readiness_status')
+    fields = ('user', 'promo_code', 'receipt_method', 'payment_method', 'payment_state', 'order_status', 'readiness_status')
 
     list_display = ['creation_time', 'readiness_status', 'order_status', 'first_name', 'phone', 'address',
                     'amount', 'receipt_method', 'payment_state', 'payment_method', 'order_on_site']
@@ -26,3 +26,9 @@ class Order(admin.ModelAdmin):
         orders = queryset
         for order in orders:
             order.delete()
+
+
+@admin.register(models.PromoCode)
+class PromoCode(admin.ModelAdmin):
+    list_display = ['name', 'discount', 'valid_from', 'valid_to']
+    list_editable = ['discount', 'valid_from', 'valid_to']

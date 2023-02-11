@@ -1,7 +1,7 @@
-import datetime
 from decimal import Decimal
 
-from django.db.models import Sum
+from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models.signals import post_save, post_delete, pre_save, pre_delete
 from django.dispatch import receiver
 from django.utils import timezone
@@ -14,6 +14,45 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
+
+
+class PromoCode(models.Model):
+    name = models.CharField('Название', max_length=100, unique=True)
+    discount = models.PositiveSmallIntegerField('Скидка в %', default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    valid_from = models.DateTimeField('Действует с', default=timezone.now)
+    valid_to = models.DateTimeField('Действует до', default=(timezone.now() + timezone.timedelta(7)))
+
+    class Meta:
+        verbose_name = 'Промокод'
+        verbose_name_plural = 'Промокоды'
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def get_availability_status(self):
+        if self.valid_from <= timezone.now() <= self.valid_to:
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def check_if_it_has_already_been_used(user: User, promo_code):
+        for order in Order.objects.filter(user=user):
+            if order.promo_code.id == promo_code.id:
+                return False
+        return True
+
+    def save_orders(self):
+        if self.id:
+            for order in self.order_set.all():
+                order.save()
+
+
+@receiver(pre_save, sender=PromoCode)
+def recalculate_order_amount_before_save(sender, instance, **kwargs):
+    promo_code = instance
+    promo_code.save_orders()
 
 
 class Order(models.Model):
@@ -53,6 +92,7 @@ class Order(models.Model):
     ]
 
     user = models.ForeignKey(User, verbose_name='Клиент', on_delete=models.CASCADE, null=True, blank=True)
+    promo_code = models.ForeignKey(PromoCode, verbose_name='Промокод', on_delete=models.PROTECT, null=True, blank=True)
 
     amount = models.DecimalField('Сумма', max_digits=10, decimal_places=2, default=0, null=True, blank=True)
     receipt_method = models.PositiveSmallIntegerField('Способ получения', choices=RECEIPT_CHOICES, null=True, blank=True)
@@ -91,7 +131,6 @@ class Order(models.Model):
         if cart and (timezone.now() - cart.creation_time).days > 7:
             cart.delete()
             cart = None
-
         if not cart:
             cart = Order.objects.create(user=user,
                                         order_status=Order.STATUS_CART,
@@ -166,9 +205,15 @@ class Order(models.Model):
 
 
 @receiver(pre_save, sender=Order)
-def recalculate_component_quantity_before_save(sender, instance, **kwargs):
+def recalculate_component_quantity_and_set_amount_before_save(sender, instance, **kwargs):
     order = instance
-    order.recalculate_components_quantity()
+    if order.id:
+        order.recalculate_components_quantity()
+
+        if order.order_status == order.STATUS_CART or order.order_status == order.STATUS_PENDING_CONFIRMATION:
+            order.amount = order.get_amount()
+        else:
+            ValidationError(f'Статус заказа не должен быть {order.order_status}')
 
 
 @receiver(pre_delete, sender=Order)
@@ -198,11 +243,22 @@ class OrderItem(models.Model):
 
     @property
     def amount(self):
-        return self.quantity * self.price
+        amount = self.quantity * self.price
+
+        if self.order.order_status == self.order.STATUS_CART or self.order.order_status == self.order.STATUS_PENDING_CONFIRMATION:
+            if self.product.discount == 0 and self.order.promo_code and self.order.promo_code.get_availability_status is True:
+                return (amount/100) * (100-self.order.promo_code.discount)
+        return amount
 
     @property
     def old_amount(self):
         return self.quantity * self.product.price
+
+    def save(self, *args, **kwargs):
+        if self.order.order_status == self.order.STATUS_CART or self.order.order_status == self.order.STATUS_PENDING_CONFIRMATION:
+            super(OrderItem, self).save(*args, **kwargs)
+        else:
+            ValidationError(f'Нельзя изменить заказ со статусом {self.order.order_status}')
 
 
 @receiver(pre_save, sender=OrderItem)
@@ -213,8 +269,9 @@ def orderitem_price_setting(sender, instance, **kwargs):
 @receiver(post_save, sender=OrderItem)
 def recalculate_order_amount_after_save(sender, instance, **kwargs):
     order = instance.order
-    order.amount = order.get_amount()
-    order.save_for_models()
+    if order.order_status == order.STATUS_CART or order.order_status == order.STATUS_PENDING_CONFIRMATION:
+        order.amount = order.get_amount()
+        order.save_for_models()
 
 
 @receiver(post_delete, sender=OrderItem)
@@ -222,4 +279,3 @@ def recalculate_order_amount_after_delete(sender, instance, **kwargs):
     order = instance.order
     order.amount = order.get_amount()
     order.save_for_models()
-

@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from django.test import TestCase
 
-from .models import Order, OrderItem
+from .models import Order, OrderItem, PromoCode
 from products.models import (ProductComposition,
                              ProductComponent,
                              Product)
@@ -21,17 +21,18 @@ class TestDataBase(TestCase):
 
     def setUp(self):
         self.user = User.objects.get(username='maxim')
-
         self.component_1 = ProductComponent.objects.get(slug='red-roze')
         self.component_2 = ProductComponent.objects.get(slug='chamomile')
         self.product_1 = Product.objects.get(slug='bouquet-of-roses-and-daisies')
         self.product_2 = Product.objects.get(slug='bouquet-of-chamomile')
+        self.promocode_1 = PromoCode.objects.create(id=1, name='СКИДКА10', discount=10)
 
     def test_get_data(self):
         self.assertGreater(ProductComponent.objects.all().count(), 0)
         self.assertGreater(Product.objects.all().count(), 1)
         self.assertGreater(ProductComposition.objects.all().count(), 0)
         self.assertGreater(User.objects.all().count(), 0)
+        self.assertGreater(PromoCode.objects.all().count(), 0)
 
     def test_user_exists(self):
         users = User.objects.all()
@@ -46,8 +47,7 @@ class TestDataBase(TestCase):
 
     def cart_number(self):
         cart_number = Order.objects.filter(user=self.user,
-                                           order_status=Order.STATUS_CART
-                                           ).count()
+                                           order_status=Order.STATUS_CART).count()
         return cart_number
 
     def test_function_cart(self):
@@ -56,7 +56,6 @@ class TestDataBase(TestCase):
         1. No cart
         2. Create cart
         3. Delete cart
-
         ==============
         Add: @staticmethod Order.get_cart(user: User)
         """
@@ -128,7 +127,6 @@ class TestDataBase(TestCase):
         2. -----------""----------- after adding items
         3. -----------""----------- after deleting 1 item
         4. -----------""----------- after deleting items
-
         =================================================
         Add: @property Orderitem.amount
              Order.get_amount()
@@ -165,7 +163,6 @@ class TestDataBase(TestCase):
         Checking cart status change after Order.make_order():
         1. Attempt to change the status for an empty cart
         2. ---------------""--------------- a non-empty cart
-
         ====================================================
         Add: Order.make_order()
         """
@@ -193,13 +190,11 @@ class TestDataBase(TestCase):
            ProductComponent.quantity_in_stock and quantity_of_sold don't change
         5. If Order.delete() when Order.order_status == STATUS_CONFIRMED,
            ProductComponent.quantity_in_stock and quantity_of_sold should return back
-
         =======================================================================================
         Add: Order.recalculate_components_quantity()
              Order.save_for_models()
-             @receiver(sender=Order) recalculate_component_quantity_before_save()
+             @receiver(sender=Order) recalculate_component_quantity_and_set_amount_before_save()
              @receiver(sender=Order) recalculate_component_quantity_before_delete()
-
         """
 
         # 1. If Order.order_status == STATUS_PENDING_CONFIRMATION,
@@ -290,6 +285,10 @@ class TestDataBase(TestCase):
         1. Checking changing OrderItem.price when Product.price changes
         2. Checking changing Order.amount when Product.price changes
         3. Checking changing Order.amount when OrderItem deletes
+        4. The price should not change if the order status is not CART and not PENDING_CONFIRMATION
+        ===========================================================================================
+        Change: OrderItem.save()
+                @receiver(pre_save, sender=Order) recalculate_component_quantity_and_set_amount_before_save
         """
 
         # 1. Checking changing OrderItem.price when Product.price changes
@@ -324,3 +323,144 @@ class TestDataBase(TestCase):
 
         cart = Order.get_cart(self.user)
         self.assertEqual(cart.amount, Decimal(0))
+
+        # 4. The price should not change if the order status is not CART and not PENDING_CONFIRMATION
+        self.assertEqual(self.product_1.new_price, Decimal(3000))
+        self.assertEqual(self.product_2.new_price, Decimal(900))
+
+        OrderItem.objects.create(order=cart, product=self.product_1, quantity=1)
+        OrderItem.objects.create(order=cart, product=self.product_2, quantity=1)
+        self.assertEqual(cart.amount, Decimal(3900))
+
+        self.assertEqual(cart.id, 7)
+        self.assertEqual(cart.amount, Decimal(3900))
+        cart.order_status = Order.STATUS_CONFIRMED
+        cart.save()
+
+        self.component_1.price = 1
+        self.component_2.price = 1
+        self.component_1.save()
+        self.component_2.save()
+
+        order = Order.objects.get(id=7)
+        self.assertEqual(order.amount, Decimal(3900))
+
+        order.order_status = Order.STATUS_CANCELED
+        order = Order.objects.get(id=7)
+        self.assertEqual(order.amount, Decimal(3900))
+
+        order.order_status = Order.STATUS_PENDING_CONFIRMATION
+        order.save()
+        order = Order.objects.get(id=7)
+        self.assertEqual(order.amount, Decimal(29))
+
+        order.order_status = Order.STATUS_CART
+        order.save()
+        cart = Order.objects.get(id=7)
+        self.assertEqual(cart.amount, Decimal(29))
+
+    def test_applying_a_discount_to_an_order(self):
+        """
+        1. Promo code is valid when the validity period has started but not yet expired:
+            1.1. When the product is not discounted
+            1.2. When the product is discounted
+        2. Promo code is not valid until the start of its action.
+        3. Promo code is not valid after its expiration.
+        4. Promo code cannot be reused
+        5. New promo code should work
+        ===============================================================================
+        Extending the function OrderItem.amount()
+        Add: Promocode.get_availability_status
+             Promocode.save_orders()
+             @receiver(sender=PromoCode) recalculate_order_amount_before_save()
+        """
+
+        # 1. Promo code is valid when the validity period has started but not yet expired:
+        self.promocode_1.start_time = timezone.now()
+        self.promocode_1.end_time = timezone.now() + timezone.timedelta(7)
+        self.promocode_1.save()
+        cart = Order.get_cart(self.user)
+
+        # 1.1. When the product is not discounted
+        self.assertEqual(self.product_1.discount, 0)
+        self.assertEqual(self.product_1.new_price, Decimal(3000))
+
+        OrderItem.objects.create(order=cart, product=self.product_1, quantity=1)
+        self.assertEqual(cart.amount, Decimal(3000))
+        self.assertEqual(self.promocode_1.discount, 10)
+        cart.promo_code = self.promocode_1
+        cart.save()
+
+        self.assertEqual(cart.amount, Decimal(2700))
+
+        # 1.2. When the product is discounted
+        self.assertEqual(self.product_2.discount, 10)
+        self.assertEqual(self.product_2.price, Decimal(1000))
+        self.assertEqual(self.product_2.new_price, Decimal(900))
+        OrderItem.objects.create(order=cart, product=self.product_2, quantity=1)
+
+        self.assertTrue(self.promocode_1.get_availability_status)
+        self.assertEqual(cart.amount, Decimal(3600))
+
+        # 2. Promo code is not valid until the start of its action.
+        self.promocode_1.valid_from = timezone.now() + timezone.timedelta(1)
+        self.promocode_1.valid_to = timezone.now() + timezone.timedelta(8)
+        self.promocode_1.save()
+
+        cart = Order.get_cart(self.user)
+        self.promocode_1 = PromoCode.objects.get(id=1)
+        self.assertFalse(self.promocode_1.get_availability_status)
+        self.assertEqual(cart.amount, Decimal(3900))
+
+        # 3. Promo code is not valid after its expiration.
+        self.promocode_1.valid_from = timezone.now() - timezone.timedelta(8)
+        self.promocode_1.valid_to = timezone.now() - timezone.timedelta(1)
+        self.promocode_1.save()
+        cart = Order.get_cart(self.user)
+        self.promocode_1 = PromoCode.objects.get(id=1)
+
+        self.assertFalse(self.promocode_1.get_availability_status)
+        self.assertEqual(cart.amount, Decimal(3900))
+
+        cart.make_order()
+
+        # 4. Promo code cannot be reused
+        self.promocode_1.valid_from = timezone.now()
+        self.promocode_1.valid_to = timezone.now() + timezone.timedelta(7)
+        self.promocode_1.save()
+        self.promocode_1 = PromoCode.objects.get(id=1)
+
+        cart = Order.get_cart(self.user)
+        self.assertEqual(self.product_1.new_price, Decimal(3000))
+        OrderItem.objects.create(order=cart, product=self.product_1, quantity=2)
+
+        self.assertEqual(cart.amount, Decimal(6000))
+        self.assertEqual(self.promocode_1.discount, 10)
+
+        if self.promocode_1.check_if_it_has_already_been_used(self.user, self.promocode_1):
+            cart.promo_code = self.promocode_1
+            cart.save()
+
+        cart = Order.get_cart(self.user)
+        self.assertEqual(cart.amount, Decimal(6000))
+        cart.make_order()
+
+        # 5. New promo code should work
+        promocode_2 = PromoCode.objects.create(id=2, name='ПРОМО20', discount=20, valid_from=timezone.now(), valid_to=(timezone.now()+timezone.timedelta(7)))
+        cart = Order.get_cart(self.user)
+        cart.make_order()
+
+        self.assertEqual(self.product_1.discount, 0)
+        self.assertEqual(self.product_1.new_price, Decimal(3000))
+        self.assertEqual(self.product_2.discount, 10)
+        self.assertEqual(self.product_2.price, Decimal(1000))
+        self.assertEqual(self.product_2.new_price, Decimal(900))
+
+        OrderItem.objects.create(order=cart, product=self.product_1, quantity=1)
+        OrderItem.objects.create(order=cart, product=self.product_2, quantity=1)
+        cart.promo_code = promocode_2
+        cart.save()
+
+        cart = Order.get_cart(self.user)
+        self.assertTrue(promocode_2.get_availability_status)
+        self.assertEqual(cart.amount, Decimal(3300))
