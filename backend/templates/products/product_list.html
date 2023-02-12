@@ -76,14 +76,26 @@
                             <meta itemprop="price" content="{{ product.price }}">
                             <meta itemprop="priceCurrency" content="RUB">
 
-                            <div>
-                                <form action="{% url 'add_one_item_to_cart' product.id %}" class="col-8 d-flex justify-content-center" method="post">
-                                    {% csrf_token %}
-                                    <button class="btn p-0">
-                                        <img src="{% static 'products/icons/dark/add-to-cart-icon.png' %}" alt="shopping-bag-icon" width="35rem">
-                                    </button>
-
-                                </form>
+                            <div class="d-flex justify-content-end">
+                                {% if user.is_authenticated %}
+                                    <form action="{% url 'add_one_item_to_cart' product.id %}" class="col-8 d-flex justify-content-center" method="post">
+                                        {% csrf_token %}
+                                        <button class="btn p-0">
+                                            <img src="{% static 'products/icons/dark/add-to-cart-icon.png' %}" alt="shopping-bag-icon" width="35rem">
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <div class="col-8 d-flex justify-content-center">
+                                        <a class="btn p-0" tabindex="0" role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true" 
+                                        data-bs-content="
+                                            <div class='row m-0 p-0'>
+                                                <span class='col-12 m-0 p-0'>Для того, чтобы добавить товар в корзину, нужно войти в аккаунт.</span>
+                                                <a href={% url 'login' %} class='col-12 btn c-btn-primary m-0 mt-2'>Войти</a>
+                                            </div>">
+                                            <img src="{% static 'products/icons/dark/add-to-cart-icon.png' %}" alt="shopping-bag-icon" width="35rem">
+                                        </a>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     </section>
@@ -147,13 +159,26 @@
                                 </div>
                             {% endif %}
 
-                            <div>
-                                <form action="{% url 'add_one_item_to_cart' product.id %}" class="col-8 d-flex justify-content-center" method="post">
-                                    {% csrf_token %}
-                                    <button class="btn p-0">
-                                        <img src="{% static 'products/icons/dark/add-to-cart-icon.png' %}" alt="shopping-bag-icon" width="35rem">
-                                    </button>
-                                </form>
+                            <div class="d-flex justify-content-end">
+                                {% if user.is_authenticated %}
+                                    <form action="{% url 'add_one_item_to_cart' product.id %}" class="col-8 d-flex justify-content-center" method="post">
+                                        {% csrf_token %}
+                                        <button class="btn p-0">
+                                            <img src="{% static 'products/icons/dark/add-to-cart-icon.png' %}" alt="shopping-bag-icon" width="35rem">
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <div class="col-8 d-flex justify-content-center">
+                                        <a class="btn p-0" tabindex="0" role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true" 
+                                        data-bs-content="
+                                            <div class='row m-0 p-0'>
+                                                <span class='col-12 m-0 p-0'>Для того, чтобы добавить товар в корзину, нужно войти в аккаунт.</span>
+                                                <a href={% url 'login' %} class='col-12 btn c-btn-primary m-0 mt-2'>Войти</a>
+                                            </div>">
+                                            <img src="{% static 'products/icons/dark/add-to-cart-icon.png' %}" alt="shopping-bag-icon" width="35rem">
+                                        </a>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     </section>
@@ -214,5 +239,12 @@
 
         </div>
     </div>
+    <script>
+        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+        const popover = new bootstrap.Popover('.popover-dismiss', {
+            trigger: 'focus'
+            })
+    </script>
     {% include 'includes/footer.html' %}
 {% endblock %}

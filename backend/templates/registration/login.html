@@ -34,7 +34,8 @@
                     </div>
                 {% endfor %}
                 <button class='btn c-btn-form-primary' type="submit">Войти</button>
-                <a class="c-link-info col-12 col-sm-8 p-0" href="{% url 'password_reset' %}">Забыли пароль?</a>
+                <a class="c-link-info col-12 p-0" href="{% url 'registration' %}">Нет аккаунта? Зарегистрироваться</a>
+                <a class="c-link-info col-12 p-0 mt-1" href="{% url 'password_reset' %}">Забыли пароль?</a>
             </form>
         </div>
     </div>
@@ -75,7 +76,8 @@
                     </div>
                 {% endfor %}
                 <button class='btn c-btn-form-primary col-12 col-sm-8' type="submit">Войти</button>
-                <a class="c-link-info col-12 col-sm-8 p-0" href="{% url 'password_reset' %}">Забыли пароль?</a>
+                <a class="c-link-info col-12 col-sm-8 p-0" href="{% url 'registration' %}">Нет аккаунта? Зарегистрироваться</a>
+                <a class="c-link-info col-12 col-sm-8 p-0 mt-1" href="{% url 'password_reset' %}">Забыли пароль?</a>
             </form>
         </div>
     </div>

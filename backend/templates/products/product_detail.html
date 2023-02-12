@@ -116,26 +116,50 @@
                         </div>
 
                         <div class="col-7 col-md-8 m-0 p-0 py-3 me-2 ms-md-1">
-                            <form action="{% url 'add_item_to_cart' product.id %}" class="row justify-content-between m-0" method="post">
-                                {% csrf_token %}
 
-                                <div class="col-8 col-sm-5 col-md-7 col-lg-5 justify-content-center border rounded-3 row m-0 p-0">
-                                    <button class="btn col-4 c-btn-white rounded-3 m-0 p-0" type="button" onclick="this.nextElementSibling.stepDown();">
-                                        <img src="{% static 'products/icons/dark/minus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
+                            {% if user.is_authenticated %}
+                                <form action="{% url 'add_item_to_cart' product.id %}" class="row justify-content-between m-0" method="post">
+                                    {% csrf_token %}
+                                    <div class="col-8 col-sm-5 col-md-7 col-lg-6 col-xl-5 justify-content-center border rounded-3 row m-0 p-0">
+                                        <button class="btn col-4 c-btn-white rounded-3 m-0 p-0" type="button" onclick="this.nextElementSibling.stepDown();">
+                                            <img src="{% static 'products/icons/dark/minus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
+                                        </button>
+    
+                                        {{ cart_add_quantity_form.quantity }}
+    
+                                        <button class="btn col-4 c-btn-white rounded-3 m-0 p-0" type="button" onclick="this.previousElementSibling.stepUp();">
+                                            <img src="{% static 'products/icons/dark/plus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
+                                        </button>
+                                    </div>
+    
+                                    <button type="submit" class="btn c-btn-primary col-4 col-sm-6 col-md-5 col-lg-5 p-1 m-0">
+                                        <span>Купить</span>
                                     </button>
+                                </form>
+                            {% else %}
+                                <div class="row justify-content-between m-0">
+                                    <div class="col-8 col-sm-5 col-md-7 col-lg-5 justify-content-center border rounded-3 row m-0 p-0">
+                                        <button class="btn col-4 c-btn-white rounded-3 m-0 p-0" type="button" onclick="this.nextElementSibling.stepDown();">
+                                            <img src="{% static 'products/icons/dark/minus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
+                                        </button>
 
-                                    {{ cart_add_quantity_form.quantity }}
+                                        {{ cart_add_quantity_form.quantity }}
 
-                                    <button class="btn col-4 c-btn-white rounded-3 m-0 p-0" type="button" onclick="this.previousElementSibling.stepUp();">
-                                        <img src="{% static 'products/icons/dark/plus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
-                                    </button>
+                                        <button class="btn col-4 c-btn-white rounded-3 m-0 p-0" type="button" onclick="this.previousElementSibling.stepUp();">
+                                            <img src="{% static 'products/icons/dark/plus-icon.svg' %}" alt="shopping-bag-icon" width="15rem">
+                                        </button>
+                                    </div>
+
+                                    <a class="btn c-btn-primary col-4 col-sm-6 col-md-5 col-lg-6 p-1 m-0" tabindex="0" role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true" 
+                                        data-bs-content="
+                                            <div class='row m-0 p-0'>
+                                                <span class='col-12 m-0 p-0'>Для того, чтобы добавить товар в корзину, нужно войти в аккаунт.</span>
+                                                <a href={% url 'login' %} class='col-12 btn c-btn-primary m-0 mt-2'>Войти</a>
+                                            </div>">
+                                        <span>Купить</span>
+                                    </a>
                                 </div>
-
-                                <button type="submit" class="btn c-btn-primary col-4 col-sm-6 col-md-5 col-lg-6 p-1 m-0">
-                                    <span>Купить</span>
-                                </button>
-
-                            </form>
+                            {% endif %}
                         </div>
                     </div>  
 
@@ -166,6 +190,11 @@
     <script>
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+        const popover = new bootstrap.Popover('.popover-dismiss', {
+            trigger: 'focus'
+            })
     </script>
 
     {% include 'includes/footer.html' %}
