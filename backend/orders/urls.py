@@ -5,7 +5,7 @@ from .views import (AddItemToCart,
                     RemoveItemToCart,
                     RemoveOneItemToCart,
                     cart_view,
-                    OrderCreateView)
+                    OrderCreateView,)
 
 urlpatterns = [
     # path('add-item-to-cart/<int:pk>', add_item_to_cart, name='add_item_to_cart'),

@@ -2,6 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.urls import reverse_lazy
+from django.views.decorators.http import require_POST
+
 from backend import settings
 
 from django.core.exceptions import ValidationError
@@ -9,8 +11,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from django.views.generic import View, FormView
 
-from .models import Order
-from .forms import OrderCreateForm, AddQuantityForm
+from .models import Order, PromoCode
+from .forms import OrderCreateForm, AddQuantityForm, PromoCodeForm
 from products.models import Product
 
 from products.forms import ProductSearchForm, ProductFilterForm
@@ -107,15 +109,71 @@ def cart_view(request):
         if item.product.status == 1 or item.product.status == 4:
             available = 0
 
+    if request.method == 'POST':
+        promo_code_form = PromoCodeForm(request.POST, request=request)
+        if promo_code_form.is_valid():
+            return redirect('cart')
+    else:
+        promo_code_form = PromoCodeForm()
+
     context = {
         'cart': cart,
         'items': items,
         'cart_add_quantity_form': cart_add_quantity_form,
         'filter_form': filter_form,
         'available': available,
+        'promo_code_form': promo_code_form,
     }
 
     return render(request, 'orders/cart.html', context)
+
+
+# @require_POST
+# def promo_code_view(request):
+#
+#     if request.method == 'POST':
+#         form = PromoCodeForm(request.POST)
+#         if form.is_valid():
+#             code = form.cleaned_data['code']
+#             try:
+#                 promo_code = PromoCode.objects.get(code=code)
+#                 if promo_code.check_if_it_has_already_been_used(request.user, promo_code):
+#                     cart = Order.get_cart(request.user)
+#                     cart.promo_code = promo_code
+#                     cart.save()
+#                     return redirect('cart')
+#             except Exception:
+#                 return render('')
+
+
+# class PromoCodeView(LoginRequiredMixin, View):
+#     login_url = '/login'
+#     redirect_field_name = 'redirect_to'
+#     form_class = PromoCodeForm
+#     template_name = 'orders/cart.html'
+#     success_url = reverse_lazy('cart')
+#
+#     def form_valid(self, form):
+#         form = PromoCodeForm
+#         code = form.cleaned_data.get('code')
+#         if PromoCode.objects.filter(code=code):
+#             if PromoCode.check_if_it_has_already_been_used(self.user, code):
+#                 cart = Order.get_cart(self.user)
+#                 cart.promo_code = PromoCode.objects.get(code=code)
+#                 cart.save()
+#
+#         return redirect('cart')
+#
+#     def post(self, request):
+#         cart = Order.get_cart(request.user)
+#         try:
+#             item = PromoCode.objects.get(code=code)
+#             if PromoCode.check_if_it_has_already_been_used(self.user, code):
+#                 cart = Order.get_cart(self.user)
+#                 cart.promo_code = PromoCode.objects.get(code=code)
+#                 cart.save()
+#         finally:
+#             return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
 
 
 class OrderCreateView(LoginRequiredMixin, FormView):

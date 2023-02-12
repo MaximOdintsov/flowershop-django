@@ -30,5 +30,5 @@ class Order(admin.ModelAdmin):
 
 @admin.register(models.PromoCode)
 class PromoCode(admin.ModelAdmin):
-    list_display = ['name', 'discount', 'valid_from', 'valid_to']
+    list_display = ['code', 'discount', 'valid_from', 'valid_to']
     list_editable = ['discount', 'valid_from', 'valid_to']

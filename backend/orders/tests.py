@@ -25,7 +25,7 @@ class TestDataBase(TestCase):
         self.component_2 = ProductComponent.objects.get(slug='chamomile')
         self.product_1 = Product.objects.get(slug='bouquet-of-roses-and-daisies')
         self.product_2 = Product.objects.get(slug='bouquet-of-chamomile')
-        self.promocode_1 = PromoCode.objects.create(id=1, name='СКИДКА10', discount=10)
+        self.promocode_1 = PromoCode.objects.create(id=1, code='СКИДКА10', discount=10)
 
     def test_get_data(self):
         self.assertGreater(ProductComponent.objects.all().count(), 0)
@@ -446,7 +446,7 @@ class TestDataBase(TestCase):
         cart.make_order()
 
         # 5. New promo code should work
-        promocode_2 = PromoCode.objects.create(id=2, name='ПРОМО20', discount=20, valid_from=timezone.now(), valid_to=(timezone.now()+timezone.timedelta(7)))
+        promocode_2 = PromoCode.objects.create(id=2, code='ПРОМО20', discount=20, valid_from=timezone.now(), valid_to=(timezone.now()+timezone.timedelta(7)))
         cart = Order.get_cart(self.user)
         cart.make_order()
 

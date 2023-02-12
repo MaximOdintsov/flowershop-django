@@ -1,5 +1,7 @@
 from django import forms
-from .models import Order, OrderItem
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
+
+from .models import Order, OrderItem, PromoCode
 from phonenumber_field.formfields import PhoneNumberField
 
 from django import forms
@@ -20,12 +22,6 @@ class AddQuantityForm(forms.Form):
             }
         )
     )
-#
-# class AddQuantityForm(forms.ModelForm):
-#     # PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 21)]
-#     class Meta:
-#         model = OrderItem
-#         fields = ['quantity']
 
 
 class OrderCreateForm(forms.ModelForm):
@@ -117,6 +113,49 @@ class OrderCreateForm(forms.ModelForm):
 
     class Meta:
         model = Order
+        fields = ['first_name', 'phone', 'email', 'address']
 
-        fields = ['first_name',
-                  'phone', 'email', 'address']
+
+class PromoCodeForm(forms.Form):
+
+    # class Meta:
+    #     model = PromoCode
+    #     fields = ['code']
+
+    code = forms.CharField(
+        label='Промокод',
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control m-0 p-1 h-100',
+                'placeholder': 'Введите промокод',
+            }
+        )
+    )
+
+    def clean(self):
+        super(PromoCodeForm, self).clean()
+        code = self.cleaned_data.get('code')
+
+        try:
+            promo_code = PromoCode.objects.get(code=code)
+            if promo_code:
+                if PromoCode.check_if_it_has_already_been_used(self.request.user, promo_code):
+                    cart = Order.get_cart(self.request.user)
+                    cart.promo_code = promo_code
+                    cart.save()
+                else:
+                    self._errors['code'] = self.error_class([
+                        'Этот промокод уже был использован вами'
+                    ])
+        except ObjectDoesNotExist:
+            self._errors['code'] = self.error_class([
+                'Такого промокода не существует'
+            ])
+
+    def __init__(self, *args, **kwargs):
+        try:
+            self.request = kwargs.pop('request')
+        except Exception:
+            pass
+        super(PromoCodeForm, self).__init__(*args, **kwargs)

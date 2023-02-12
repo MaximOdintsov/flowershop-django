@@ -17,7 +17,7 @@ User = get_user_model()
 
 
 class PromoCode(models.Model):
-    name = models.CharField('Название', max_length=100, unique=True)
+    code = models.CharField('Название', max_length=100, unique=True)
     discount = models.PositiveSmallIntegerField('Скидка в %', default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     valid_from = models.DateTimeField('Действует с', default=timezone.now)
     valid_to = models.DateTimeField('Действует до', default=(timezone.now() + timezone.timedelta(7)))
@@ -27,7 +27,7 @@ class PromoCode(models.Model):
         verbose_name_plural = 'Промокоды'
 
     def __str__(self):
-        return self.name
+        return self.code
 
     @property
     def get_availability_status(self):
@@ -39,7 +39,7 @@ class PromoCode(models.Model):
     @staticmethod
     def check_if_it_has_already_been_used(user: User, promo_code):
         for order in Order.objects.filter(user=user):
-            if order.promo_code.id == promo_code.id:
+            if order.order_status != order.STATUS_CART and order.promo_code == promo_code:
                 return False
         return True
 
