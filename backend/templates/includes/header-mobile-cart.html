@@ -203,46 +203,55 @@
         <div class="row d-flex flex-wrap col-12 justify-content-between align-items-stretch m-0 p-2">
             <div class="col-6 col-sm-7 col-md-8 text-center m-0 p-0">
                 <div class="d-flex d-sm-none align-items-end justify-content-center c-bg-gray border rounded-3 h-100 py-2">
-                    <h4 class="fs-17 pe-3">Итого:</h4>
-                    <div class="text-end d-grid">
-                        {% if cart.get_amount == cart.get_old_amount %}                                           
-                            <h4 class="fs-17">{{ cart.amount|floatformat:0 }} &#8381</h4>
-                        {% else %}    
+                    {% if cart.get_amount == cart.get_old_amount %} 
+                        <h4 class="fs-17 pe-3 m-0">Итого:</h4>
+                        <div class="text-end d-grid">
+                            <h4 class="fs-17 m-0">{{ cart.amount|floatformat:0 }} &#8381</h4>
+                        </div>
+                    {% else %}   
+                        <h4 class="fs-21 pe-3">Итого:</h4>
+                        <div class="text-end d-grid">
                             <span>
                                 <del class="old-price fs-11">{{ cart.get_old_amount|floatformat:0 }} &#8381</del>
                             </span>
 
-                            <h4 class="c-new-price fs-17">{{ cart.amount|floatformat:0 }} &#8381</h4>                        
-                        {% endif %}
-                    </div>
+                            <h4 class="c-new-price fs-17">{{ cart.amount|floatformat:0 }} &#8381</h4> 
+                        </div>                        
+                    {% endif %}
                 </div>
                 <div class="d-none d-sm-flex d-md-none align-items-end justify-content-center c-bg-gray border rounded-3 h-100 py-2">
-                    <h4 class="fs-19 pe-3">Итого:</h4>
-                    <div class="text-end d-grid">
-                        {% if cart.get_amount == cart.get_old_amount %}                                           
-                            <h4 class="fs-19">{{ cart.amount|floatformat:0 }} &#8381</h4>
-                        {% else %}    
+                    {% if cart.get_amount == cart.get_old_amount %} 
+                        <h4 class="fs-19 pe-3 m-0">Итого:</h4>
+                        <div class="text-end d-grid">
+                            <h4 class="fs-19 m-0">{{ cart.amount|floatformat:0 }} &#8381</h4>
+                        </div>
+                    {% else %}   
+                        <h4 class="fs-19 pe-3">Итого:</h4>
+                        <div class="text-end d-grid">
                             <span>
                                 <del class="old-price fs-13">{{ cart.get_old_amount|floatformat:0 }} &#8381</del>
                             </span>
 
-                            <h4 class="c-new-price fs-19">{{ cart.amount|floatformat:0 }} &#8381</h4>                        
-                        {% endif %}
-                    </div>
+                            <h4 class="c-new-price fs-19">{{ cart.amount|floatformat:0 }} &#8381</h4> 
+                        </div>                        
+                    {% endif %}
                 </div>
                 <div class="d-none d-md-flex align-items-end justify-content-center c-bg-gray border rounded-3 h-100 py-2">
-                    <h4 class="fs-21 pe-3">Итого:</h4>
-                    <div class="text-end d-grid">
-                        {% if cart.get_amount == cart.get_old_amount %}                                           
-                            <h4 class="fs-21">{{ cart.amount|floatformat:0 }} &#8381</h4>
-                        {% else %}    
+                    {% if cart.get_amount == cart.get_old_amount %} 
+                        <h4 class="fs-21 pe-3 m-0">Итого:</h4>
+                        <div class="text-end d-grid">
+                            <h4 class="fs-21 m-0">{{ cart.amount|floatformat:0 }} &#8381</h4>
+                        </div>
+                    {% else %}   
+                        <h4 class="fs-21 pe-3">Итого:</h4>
+                        <div class="text-end d-grid">
                             <span>
                                 <del class="old-price fs-15">{{ cart.get_old_amount|floatformat:0 }} &#8381</del>
                             </span>
 
-                            <h4 class="c-new-price fs-21">{{ cart.amount|floatformat:0 }} &#8381</h4>                        
-                        {% endif %}
-                    </div>
+                            <h4 class="c-new-price fs-21">{{ cart.amount|floatformat:0 }} &#8381</h4> 
+                        </div>                        
+                    {% endif %}
                 </div>
             </div>
 

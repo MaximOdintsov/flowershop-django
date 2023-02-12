@@ -340,8 +340,13 @@
                                     {% else %}
                                         {{ promo_code_form.code }}
                                     {% endif %}
-                                    <button class="col-12 btn c-btn-form-primary mt-2" type="submit">Применить промокод</button>
+                                    <button class="col-10 btn c-btn-form-primary mt-2" type="submit">Применить промокод</button>
+                                    <button type="button" class="col-2 btn m-0 p-0" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    data-bs-title="Промокоды не действуют на товары со скидкой.">
+                                        <svg class="bi flex-shrink-0 mx-2" role="img" width="20" height="20" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+                                    </button>
                                 </form>
+                                
                             </div>
 
                             <div class="row border-top m-0 p-0 mt-3 pt-3">
@@ -635,24 +640,32 @@
                     {% endfor %}
                 </div>
                 <!-- Item card  -->
+
+                <!-- Promo code -->
                 <div class="col-12 my-3" id="promo_code_form_mobile">
                     <div class="row c-bg-light rounded-3 border shadow-sm m-0 p-2">
-                        <form class="row justify-content-between m-0 p-0" action="{% url 'cart' %}" method="post">
+                        <form class="row justify-content-center m-0 p-0" action="{% url 'cart' %}" method="post">
                             {% csrf_token %}
                                 {% if promo_code_form.code.errors %}
-                                    <div class="col-8 col-md-7 m-0 p-0 h-50">
+                                    <div class="col-7 col-sm-6 m-0 p-0 h-50">
                                         {{ promo_code_form.code }}
         
-                                        <div class="text-danger p-0">
+                                        <div class="text-danger p-0 m-0">
                                             <small>{{ promo_code_form.code.errors }}</small>
                                         </div>
                                     </div>
                                 {% else %}
-                                    <div class="col-7 col-md-7 m-0 p-0 h-100">
+                                    <div class="col-7 col-sm-6 m-0 p-0 h-100">
                                         {{ promo_code_form.code }}
                                     </div>
                                 {% endif %}
-                            <button class="col-4 col-sm-5 btn c-btn-form-primary m-0 p-1" type="submit">Применить промокод</button>
+                            <button class="col-4 col-sm-5 btn c-btn-form-primary m-0 p-1" type="submit">
+                                <span>Применить промокод</span>
+                            </button>
+                            <button type="button" class="col-1 btn m-0 p-0" data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-title="Промокоды не действуют на товары со скидкой.">
+                                <svg class="bi flex-shrink-0 mx-2" role="img" width="20" height="20" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -673,5 +686,9 @@
     <script>
         const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
         const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        const exampleEl = document.getElementById('example')
+        const tooltip = new bootstrap.Tooltip(exampleEl, options)
     </script>
 {% endblock %}
