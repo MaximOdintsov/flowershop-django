@@ -127,10 +127,6 @@ class Order(models.Model):
         cart = Order.objects.filter(user=user,
                                     order_status=Order.STATUS_CART
                                     ).first()
-
-        if cart and (timezone.now() - cart.creation_time).days > 7:
-            cart.delete()
-            cart = None
         if not cart:
             cart = Order.objects.create(user=user,
                                         order_status=Order.STATUS_CART,

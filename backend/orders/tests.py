@@ -71,20 +71,6 @@ class TestDataBase(TestCase):
         Order.get_cart(self.user)
         self.assertEqual(self.cart_number(), 1)
 
-    def test_cart_older_7_days(self):
-        """
-        If cart older than 7 days, it must be deleted:
-        1. Get cart and make it older
-        """
-
-        # 1. Get cart and make it older
-        cart = Order.get_cart(self.user)
-        cart.creation_time = timezone.now() - timezone.timedelta(8)
-        cart.save()
-
-        cart = Order.get_cart(self.user)
-        self.assertEqual((timezone.now() - cart.creation_time).days, 0)
-
     def test_price_setting_for_orderitem(self):
         """
         Checking to set price to product for orderitem:
@@ -332,7 +318,7 @@ class TestDataBase(TestCase):
         OrderItem.objects.create(order=cart, product=self.product_2, quantity=1)
         self.assertEqual(cart.amount, Decimal(3900))
 
-        self.assertEqual(cart.id, 7)
+        self.assertEqual(cart.id, 5)
         self.assertEqual(cart.amount, Decimal(3900))
         cart.order_status = Order.STATUS_CONFIRMED
         cart.save()
@@ -342,21 +328,21 @@ class TestDataBase(TestCase):
         self.component_1.save()
         self.component_2.save()
 
-        order = Order.objects.get(id=7)
+        order = Order.objects.get(id=5)
         self.assertEqual(order.amount, Decimal(3900))
 
         order.order_status = Order.STATUS_CANCELED
-        order = Order.objects.get(id=7)
+        order = Order.objects.get(id=5)
         self.assertEqual(order.amount, Decimal(3900))
 
         order.order_status = Order.STATUS_PENDING_CONFIRMATION
         order.save()
-        order = Order.objects.get(id=7)
+        order = Order.objects.get(id=5)
         self.assertEqual(order.amount, Decimal(29))
 
         order.order_status = Order.STATUS_CART
         order.save()
-        cart = Order.objects.get(id=7)
+        cart = Order.objects.get(id=5)
         self.assertEqual(cart.amount, Decimal(29))
 
     def test_applying_a_discount_to_an_order(self):
